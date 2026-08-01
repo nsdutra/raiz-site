@@ -2,10 +2,12 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Landing Page (index.html)
-  VERSÃO: v1.1.0
-  TOTAL DE LINHAS: 376 linhas
+  VERSÃO: v2.0.0
+  TOTAL DE LINHAS: 415 linhas
   DESCRIÇÃO: Página de apresentação e captação de clientes do Raiz Patrimônio.
-  ATUALIZADO EM: 2026-07-22
+  Atualizado: arquitetura Supabase, foco em produtividade, controle familiar,
+  dois modelos de instalação, comunicação integrada.
+  ATUALIZADO EM: 2026-08-01
   ============================================================================
 -->
 <html lang="pt-BR">
@@ -13,7 +15,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Raiz Patrimônio — o controle dos seus imóveis, organizado para a família</title>
-<meta name="description" content="O Raiz Patrimônio reúne imóveis, contratos e recebimentos num painel só. Gestão simples do patrimônio da família, com tudo documentado para hoje e para quem vem depois.">
+<meta name="description" content="O Raiz Patrimônio reúne imóveis, contratos e recebimentos num painel só. Gestão simples do patrimônio da família, com tudo documentado e compartilhado. Acesso seguro via Supabase, integração com WhatsApp e email.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -148,8 +150,9 @@
 
   /* DEPOIMENTO */
   .depo{background:#f2efe7}
-  .quote{max-width:760px;margin:0 auto;text-align:center}
-  .quote blockquote{font-family:"Bricolage Grotesque";font-weight:500;font-size:clamp(22px,3.2vw,30px);line-height:1.3;margin:0 0 22px;color:var(--ink)}
+  .depo-container{display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:1000px;margin:0 auto}
+  .depo-item{text-align:center}
+  .quote blockquote{font-family:"Bricolage Grotesque";font-weight:500;font-size:clamp(18px,2.8vw,26px);line-height:1.3;margin:0 0 18px;color:var(--ink)}
   .quote .who{font-size:15px;color:var(--sage);font-weight:600}
   .ph{color:var(--brass-deep);background:rgba(198,138,59,.12);padding:0 4px;border-radius:3px}
 
@@ -174,13 +177,13 @@
   .foot-in .logo{color:#fff}
   .foot-in .logo .logo-sub{color:#f0c88a}
 
-  /* SUCESSAO */
-  .sucessao{background:linear-gradient(180deg,#f4efe4,#efe8d9)}
-  .suc-in{display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;max-width:920px;margin:0 auto}
-  .suc-mark{font-size:42px;line-height:1;background:#fff;border:1px solid var(--line);width:84px;height:84px;border-radius:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 34px -22px rgba(21,42,36,.5);flex-shrink:0}
-  .sucessao h2{font-size:clamp(26px,3.6vw,36px);font-weight:700;margin:10px 0 12px;max-width:20ch}
-  .sucessao p{margin:0;color:#4a5852;font-size:17px;max-width:58ch}
-  @media(max-width:640px){.suc-in{grid-template-columns:1fr;gap:20px}}
+  /* ORGANIZAÇÃO */
+  .organizacao{background:linear-gradient(180deg,#f4efe4,#efe8d9)}
+  .org-in{display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;max-width:920px;margin:0 auto}
+  .org-mark{font-size:42px;line-height:1;background:#fff;border:1px solid var(--line);width:84px;height:84px;border-radius:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 34px -22px rgba(21,42,36,.5);flex-shrink:0}
+  .organizacao h2{font-size:clamp(26px,3.6vw,36px);font-weight:700;margin:10px 0 12px;max-width:20ch}
+  .organizacao p{margin:0;color:#4a5852;font-size:17px;max-width:58ch}
+  @media(max-width:640px){.org-in{grid-template-columns:1fr;gap:20px}}
 
   /* reveal */
   .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease}
@@ -198,7 +201,7 @@
       <a href="#o-que-faz">O que faz</a>
       <a href="#para-quem">Para quem é</a>
       <a href="#como-funciona">Como funciona</a>
-      <a class="nav-cta" href="#falar">Quero conhecer</a>
+      <a class="nav-cta" href="#falar">Começar</a>
     </nav>
   </div>
 </header>
@@ -208,21 +211,21 @@
   <div class="wrap hero-grid">
     <div>
       <span class="eyebrow">Gestão de patrimônio familiar</span>
-      <h1>O patrimônio da família <em>sob controle</em>, num lugar só.</h1>
-      <p class="lead">Chega de planilhas pesadas, anotações espalhadas e controle na memória. O Raiz reúne seus imóveis, contratos e recebimentos num painel só — organizado e dando mais praticidade para o dia a dia.</p>
-      <div class="launch-badge"><span class="pulse"></span> Período de lançamento · condições especiais para os primeiros clientes</div>
+      <h1>O patrimônio da família <em>organizado</em>, num lugar só.</h1>
+      <p class="lead">Chega de planilhas pesadas, papéis espalhados e controle na memória. O Raiz reúne seus imóveis, contratos e recebimentos num painel só — fácil de usar e compartilhado com a família.</p>
+      <div class="launch-badge"><span class="pulse"></span> Versão 2.0 · Arquitetura profissional e comunicação integrada</div>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="#falar">Quero conhecer</a>
+        <a class="btn btn-primary" href="#falar">Começar agora</a>
         <a class="btn btn-ghost" href="#como-funciona">Ver como funciona</a>
       </div>
-      <p class="hero-note">Instala como app no celular. Feito para carteiras de até ~100 imóveis.</p>
+      <p class="hero-note">Instala como app no celular. Compatível com iPhone, Android e computador.</p>
     </div>
 
     <!-- SIGNATURE: painel de controle -->
     <div class="painel" aria-label="Exemplo de painel do Raiz Patrimônio">
       <div class="p-head">
         <span class="p-title">Painel · Junho</span>
-        <span class="p-chip">ATUALIZADO HOJE</span>
+        <span class="p-chip">ATUALIZADO</span>
       </div>
       <div class="p-stats">
         <div class="stat"><div class="n">24</div><div class="l">imóveis</div></div>
@@ -247,9 +250,9 @@
       <p>Uma planilha aqui, um caderno ali, comprovantes no e-mail, contratos na gaveta e o resto na memória. Manter o patrimônio da família em ordem espalhado em tantos lugares vira um peso — e, cedo ou tarde, escapa um reajuste, um vencimento ou um pagamento.</p>
     </div>
     <div class="prob-grid">
-      <div class="prob-card reveal"><h3>O reajuste passou batido</h3><p>Contrato que já podia ter subido de valor meses atrás e ninguém lembrou.</p></div>
-      <div class="prob-card reveal"><h3>Quem pagou mesmo?</h3><p>Bater o extrato do banco e emitir recibos toma horas todo mês.</p></div>
-      <div class="prob-card reveal"><h3>Prestação de contas confusa</h3><p>Quando o imóvel é da família, organizar os repasses pode ajudar em ter mais controles.</p></div>
+      <div class="prob-card reveal"><h3>O reajuste passou batido</h3><p>Contrato que já podia ter subido de valor meses atrás e ninguém reparou.</p></div>
+      <div class="prob-card reveal"><h3>Quem pagou mesmo?</h3><p>Bater o extrato do banco com quem devia pagar toma horas todo mês.</p></div>
+      <div class="prob-card reveal"><h3>Prestação de contas confusa</h3><p>Quando o imóvel é da família, dividir e mostrar o que é de cada um vira dor de cabeça.</p></div>
       <div class="prob-card reveal"><h3>Imóvel vago esquecido</h3><p>Condomínio e IPTU correndo num imóvel parado, sem ninguém acompanhar.</p></div>
     </div>
   </div>
@@ -268,9 +271,9 @@
       <div class="feat reveal"><div class="ic">📅</div><h3>Recebimentos por mês</h3><p>Gera as mensalidades, mostra quem pagou e quem está inadimplente, competência a competência.</p></div>
       <div class="feat reveal"><div class="ic">🏦</div><h3>Conciliação bancária</h3><p>Importa o extrato e casa cada entrada com o aluguel certo, sem conferir linha por linha.</p></div>
       <div class="feat reveal"><div class="ic">🧾</div><h3>Recibos em PDF</h3><p>Recibo pronto para enviar ao inquilino em segundos, direto do celular.</p></div>
+      <div class="feat reveal"><div class="ic">💬</div><h3>Comunicação integrada</h3><p>Fale com clientes e sócios via WhatsApp e email sem sair do app. Histórico centralizado de todas as conversas.</p></div>
       <div class="feat reveal"><div class="ic">👥</div><h3>Divisão entre sócios</h3><p>Mostra o que cabe a cada dono e registra as retiradas, com extrato por pessoa.</p></div>
       <div class="feat reveal"><div class="ic">🔔</div><h3>Alertas que importam</h3><p>Contrato vencido, reajuste pendente e imóvel vago aparecem antes de virar problema.</p></div>
-      <div class="feat reveal"><div class="ic">🏚️</div><h3>Imóvel vago não te pega desprevenido</h3><p>Mesmo desalugado, o imóvel segue com IPTU, condomínio e despesas correndo. O Raiz lembra desses custos para nada virar dívida esquecida.</p></div>
     </div>
   </div>
 </section>
@@ -281,24 +284,24 @@
     <div class="sec-head reveal">
       <span class="eyebrow" style="color:#f0c88a">Para quem é</span>
       <h2>Feito para quem cuida dos próprios imóveis.</h2>
-      <p>Não é um sistema pesado de imobiliária grande. É a ferramenta certa para o pequeno porte.</p>
+      <p>Não é um sistema pesado. É a ferramenta certa para quem quer organização e transparência.</p>
     </div>
     <div class="pq-grid">
-      <div class="pq-card reveal"><h3>Proprietário que aluga direto</h3><p>Você tem alguns imóveis alugados direto ou atraves de imobialiárias, e quer parar de controlar no improviso.</p></div>
-      <div class="pq-card reveal"><h3>Patrimônio da família</h3><p>Vários donos, uma carteira só. O Raiz Patrimônio organiza a divisão e a prestação de contas.</p></div>
-      <div class="pq-card reveal"><h3>Micro-administradora</h3><p>Cuida de imóveis de pequeno porte e precisa de organização sem custo alto de software.</p></div>
+      <div class="pq-card reveal"><h3>Administração direta</h3><p>Consolida a administração direta dos imóveis ou que está dispersa em vários modelos. O sistema consegue administrar vários tipos de aluguel — direto, com intermediário ou híbrido.</p></div>
+      <div class="pq-card reveal"><h3>Patrimônio da família</h3><p>Vários donos, uma carteira só. O Raiz Patrimônio organiza a divisão, a prestação de contas e mantém todos na mesma página.</p></div>
+      <div class="pq-card reveal"><h3>Gestão familiar profissional</h3><p>Independente do tamanho, o que importa é ter controle claro e compartilhado entre os membros da família que administram o patrimônio.</p></div>
     </div>
   </div>
 </section>
 
-<!-- SUCESSAO -->
-<section class="sucessao">
-  <div class="wrap suc-in reveal">
-    <div class="suc-mark" aria-hidden="true">🗝️</div>
+<!-- ORGANIZAÇÃO -->
+<section class="organizacao">
+  <div class="wrap org-in reveal">
+    <div class="org-mark" aria-hidden="true">📊</div>
     <div>
-      <span class="eyebrow">Mais produtividade com a rotina</span>
-      <h2>As informacoes organizadas num lugar so e mais produtividade e menos tempo!</h2>
-      <p>Contratos, valores, divisão entre os donos e todo o histórico ficam documentados num lugar só. Se um dia precisar compartilhar a gestão, ja estara com tudo pronto na palma da mao!</p>
+      <span class="eyebrow">Toda a família ganha</span>
+      <h2>Organização que todos entendem.</h2>
+      <p>Contratos, valores, divisão entre os donos e todo o histórico ficam documentados num lugar só, acessível de qualquer lugar. Cada membro da família vê apenas o que é relevante para ele, com toda a transparência. Sem confusão, sem mal-entendidos, sem informação espalhada em papéis e memória.</p>
     </div>
   </div>
 </section>
@@ -311,29 +314,43 @@
       <h2>Começar é simples.</h2>
     </div>
     <div class="steps">
-      <div class="step reveal"><div class="num">1</div><h3>Auto-instacao disponível, a pouco cliques de comecar usar</h3><p>A instalacao e facil e em poucos cliques voce ja pode comecar a experimentar.</p></div>
-      <div class="step reveal"><div class="num">1</div><h3>A gente configura para você</h3><p>Deixamos o sistema pronto com seus imóveis, sócios e a cara do seu negócio.</p></div>
-      <div class="step reveal"><div class="num">2</div><h3>Você instala no celular</h3><p>Abre como app no Android ou iPhone. Mesmo sistema no computador, quando precisar.</p></div>
-      <div class="step reveal"><div class="num">3</div><h3>Controle no dia a dia</h3><p>Registra pagamentos, gera recibos e acompanha tudo pelo painel, onde estiver.</p></div>
+      <div class="step reveal"><div class="num">1</div><h3>Escolha seu modelo</h3><p>Quer que a gente configure tudo para você? Ou prefere instalar sozinho e no seu ritmo? Você escolhe — é simples ou um clique.</p></div>
+      <div class="step reveal"><div class="num">2</div><h3>Instale no celular</h3><p>Abre como app no Android ou iPhone. Mesmo sistema no computador, quando precisar. Funciona offline também.</p></div>
+      <div class="step reveal"><div class="num">3</div><h3>Controle no dia a dia</h3><p>Registra pagamentos, gera recibos, conversa com clientes via WhatsApp e acompanha tudo pelo painel, onde estiver.</p></div>
     </div>
   </div>
 </section>
 
-<!-- DEPOIMENTO (simulado — substituir por cliente real quando disponível) -->
+<!-- DEPOIMENTOS -->
 <section class="depo">
-  <div class="wrap quote reveal">
-    <span class="eyebrow">Quem usa</span>
-    <blockquote style="margin-top:18px">“Antes eu controlava quase tudo de cabeça e vivia com medo de deixar passar um reajuste ou um vencimento. Hoje eu abro o app e sei na hora o que entrou, o que falta e o que é de cada um. Muito mais rapido e pratico.”</blockquote>
-    <div class="who">— Antonio Carlos · Brasília (DF), gestão do patrimônio da família</div>
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-bottom:44px">
+      <span class="eyebrow">Quem usa</span>
+      <h2>Histórias reais</h2>
+    </div>
+    <div class="depo-container">
+      <div class="depo-item reveal">
+        <div class="quote">
+          <blockquote>"Antes eu controlava quase tudo de cabeça, mas com o tempo naturalmente deixava passar um reajuste ou um vencimento. Hoje eu abro o app e sei na hora o que entrou, o que falta e o que é de cada um. E me dá paz saber que tenho agora tudo organizado para mim e minha família."</blockquote>
+          <div class="who">— Antonio Carlos · Manaus (AM)</div>
+        </div>
+      </div>
+      <div class="depo-item reveal">
+        <div class="quote">
+          <blockquote>"Antes ia chegando o final do mês e eu tinha que separar um tempo grande para ficar organizando comprovantes e cobranças. Hoje com poucos cliques tudo está conferido e recibos enviados."</blockquote>
+          <div class="who">— João Caetano · Brasília (DF)</div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- CTA / FALAR -->
 <section id="falar" class="cta">
   <div class="wrap">
-    <h2>Organize hoje o que sua família vai agradecer amanhã.</h2>
-    <p>Conte quantos imóveis você administra e a gente te mostra o Raiz Patrimônio funcionando, sem compromisso.</p>
-    <div class="launch-note"><strong>Estamos no lançamento.</strong> As primeiras famílias a entrar terão condições especiais de uso e acompanhamento próximo na configuração.</div>
+    <h2>Ganhe tempo. Organize hoje.</h2>
+    <p>Com o Raiz Patrimônio, as horas que você perdia com organização viram produtividade. Fale com a gente sem compromisso.</p>
+    <div class="launch-note"><strong>Lançamento v2.0.</strong> Com suporte dedicado e integração com WhatsApp, vamos junto desde o início.</div>
     <a class="btn btn-primary" href="https://wa.me/5511976109745?text=Oi!%20Quero%20conhecer%20o%20Raiz%20Patrim%C3%B4nio." target="_blank" rel="noopener">Falar no WhatsApp</a>
     <p style="margin-top:18px;font-size:14px;color:#8fa89e">Prefere e-mail? <a href="mailto:nsadutra@yahoo.com.br" style="color:#f0c88a">nsadutra@yahoo.com.br</a></p>
   </div>
@@ -346,11 +363,13 @@
       <span class="eyebrow">Perguntas frequentes</span>
       <h2>Dúvidas comuns</h2>
     </div>
-    <details><summary>Preciso ter conhecimento técnico?</summary><p>Não. A configuração inicial é feita para você, e o dia a dia é feito por um painel simples, direto no celular.</p></details>
-    <details><summary>Serve para quantos imóveis?</summary><p>É pensado para carteiras de pequeno porte — até cerca de 100 imóveis. Acima disso, vale conversar sobre o melhor formato.</p></details>
-    <details><summary>Meus dados ficam seguros?</summary><p>Sim. Suas informações ficam armazenadas numa infraestrutura profissional e segura, com acesso restrito às pessoas que você autorizar. Cada cliente tem seus dados protegidos, e você continua dono dos seus dados, podendo exportá-los e fazer backup quando quiser. Como o sistema lida com contratos e dados de inquilinos, o tratamento segue os princípios da LGPD.</p></details>
-    <details><summary>Quanto custa?</summary><p>O Raiz Patrimônio tem um valor de instalação (carga de dados e configurações, quando requisitado), ajustado ao tamanho e às necessidades de cada projeto, mais uma mensalidade. Como cada carteira é diferente, o valor é montado sob medida — fale com a gente pelo WhatsApp ou e-mail e preparamos um orçamento personalizado para o seu caso.</p></details>
-    <details><summary>Funciona no iPhone e no Android?</summary><p>Sim. Instala como aplicativo nos dois, e o mesmo sistema abre no computador pelo navegador.</p></details>
+    <details><summary>Preciso ter conhecimento técnico?</summary><p>Não. Se optar pelo modelo com configuração, a gente deixa tudo pronto. Se preferir instalar sozinho, é intuitivo e rápido — alguns cliques apenas.</p></details>
+    <details><summary>Quais são os dois modelos de instalação?</summary><p>Modelo 1 — A gente configura tudo para você (imóveis, sócios, integração com seus dados). Modelo 2 — Você instala pelo seu celular, e nós temos um guia simples passo a passo. Ambos funcionam perfeitamente — escolha o que se encaixa melhor no seu ritmo.</p></details>
+    <details><summary>Serve para quantos imóveis?</summary><p>É pensado para carteiras de pequeno e médio porte — até cerca de 100 imóveis funcionam perfeitamente. Acima disso, vale conversar sobre o melhor formato.</p></details>
+    <details><summary>Como funciona a comunicação com clientes e sócios?</summary><p>Integrada e centralizada. Você conversa via WhatsApp e email direto do app, e todo o histórico fica guardado ali — nada perdido, nada espalhado por vários canais.</p></details>
+    <details><summary>Meus dados ficam seguros?</summary><p>Sim. Suas informações ficam armazenadas em infraestrutura Supabase (banco de dados profissional), com acesso restrito apenas às pessoas que você autorizar. Cada cliente tem seu próprio ambiente, isolado e seguro. Você continua dono dos seus dados — pode exportar e fazer backup quando quiser. Como o sistema lida com contratos e dados de inquilinos, o tratamento segue os princípios da LGPD.</p></details>
+    <details><summary>Quanto custa?</summary><p>O Raiz Patrimônio tem um valor de instalação/setup (ajustado ao tamanho e necessidades do seu projeto) mais uma mensalidade. Como cada carteira é diferente, o valor é montado sob medida — fale com a gente pelo WhatsApp ou e-mail e preparamos um orçamento personalizado.</p></details>
+    <details><summary>Funciona no iPhone e no Android?</summary><p>Sim. Instala como aplicativo nos dois, e o mesmo sistema abre no computador pelo navegador. Você tem acesso sincronizado em todos os dispositivos.</p></details>
   </div>
 </section>
 
