@@ -2,12 +2,25 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Landing Page (index.html)
-  VERSÃO: v2.1.0
-  TOTAL DE LINHAS: 398 linhas
+  VERSÃO: v2.2.0
+  TOTAL DE LINHAS: 573 linhas
   DESCRIÇÃO: Página de apresentação e captação de clientes do Raiz Patrimônio.
-  Atualizado: domínio próprio (raizpatrimonio.com.br), email e WhatsApp
-  corporativos, CTA apontando para app.raizpatrimonio.com.br (produto).
-  ATUALIZADO EM: 2026-08-06
+  NOVIDADES v2.2.0 (Fase 1A — trial auto-serviço):
+    - Nova seção #trial: formulário de cadastro (empresa, nome, email,
+      whatsapp, senha) que cria conta + empresa + licença trial (7 dias)
+      direto pelo navegador, sem passar por você.
+    - Fluxo: supabase.auth.signUp() -> rpc('fn_criar_trial') -> redireciona
+      pro app com handoff de sessão via hash da URL (mesma técnica de
+      magic link do próprio Supabase) — pessoa cai logada direto no app,
+      sem pedir login de novo.
+    - Depende de raiz_fase1a_signup_trial.sql já aplicado no Supabase, e
+      da versão do app.html que lê o hash "type=trial_handoff" no
+      window.onload (RaizPatrimonio-BETA-V1_39_0.html ainda NÃO tem isso —
+      ver próximo passo).
+    - Nav/hero CTA atualizados: "Começar" -> "Testar grátis", apontando
+      pra #trial em vez de #falar. Seção #falar (WhatsApp) mantida mais
+      abaixo, pra quem prefere falar antes de testar.
+  ATUALIZADO EM: 2026-08-07
   ============================================================================
 -->
 <html lang="pt-BR">
@@ -19,6 +32,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
   :root{
     --ink:#17211e;
@@ -185,6 +199,28 @@
   .organizacao p{margin:0;color:#4a5852;font-size:17px;max-width:58ch}
   @media(max-width:640px){.org-in{grid-template-columns:1fr;gap:20px}}
 
+  /* TRIAL — cadastro auto-serviço */
+  .trial-section{background:linear-gradient(180deg,#f4efe4,#faf9f5)}
+  .trial-box{max-width:480px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:32px;box-shadow:0 24px 60px -30px rgba(21,42,36,.35)}
+  .trial-box .eyebrow{display:block;text-align:center;margin-bottom:8px}
+  .trial-box h2{font-size:26px;text-align:center;margin-bottom:6px}
+  .trial-box .trial-sub{text-align:center;color:#4a5852;font-size:15px;margin-bottom:26px}
+  .trial-field{margin-bottom:14px}
+  .trial-field label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:5px}
+  .trial-field input{
+    width:100%;box-sizing:border-box;padding:11px 14px;border:1.5px solid var(--line);
+    border-radius:10px;font-size:15px;font-family:inherit;color:var(--ink);background:var(--paper);
+    transition:border-color .15s ease;
+  }
+  .trial-field input:focus{outline:none;border-color:var(--pine)}
+  .trial-submit{width:100%;border:none;cursor:pointer;margin-top:8px}
+  .trial-status{margin-top:14px;font-size:13.5px;text-align:center;min-height:18px}
+  .trial-status.erro{color:#b23a2e}
+  .trial-status.ok{color:var(--pine)}
+  .trial-perks{display:flex;justify-content:center;gap:18px;margin-top:18px;flex-wrap:wrap}
+  .trial-perks span{font-size:12.5px;color:var(--sage);display:flex;align-items:center;gap:5px}
+  @media(max-width:560px){.trial-box{padding:24px 20px}}
+
   /* reveal */
   .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease}
   .reveal.in{opacity:1;transform:none}
@@ -202,7 +238,7 @@
       <a href="#para-quem">Para quem é</a>
       <a href="#como-funciona">Como funciona</a>
       <a href="https://app.raizpatrimonio.com.br" target="_blank" rel="noopener">Já sou cliente</a>
-      <a class="nav-cta" href="#falar">Começar</a>
+      <a class="nav-cta" href="#trial">Testar grátis</a>
     </nav>
   </div>
 </header>
@@ -214,9 +250,9 @@
       <span class="eyebrow">Gestão de patrimônio familiar</span>
       <h1>O patrimônio da família <em>organizado</em>, num lugar só.</h1>
       <p class="lead">Chega de planilhas pesadas, papéis espalhados e controle na memória. O Raiz reúne seus imóveis, contratos e recebimentos num painel só — fácil de usar e compartilhado com a família.</p>
-      <div class="launch-badge"><span class="pulse"></span> Versão 2.0 · Arquitetura profissional e comunicação integrada</div>
+      <div class="launch-badge"><span class="pulse"></span> Teste grátis por 7 dias · sem cartão de crédito</div>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="#falar">Começar agora</a>
+        <a class="btn btn-primary" href="#trial">Testar grátis agora</a>
         <a class="btn btn-ghost" href="#como-funciona">Ver como funciona</a>
       </div>
       <p class="hero-note">Instala como app no celular. Compatível com iPhone, Android e computador.</p>
@@ -322,6 +358,49 @@
   </div>
 </section>
 
+<!-- TRIAL — cadastro auto-serviço -->
+<section id="trial" class="trial-section">
+  <div class="wrap">
+    <div class="trial-box reveal">
+      <span class="eyebrow">Comece agora</span>
+      <h2>Teste grátis por 7 dias</h2>
+      <p class="trial-sub">Cadastre sua empresa e já entre direto no sistema. Sem cartão, sem instalação.</p>
+
+      <form id="form-trial" novalidate>
+        <div class="trial-field">
+          <label for="trial-empresa">Nome da empresa ou família</label>
+          <input type="text" id="trial-empresa" name="empresa" autocomplete="organization" required placeholder="Ex.: Patrimônio da Família Silva">
+        </div>
+        <div class="trial-field">
+          <label for="trial-nome">Seu nome</label>
+          <input type="text" id="trial-nome" name="nome" autocomplete="name" required placeholder="Ex.: Maria Silva">
+        </div>
+        <div class="trial-field">
+          <label for="trial-email">E-mail</label>
+          <input type="email" id="trial-email" name="email" autocomplete="email" required placeholder="voce@email.com">
+        </div>
+        <div class="trial-field">
+          <label for="trial-whatsapp">WhatsApp</label>
+          <input type="tel" id="trial-whatsapp" name="whatsapp" autocomplete="tel" required placeholder="(11) 91234-5678">
+        </div>
+        <div class="trial-field">
+          <label for="trial-senha">Crie uma senha</label>
+          <input type="password" id="trial-senha" name="senha" autocomplete="new-password" required minlength="6" placeholder="Mínimo 6 caracteres">
+        </div>
+
+        <button type="submit" id="trial-submit-btn" class="btn btn-primary trial-submit">Começar meu teste grátis</button>
+        <p id="trial-status" class="trial-status" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="trial-perks">
+        <span>✓ Sem cartão de crédito</span>
+        <span>✓ Cancele quando quiser</span>
+        <span>✓ Suporte por WhatsApp</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- DEPOIMENTOS -->
 <section class="depo">
   <div class="wrap">
@@ -392,6 +471,103 @@
     },{threshold:.14});
     els.forEach(el=>io.observe(el));
   } else { els.forEach(el=>el.classList.add('in')); }
+</script>
+
+<!-- ============================================================================
+     TRIAL — CADASTRO AUTO-SERVIÇO (v2.2.0)
+     Mesmo projeto Supabase do app (oduwpttbbemypiypjsux). Fluxo:
+       1) supabase.auth.signUp(email, senha) — cria o login.
+       2) supabase.rpc('fn_criar_trial', {...}) — cria empresa + pessoa
+          (perfil admin) + licença trial (7 dias), tudo em 1 função
+          SECURITY DEFINER no banco (ver raiz_fase1a_signup_trial.sql).
+       3) Redireciona pro app com os tokens de sessão no hash da URL
+          (#access_token=...&refresh_token=...&type=trial_handoff) — a
+          mesma técnica que o próprio Supabase usa em magic link. O app
+          (window.onload) detecta esse hash, aplica a sessão via
+          setSession() e entra direto, sem pedir login de novo.
+     ============================================================================ -->
+<script>
+  const SUPABASE_URL = "https://oduwpttbbemypiypjsux.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kdXdwdHRiYmVteXBpeXBqc3V4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyODEyOTcsImV4cCI6MjEwMDg1NzI5N30.9-cu1CV1wPbo5UH1G2eAsWqsvS54AWNuQZOlifc9a7w";
+  const APP_URL = "https://app.raizpatrimonio.com.br";
+
+  const { createClient } = supabase;
+  const dbTrial = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const formTrial = document.getElementById('form-trial');
+  const btnTrial = document.getElementById('trial-submit-btn');
+  const statusTrial = document.getElementById('trial-status');
+
+  function mostrarStatusTrial(mensagem, tipo) {
+    statusTrial.textContent = mensagem;
+    statusTrial.className = 'trial-status' + (tipo ? ' ' + tipo : '');
+  }
+
+  formTrial.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const empresa = document.getElementById('trial-empresa').value.trim();
+    const nome = document.getElementById('trial-nome').value.trim();
+    const email = document.getElementById('trial-email').value.trim();
+    const whatsapp = document.getElementById('trial-whatsapp').value.trim();
+    const senha = document.getElementById('trial-senha').value;
+
+    if (!empresa || !nome || !email || !whatsapp || senha.length < 6) {
+      mostrarStatusTrial('Preenche todos os campos (senha com pelo menos 6 caracteres).', 'erro');
+      return;
+    }
+
+    btnTrial.disabled = true;
+    btnTrial.textContent = 'Criando sua conta...';
+    mostrarStatusTrial('', '');
+
+    try {
+      // 1) Cria o login
+      const { data: signUpData, error: signUpError } = await dbTrial.auth.signUp({
+        email: email,
+        password: senha
+      });
+      if (signUpError) throw signUpError;
+
+      // Sessão vem direto do signUp (confirmação de e-mail desligada no
+      // projeto) — se algum dia isso mudar, session virá null aqui e
+      // precisamos rever esse fluxo (avisar "confira seu e-mail" em vez
+      // de redirecionar direto).
+      const session = signUpData.session;
+      if (!session) {
+        mostrarStatusTrial('Conta criada! Confira seu e-mail para confirmar o acesso.', 'ok');
+        btnTrial.disabled = false;
+        btnTrial.textContent = 'Começar meu teste grátis';
+        return;
+      }
+
+      // 2) Cria empresa + pessoa + licença de trial (função no banco)
+      const { error: rpcError } = await dbTrial.rpc('fn_criar_trial', {
+        p_nome_empresa: empresa,
+        p_nome_usuario: nome,
+        p_whatsapp: whatsapp
+      });
+      if (rpcError) throw rpcError;
+
+      mostrarStatusTrial('Tudo pronto! Redirecionando...', 'ok');
+
+      // 3) Handoff pro app já autenticado — tokens no hash, igual magic link
+      const handoffUrl = APP_URL + '/#access_token=' + encodeURIComponent(session.access_token) +
+        '&refresh_token=' + encodeURIComponent(session.refresh_token) +
+        '&type=trial_handoff';
+
+      window.location.href = handoffUrl;
+
+    } catch (err) {
+      const msg = (err && err.message) ? err.message : 'Erro desconhecido.';
+      const msgAmigavel = msg.includes('already registered') || msg.includes('já está vinculado')
+        ? 'Este e-mail já tem uma conta. Tenta entrar direto pelo app, ou usa outro e-mail.'
+        : 'Não deu pra criar sua conta agora (' + msg + '). Tenta de novo ou chama no WhatsApp.';
+      mostrarStatusTrial(msgAmigavel, 'erro');
+      btnTrial.disabled = false;
+      btnTrial.textContent = 'Começar meu teste grátis';
+    }
+  });
 </script>
 </body>
 </html>
