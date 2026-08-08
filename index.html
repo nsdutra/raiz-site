@@ -2,8 +2,16 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Landing Page (index.html)
-  VERSÃO: v2.2.0
-  TOTAL DE LINHAS: 573 linhas
+  VERSÃO: v2.3.0
+  TOTAL DE LINHAS: 626 linhas
+  NOVIDADES v2.3.0 — correções pós-teste real:
+    - Validação nativa dos campos obrigatórios (checkValidity/
+      reportValidity) em vez de só mensagem de texto — antes o
+      preventDefault() impedia o navegador de mostrar o aviso nativo.
+    - Novo campo: faixa de imóveis administrados (0-5 / 5-20 / 20+),
+      pílulas clicáveis, obrigatório, enviado como p_faixa_imoveis pro
+      RPC fn_criar_trial (guardado em clientes.faixa_imoveis_estimada —
+      qualificação de lead).
   DESCRIÇÃO: Página de apresentação e captação de clientes do Raiz Patrimônio.
   NOVIDADES v2.2.0 (Fase 1A — trial auto-serviço):
     - Nova seção #trial: formulário de cadastro (empresa, nome, email,
@@ -219,6 +227,17 @@
   .trial-status.ok{color:var(--pine)}
   .trial-perks{display:flex;justify-content:center;gap:18px;margin-top:18px;flex-wrap:wrap}
   .trial-perks span{font-size:12.5px;color:var(--sage);display:flex;align-items:center;gap:5px}
+
+  /* faixa de imóveis — pílulas clicáveis */
+  .faixa-opcoes{display:flex;gap:8px}
+  .faixa-pill{
+    flex:1;text-align:center;padding:10px 8px;border:1.5px solid var(--line);border-radius:10px;
+    font-size:13px;font-weight:600;color:#4a5852;cursor:pointer;background:var(--paper);
+    transition:border-color .15s ease, background .15s ease, color .15s ease;user-select:none;
+  }
+  .faixa-pill:hover{border-color:var(--sage)}
+  .faixa-pill.selecionada{background:var(--pine);border-color:var(--pine);color:#fff}
+  .faixa-erro{border-color:#b23a2e !important}
   @media(max-width:560px){.trial-box{padding:24px 20px}}
 
   /* reveal */
@@ -387,6 +406,15 @@
           <label for="trial-senha">Crie uma senha</label>
           <input type="password" id="trial-senha" name="senha" autocomplete="new-password" required minlength="6" placeholder="Mínimo 6 caracteres">
         </div>
+        <div class="trial-field">
+          <label>Quantos imóveis você administra hoje?</label>
+          <div class="faixa-opcoes" id="faixa-opcoes" role="radiogroup" aria-label="Quantidade de imóveis">
+            <div class="faixa-pill" data-valor="0-5" onclick="selecionarFaixaImoveis(this)" role="radio" aria-checked="false" tabindex="0">0 a 5</div>
+            <div class="faixa-pill" data-valor="5-20" onclick="selecionarFaixaImoveis(this)" role="radio" aria-checked="false" tabindex="0">5 a 20</div>
+            <div class="faixa-pill" data-valor="20+" onclick="selecionarFaixaImoveis(this)" role="radio" aria-checked="false" tabindex="0">Acima de 20</div>
+          </div>
+          <input type="hidden" id="trial-faixa" name="faixa_imoveis" value="">
+        </div>
 
         <button type="submit" id="trial-submit-btn" class="btn btn-primary trial-submit">Começar meu teste grátis</button>
         <p id="trial-status" class="trial-status" role="status" aria-live="polite"></p>
@@ -497,23 +525,47 @@
   const formTrial = document.getElementById('form-trial');
   const btnTrial = document.getElementById('trial-submit-btn');
   const statusTrial = document.getElementById('trial-status');
+  const campoFaixa = document.getElementById('trial-faixa');
 
   function mostrarStatusTrial(mensagem, tipo) {
     statusTrial.textContent = mensagem;
     statusTrial.className = 'trial-status' + (tipo ? ' ' + tipo : '');
   }
 
+  // Faixa de imóveis — pílulas clicáveis (não é <select>/radio nativo, então
+  // a obrigatoriedade é checada manualmente no submit, não pelo HTML5).
+  function selecionarFaixaImoveis(el) {
+    document.querySelectorAll('.faixa-pill').forEach(function(p) {
+      p.classList.remove('selecionada');
+      p.setAttribute('aria-checked', 'false');
+    });
+    el.classList.remove('faixa-erro');
+    el.classList.add('selecionada');
+    el.setAttribute('aria-checked', 'true');
+    campoFaixa.value = el.getAttribute('data-valor');
+    document.getElementById('faixa-opcoes').classList.remove('faixa-erro');
+  }
+
   formTrial.addEventListener('submit', async function(e) {
     e.preventDefault();
+
+    // Validação nativa dos campos "required" — dispara o balão/realce
+    // padrão do navegador em vez de só uma mensagem de texto embaixo.
+    if (!formTrial.checkValidity()) {
+      formTrial.reportValidity();
+      return;
+    }
 
     const empresa = document.getElementById('trial-empresa').value.trim();
     const nome = document.getElementById('trial-nome').value.trim();
     const email = document.getElementById('trial-email').value.trim();
     const whatsapp = document.getElementById('trial-whatsapp').value.trim();
     const senha = document.getElementById('trial-senha').value;
+    const faixaImoveis = campoFaixa.value;
 
-    if (!empresa || !nome || !email || !whatsapp || senha.length < 6) {
-      mostrarStatusTrial('Preenche todos os campos (senha com pelo menos 6 caracteres).', 'erro');
+    if (!faixaImoveis) {
+      mostrarStatusTrial('Escolhe uma faixa de quantidade de imóveis.', 'erro');
+      document.querySelectorAll('.faixa-pill').forEach(function(p) { p.classList.add('faixa-erro'); });
       return;
     }
 
@@ -545,7 +597,8 @@
       const { error: rpcError } = await dbTrial.rpc('fn_criar_trial', {
         p_nome_empresa: empresa,
         p_nome_usuario: nome,
-        p_whatsapp: whatsapp
+        p_whatsapp: whatsapp,
+        p_faixa_imoveis: faixaImoveis
       });
       if (rpcError) throw rpcError;
 
