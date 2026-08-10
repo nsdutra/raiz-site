@@ -2,14 +2,18 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Landing Page (index.html)
-  VERSÃO: v2.4.0
-  TOTAL DE LINHAS: 626 linhas
-  NOVIDADES v2.4.0 — correções pós-teste real:
-    - Pílulas de faixa de imóveis: corrigido desalinhamento (causa era
-      altura inconsistente quando o texto quebrava linha — "Acima de 20"
-      vs "0 a 5"). Agora usa flexbox com altura mínima igual nas três.
-    - RPC fn_criar_trial agora recebe p_email também (faltava — o
-      e-mail do lead não estava sendo gravado no cadastro).
+  VERSÃO: v2.5.0
+  TOTAL DE LINHAS: 696 linhas
+  NOVIDADES v2.5.0 — convite de sócio pro trial:
+    - Novo parâmetro de URL ?convite=<cliente_id> — quando presente,
+      esconde os campos "Nome da empresa" e "faixa de imóveis" (não
+      fazem sentido pra quem está entrando num trial já existente),
+      mostra banner com nome da empresa + vagas restantes
+      (fn_info_convite_trial, chamada como anon, antes do login).
+    - Submit ramifica: com convite válido chama fn_entrar_trial_convite
+      (só cria a pessoa, não a empresa); sem convite (ou convite
+      inválido/expirado/lotado) segue o fluxo normal de sempre
+      (fn_criar_trial).
   DESCRIÇÃO: Página de apresentação e captação de clientes do Raiz Patrimônio.
   NOVIDADES v2.2.0 (Fase 1A — trial auto-serviço):
     - Nova seção #trial: formulário de cadastro (empresa, nome, email,
@@ -381,11 +385,14 @@
   <div class="wrap">
     <div class="trial-box reveal">
       <span class="eyebrow">Comece agora</span>
-      <h2>Teste grátis por 7 dias</h2>
-      <p class="trial-sub">Cadastre sua empresa e já entre direto no sistema. Sem cartão, sem instalação.</p>
+      <h2 id="trial-titulo">Teste grátis por 7 dias</h2>
+      <p class="trial-sub" id="trial-subtitulo">Cadastre sua empresa e já entre direto no sistema. Sem cartão, sem instalação.</p>
+
+      <!-- FASE 1A (v2.5.0) — aparece só quando a página abre com ?convite=... -->
+      <div id="convite-banner" class="hidden" style="background:var(--brass-light,#f0c88a);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:13.5px;color:#5c4318;text-align:center;"></div>
 
       <form id="form-trial" novalidate>
-        <div class="trial-field">
+        <div class="trial-field" id="campo-trial-empresa">
           <label for="trial-empresa">Nome da empresa ou família</label>
           <input type="text" id="trial-empresa" name="empresa" autocomplete="organization" required placeholder="Ex.: Patrimônio da Família Silva">
         </div>
@@ -405,7 +412,7 @@
           <label for="trial-senha">Crie uma senha</label>
           <input type="password" id="trial-senha" name="senha" autocomplete="new-password" required minlength="6" placeholder="Mínimo 6 caracteres">
         </div>
-        <div class="trial-field">
+        <div class="trial-field" id="campo-trial-faixa">
           <label>Quantos imóveis você administra hoje?</label>
           <div class="faixa-opcoes" id="faixa-opcoes" role="radiogroup" aria-label="Quantidade de imóveis">
             <div class="faixa-pill" data-valor="0-5" onclick="selecionarFaixaImoveis(this)" role="radio" aria-checked="false" tabindex="0">0 a 5</div>
@@ -531,6 +538,58 @@
     statusTrial.className = 'trial-status' + (tipo ? ' ' + tipo : '');
   }
 
+  // ============================================================================
+  // FASE 1A (v2.5.0) — CONVITE DE SÓCIO: se a URL vier com ?convite=<cliente_id>
+  // (link compartilhado pelo app, aba Sobre), pula a criação de empresa nova —
+  // a pessoa entra como mais um acesso na empresa que já está em trial.
+  // Checagem de validade (trial ainda ativo, não expirado, < 5 pessoas) roda
+  // aqui SÓ pra UX (esconder campo, mostrar aviso); a validação que importa
+  // de verdade roda de novo no banco em fn_entrar_trial_convite.
+  // ============================================================================
+  let conviteClienteId = null;
+
+  async function verificarConviteNaUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const convite = params.get('convite');
+    if (!convite) return;
+
+    try {
+      const { data, error } = await dbTrial.rpc('fn_info_convite_trial', { p_cliente_id: convite });
+      if (error) throw error;
+      const linha = Array.isArray(data) ? data[0] : data;
+
+      if (!linha) {
+        // Convite inválido/expirado/lotado — segue com o fluxo normal
+        // (cria empresa própria), só avisa educadamente.
+        const banner = document.getElementById('convite-banner');
+        banner.textContent = 'Esse link de convite não está mais disponível — mas você pode começar seu próprio teste grátis abaixo.';
+        banner.classList.remove('hidden');
+        return;
+      }
+
+      conviteClienteId = convite;
+
+      document.getElementById('trial-titulo').textContent = 'Você foi convidado!';
+      document.getElementById('trial-subtitulo').textContent = 'Entre com seus próprios dados de acesso — vocês vão dividir o mesmo teste grátis.';
+
+      const banner = document.getElementById('convite-banner');
+      banner.textContent = '🎉 Convite para testar junto com "' + linha.nome_empresa + '" — ' + linha.vagas_restantes + ' vaga(s) restante(s).';
+      banner.classList.remove('hidden');
+
+      // Empresa e faixa de imóveis não fazem sentido nesse fluxo — quem
+      // convidou já respondeu isso.
+      document.getElementById('campo-trial-empresa').classList.add('hidden');
+      document.getElementById('trial-empresa').required = false;
+      document.getElementById('campo-trial-faixa').classList.add('hidden');
+
+    } catch (err) {
+      console.warn('Falha ao checar convite:', err.message);
+      // Não bloqueia nada — segue com o fluxo normal de sempre.
+    }
+  }
+
+  verificarConviteNaUrl();
+
   // Faixa de imóveis — pílulas clicáveis (não é <select>/radio nativo, então
   // a obrigatoriedade é checada manualmente no submit, não pelo HTML5).
   function selecionarFaixaImoveis(el) {
@@ -562,7 +621,9 @@
     const senha = document.getElementById('trial-senha').value;
     const faixaImoveis = campoFaixa.value;
 
-    if (!faixaImoveis) {
+    // FASE 1A (v2.5.0) — no modo convite, empresa/faixa ficam escondidos
+    // e não são obrigatórios (ver verificarConviteNaUrl).
+    if (!conviteClienteId && !faixaImoveis) {
       mostrarStatusTrial('Escolhe uma faixa de quantidade de imóveis.', 'erro');
       document.querySelectorAll('.faixa-pill').forEach(function(p) { p.classList.add('faixa-erro'); });
       return;
@@ -592,14 +653,23 @@
         return;
       }
 
-      // 2) Cria empresa + pessoa + licença de trial (função no banco)
-      const { error: rpcError } = await dbTrial.rpc('fn_criar_trial', {
-        p_nome_empresa: empresa,
-        p_nome_usuario: nome,
-        p_whatsapp: whatsapp,
-        p_faixa_imoveis: faixaImoveis,
-        p_email: email
-      });
+      // 2) Cria empresa nova (fluxo normal) OU só a pessoa numa empresa
+      // que já existe (fluxo de convite) — mesma validação de limite de
+      // 5 pessoas e trial ainda ativo roda de novo dentro da função.
+      const { error: rpcError } = conviteClienteId
+        ? await dbTrial.rpc('fn_entrar_trial_convite', {
+            p_cliente_id: conviteClienteId,
+            p_nome_usuario: nome,
+            p_whatsapp: whatsapp,
+            p_email: email
+          })
+        : await dbTrial.rpc('fn_criar_trial', {
+            p_nome_empresa: empresa,
+            p_nome_usuario: nome,
+            p_whatsapp: whatsapp,
+            p_faixa_imoveis: faixaImoveis,
+            p_email: email
+          });
       if (rpcError) throw rpcError;
 
       mostrarStatusTrial('Tudo pronto! Redirecionando...', 'ok');
