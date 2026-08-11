@@ -2,19 +2,39 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Landing Page (index.html)
-  VERSÃO: v2.5.0
-  TOTAL DE LINHAS: 696 linhas
-  NOVIDADES v2.5.0 — convite de sócio pro trial:
-    - Novo parâmetro de URL ?convite=<cliente_id> — quando presente,
-      esconde os campos "Nome da empresa" e "faixa de imóveis" (não
-      fazem sentido pra quem está entrando num trial já existente),
-      mostra banner com nome da empresa + vagas restantes
-      (fn_info_convite_trial, chamada como anon, antes do login).
-    - Submit ramifica: com convite válido chama fn_entrar_trial_convite
-      (só cria a pessoa, não a empresa); sem convite (ou convite
-      inválido/expirado/lotado) segue o fluxo normal de sempre
-      (fn_criar_trial).
-  DESCRIÇÃO: Página de apresentação e captação de clientes do Raiz Patrimônio.
+  VERSÃO: v2.7.0
+  TOTAL DE LINHAS: 787 linhas
+  NOVIDADES v2.7.0 — contador de visitas:
+    - registrarVisitaLanding() — dispara no load, grava em
+      comercial.eventos_landing (schema separado, primeiro do projeto):
+      página vista, referrer, utm_source/medium/campaign, parâmetro de
+      convite (se veio de link de sócio) e user agent.
+    - Fogo-e-esquece: se o insert falhar por qualquer motivo (schema
+      ainda não exposto na API, rede, etc.), só loga no console — nunca
+      trava ou atrasa a página.
+    - Depende de raiz_comercial_eventos_landing.sql + adicionar
+      "comercial" em Settings > API > Exposed schemas no Supabase
+      (config manual, não dá pra fazer via SQL).
+    - <head>: link canônico (raizpatrimonio.com.br sem www — é o domínio
+      configurado no GitHub Pages), meta robots, Open Graph completo
+      (title/description/url — sem og:image por enquanto), Twitter Card,
+      dados estruturados JSON-LD (schema.org SoftwareApplication).
+    - Novos arquivos na raiz do repo: robots.txt (libera indexação,
+      aponta pro sitemap) e sitemap.xml (só a home, site de 1 página).
+    - CORRIGIDO: link de convite de sócio (gerado no app) tinha
+      "?convite=" DEPOIS do "#trial" — isso faz o parâmetro virar parte
+      do hash em vez de query string de verdade, e a landing nunca via
+      o valor. Corrigido no app (v1.39.7): agora é
+      "?convite=xxx#trial" (query antes do hash).
+
+  --- HISTÓRICO ANTERIOR (v2.6.0) ---
+
+  NOVIDADES v2.6.0 — SEO / preparação pro Google Search Console:
+    - <head>: link canônico, meta robots, Open Graph, Twitter Card,
+      dados estruturados JSON-LD. Novos robots.txt e sitemap.xml.
+
+  --- HISTÓRICO ANTERIOR (v2.2.0) ---
+
   NOVIDADES v2.2.0 (Fase 1A — trial auto-serviço):
     - Nova seção #trial: formulário de cadastro (empresa, nome, email,
       whatsapp, senha) que cria conta + empresa + licença trial (7 dias)
@@ -39,6 +59,51 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Raiz Patrimônio — o controle dos seus imóveis, organizado para a família</title>
 <meta name="description" content="O Raiz Patrimônio reúne imóveis, contratos e recebimentos num painel só. Gestão simples do patrimônio da família, com tudo documentado e compartilhado. Acesso seguro via Supabase, integração com WhatsApp e email.">
+
+<!-- FASE SEO (v2.6.0) — canônico aponta pro domínio raiz (sem www),
+     porque é essa a configuração no GitHub Pages (Settings > Pages >
+     Custom domain = raizpatrimonio.com.br, sem www) — o GitHub redireciona
+     www -> raiz automaticamente. Se um dia isso mudar pra www como
+     domínio principal, troca aqui também. -->
+<link rel="canonical" href="https://raizpatrimonio.com.br/">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph — como o link aparece quando compartilhado no WhatsApp/
+     Facebook/LinkedIn. Sem og:image por enquanto — quando tiver uma
+     imagem de capa (1200x630px), me manda que eu adiciono a tag. -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Raiz Patrimônio">
+<meta property="og:title" content="Raiz Patrimônio — o controle dos seus imóveis, organizado para a família">
+<meta property="og:description" content="O Raiz Patrimônio reúne imóveis, contratos e recebimentos num painel só. Gestão simples do patrimônio da família, com tudo documentado e compartilhado.">
+<meta property="og:url" content="https://raizpatrimonio.com.br/">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Raiz Patrimônio — o controle dos seus imóveis, organizado para a família">
+<meta name="twitter:description" content="O Raiz Patrimônio reúne imóveis, contratos e recebimentos num painel só. Gestão simples do patrimônio da família.">
+
+<!-- Dados estruturados — ajuda o Google a entender do que se trata o
+     site (aparece em rich snippets, e reforça a ficha de "empresa" que
+     o Google eventualmente cria pra buscas com o nome da marca). -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Raiz Patrimônio",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "description": "Gestão de imóveis, contratos e recebimentos para famílias e pequenos administradores de patrimônio.",
+  "url": "https://raizpatrimonio.com.br/",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "BRL",
+    "description": "Teste grátis por 7 dias"
+  },
+  "inLanguage": "pt-BR"
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -588,6 +653,32 @@
     }
   }
 
+  // ============================================================================
+  // FASE COMERCIAL (v2.7.0) — contador de visitas, schema separado
+  // "comercial" (não mistura com os dados operacionais do app). Fogo-e-
+  // esquece: se falhar (ex: schema ainda não exposto na API), não trava
+  // nada da página, só loga no console.
+  // ============================================================================
+  function registrarVisitaLanding() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      dbTrial.schema('comercial').from('eventos_landing').insert({
+        pagina: window.location.pathname + window.location.hash,
+        referrer: document.referrer || null,
+        utm_source: params.get('utm_source'),
+        utm_medium: params.get('utm_medium'),
+        utm_campaign: params.get('utm_campaign'),
+        convite: params.get('convite'),
+        user_agent: navigator.userAgent
+      }).then(function(res) {
+        if (res.error) console.warn('Falha ao registrar visita:', res.error.message);
+      });
+    } catch (err) {
+      console.warn('Falha ao registrar visita:', err.message);
+    }
+  }
+
+  registrarVisitaLanding();
   verificarConviteNaUrl();
 
   // Faixa de imóveis — pílulas clicáveis (não é <select>/radio nativo, então
