@@ -60,6 +60,16 @@
 <title>Raiz Patrimônio — o controle dos seus imóveis, organizado para a família</title>
 <meta name="description" content="O Raiz Patrimônio reúne imóveis, contratos e recebimentos num painel só. Gestão simples do patrimônio da família, com tudo documentado e compartilhado. Acesso seguro via Supabase, integração com WhatsApp e email.">
 
+<!-- Favicon (v2.7.0) — antes não existia NENHUM link rel="icon", por isso
+     o Chrome caía no globo genérico na aba. SVG embutido via data URI (não
+     depende de subir um arquivo .ico/.png separado pro GitHub Pages —
+     funciona no mesmo commit deste HTML): monograma "R" em círculo verde
+     pine (--pine, mesma cor da marca), letra em brass (--brass) pra
+     contrastar. Se um dia quiser um favicon mais elaborado (com o logo de
+     verdade, multi-resolução .ico/.png/apple-touch-icon), é só eu gerar os
+     arquivos e trocar por link rel="icon" href="/favicon.ico" etc. -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%231e3a32'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='38' font-weight='700' fill='%23c68a3b' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E">
+
 <!-- FASE SEO (v2.6.0) — canônico aponta pro domínio raiz (sem www),
      porque é essa a configuração no GitHub Pages (Settings > Pages >
      Custom domain = raizpatrimonio.com.br, sem www) — o GitHub redireciona
@@ -151,12 +161,36 @@
   .nav-in{display:flex;align-items:center;justify-content:space-between;height:66px}
   .logo{display:inline-flex;align-items:baseline;gap:9px;font-family:"Bricolage Grotesque";font-weight:800;font-size:24px;letter-spacing:-.03em;color:var(--pine);text-decoration:none}
   .logo .logo-sub{font-family:"Inter";font-weight:600;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--sage)}
+  .nav-right{display:flex;align-items:center;gap:22px}
   .nav-links{display:flex;gap:28px;align-items:center;font-size:15px;font-weight:500}
   .nav-links a{text-decoration:none;color:var(--sage)}
   .nav-links a:hover{color:var(--ink)}
   .nav-cta{background:var(--pine);color:#fff;padding:9px 18px;border-radius:999px}
   .nav-cta:hover{background:var(--pine-deep)}
-  @media(max-width:720px){.nav-links a:not(.nav-cta){display:none}}
+
+  /* Menu mobile (v2.7.0) — ANTES desta versão, a regra abaixo simplesmente
+     escondia "O que faz/Para quem é/Como funciona/Já sou cliente" em telas
+     ≤720px, sem nenhum jeito de acessar de volta:
+       @media(max-width:720px){.nav-links a:not(.nav-cta){display:none}}
+     Isso é sério pra "Já sou cliente" — cliente ativo no celular não tinha
+     NENHUM caminho visual de volta pro app a partir da landing. Trocado por
+     um hambúrguer de verdade: .nav-cta ("Testar grátis") continua SEMPRE
+     visível no mobile, igual já era — só o grupo de links informativos +
+     "Já sou cliente" (.nav-links) que agora vira um painel que abre/fecha
+     tocando no ícone, em vez de sumir sem alternativa nenhuma. */
+  .nav-toggle{display:none;background:none;border:none;padding:8px;margin:-8px 0;cursor:pointer;color:var(--pine)}
+  .nav-toggle svg{display:block;width:24px;height:24px}
+  @media(max-width:720px){
+    .nav-toggle{display:flex;align-items:center;justify-content:center}
+    .nav-links{
+      display:none;position:absolute;top:66px;left:0;right:0;
+      flex-direction:column;align-items:stretch;gap:0;
+      background:var(--paper);border-bottom:1px solid var(--line);
+      padding:4px 20px 10px;box-shadow:0 8px 20px rgba(23,33,30,.08);
+    }
+    .nav-links.nav-open{display:flex}
+    .nav-links a{display:block;padding:14px 0;border-bottom:1px solid var(--line)}
+  }
 
   /* HERO */
   .hero{padding:72px 0 40px}
@@ -320,13 +354,18 @@
 <header class="nav">
   <div class="wrap nav-in">
     <a class="logo" href="#">Raiz<span class="logo-sub">Patrimônio</span></a>
-    <nav class="nav-links">
-      <a href="#o-que-faz">O que faz</a>
-      <a href="#para-quem">Para quem é</a>
-      <a href="#como-funciona">Como funciona</a>
-      <a href="https://app.raizpatrimonio.com.br" target="_blank" rel="noopener">Já sou cliente</a>
+    <div class="nav-right">
+      <nav class="nav-links" id="nav-links">
+        <a href="#o-que-faz">O que faz</a>
+        <a href="#para-quem">Para quem é</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="https://app.raizpatrimonio.com.br" target="_blank" rel="noopener">Já sou cliente</a>
+      </nav>
+      <button type="button" class="nav-toggle" onclick="toggleNavMobile()" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
       <a class="nav-cta" href="#trial">Testar grátis</a>
-    </nav>
+    </div>
   </div>
 </header>
 
@@ -589,6 +628,32 @@
   const SUPABASE_URL = "https://oduwpttbbemypiypjsux.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kdXdwdHRiYmVteXBpeXBqc3V4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyODEyOTcsImV4cCI6MjEwMDg1NzI5N30.9-cu1CV1wPbo5UH1G2eAsWqsvS54AWNuQZOlifc9a7w";
   const APP_URL = "https://app.raizpatrimonio.com.br";
+
+  // Menu mobile (v2.7.0) — abre/fecha o painel de "O que faz/Para quem é/
+  // Como funciona/Já sou cliente". Fecha sozinho ao tocar num link dentro
+  // do painel (evita ficar aberto depois de navegar) e ao tocar fora dele.
+  const navLinksEl = document.getElementById('nav-links');
+  const navToggleEl = document.querySelector('.nav-toggle');
+
+  function toggleNavMobile() {
+    const aberto = navLinksEl.classList.toggle('nav-open');
+    navToggleEl.setAttribute('aria-expanded', aberto ? 'true' : 'false');
+  }
+
+  navLinksEl.addEventListener('click', function(ev) {
+    if (ev.target.tagName === 'A') {
+      navLinksEl.classList.remove('nav-open');
+      navToggleEl.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  document.addEventListener('click', function(ev) {
+    if (navLinksEl.classList.contains('nav-open') &&
+        !navLinksEl.contains(ev.target) && !navToggleEl.contains(ev.target)) {
+      navLinksEl.classList.remove('nav-open');
+      navToggleEl.setAttribute('aria-expanded', 'false');
+    }
+  });
 
   const { createClient } = supabase;
   const dbTrial = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
