@@ -2,9 +2,18 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Landing Page (index.html)
-  VERSÃO: v2.7.0
-  TOTAL DE LINHAS: 787 linhas
-  NOVIDADES v2.7.0 — contador de visitas:
+  VERSÃO: v3.0.0
+  NOVIDADES v3.0.0 — reposicionamento comercial:
+    - Hero passa a vender controle + R.AI.Z no WhatsApp, sem esconder o app.
+    - "Já sou cliente" preservado no desktop e no menu mobile.
+    - R.AI.Z ganha seção de destaque com CTA direto para o bot oficial.
+    - Cofre aparece como "Próximos passos do Raiz", sem anunciar como disponível.
+    - Preço de lançamento e Importação Assistida passam a ser transparentes.
+    - Trial comercial passa para 14 dias (REQUER migration SQL entregue junto).
+    - Posicionamento de evolução contínua e captura de sugestões sem promessa.
+    - Changelog preservado; fluxo real de signup/Supabase da v2.7.0 mantido.
+
+  HISTÓRICO v2.7.0 — contador de visitas:
     - registrarVisitaLanding() — dispara no load, grava em
       comercial.eventos_landing (schema separado, primeiro do projeto):
       página vista, referrer, utm_source/medium/campaign, parâmetro de
@@ -37,7 +46,7 @@
 
   NOVIDADES v2.2.0 (Fase 1A — trial auto-serviço):
     - Nova seção #trial: formulário de cadastro (empresa, nome, email,
-      whatsapp, senha) que cria conta + empresa + licença trial (7 dias)
+      whatsapp, senha) que cria conta + empresa + licença trial (14 dias)
       direto pelo navegador, sem passar por você.
     - Fluxo: supabase.auth.signUp() -> rpc('fn_criar_trial') -> redireciona
       pro app com handoff de sessão via hash da URL (mesma técnica de
@@ -50,15 +59,15 @@
     - Nav/hero CTA atualizados: "Começar" -> "Testar grátis", apontando
       pra #trial em vez de #falar. Seção #falar (WhatsApp) mantida mais
       abaixo, pra quem prefere falar antes de testar.
-  ATUALIZADO EM: 2026-08-07
+  ATUALIZADO EM: 2026-08-18
   ============================================================================
 -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Raiz Patrimônio — o controle dos seus imóveis, organizado para a família</title>
-<meta name="description" content="O Raiz Patrimônio reúne imóveis, contratos e recebimentos num painel só. Gestão simples do patrimônio da família, com tudo documentado e compartilhado. Acesso seguro via Supabase, integração com WhatsApp e email.">
+<title>Raiz Patrimônio — controle seus imóveis pelo app e pelo WhatsApp</title>
+<meta name="description" content="Controle imóveis, contratos, recebimentos, reajustes e pendências com o Raiz Patrimônio — pelo app e com o R.AI.Z no WhatsApp. Teste grátis por 14 dias.">
 
 <!-- Favicon (v2.7.0) — antes não existia NENHUM link rel="icon", por isso
      o Chrome caía no globo genérico na aba. SVG embutido via data URI (não
@@ -108,7 +117,7 @@
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "BRL",
-    "description": "Teste grátis por 7 dias"
+    "description": "Teste grátis por 14 dias"
   },
   "inLanguage": "pt-BR"
 }
@@ -353,27 +362,30 @@
   .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease}
   .reveal.in{opacity:1;transform:none}
   @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
-  /* Botão flutuante WhatsApp (v2.8.0) — padrão de mercado: círculo verde
-     oficial do WhatsApp (#25D366, NÃO é o --pine da marca — aqui vale mais
-     ser reconhecível à primeira vista do que consistente com a paleta),
-     fixo no canto inferior direito, sempre visível por cima do conteúdo
-     (inclusive rolando a página). Vai pro número comercial/humano
-     (5511947461828), mesmo número e mesma mensagem já usados na seção
-     #falar — NÃO é o número do bot (5511978950609, esse é só usado dentro
-     do app, ver RaizPatrimonio-BETA-V1_40_3.html). */
-  .whatsapp-float{
-    position:fixed;right:22px;bottom:22px;z-index:40;
-    width:58px;height:58px;border-radius:50%;
-    background:#25D366;box-shadow:0 4px 14px rgba(0,0,0,.25);
-    display:flex;align-items:center;justify-content:center;
-    transition:transform .15s ease;
-  }
-  .whatsapp-float:hover{transform:scale(1.08)}
-  .whatsapp-float svg{width:30px;height:30px}
-  @media(max-width:720px){
-    .whatsapp-float{width:52px;height:52px;right:16px;bottom:16px}
-    .whatsapp-float svg{width:27px;height:27px}
-  }
+
+  /* v3.0.0 — blocos comerciais */
+  .hero-bot-note{margin-top:14px;font-size:14px;color:var(--sage);display:flex;gap:8px;align-items:flex-start}
+  .bot-section{background:var(--pine);color:#fff}
+  .bot-grid{display:grid;grid-template-columns:1fr .9fr;gap:54px;align-items:center}
+  .bot-section .eyebrow{color:#f0c88a}.bot-section h2{font-size:clamp(32px,4vw,48px);margin:10px 0 16px}
+  .bot-section p{color:#d9e3df;font-size:17px;line-height:1.7}
+  .bot-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+  .btn-brass{background:var(--brass);color:#fff}.btn-brass:hover{transform:translateY(-1px)}
+  .wa-card{background:#f7f7f3;color:var(--ink);border-radius:20px;padding:22px;box-shadow:0 24px 60px rgba(0,0,0,.18)}
+  .wa-bubble{background:#fff;border-radius:16px 16px 16px 4px;padding:13px 15px;margin:10px 0;font-size:14px;line-height:1.45}
+  .wa-bubble.user{background:#dcf8c6;border-radius:16px 16px 4px 16px;margin-left:44px}
+  .news-grid,.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .news-card,.price-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px}
+  .news-card h3,.price-card h3{margin:10px 0 8px}
+  .coming{display:inline-block;background:#f4ead9;color:#7a5525;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+  .price-card.featured{border:2px solid var(--brass);box-shadow:0 20px 50px -32px rgba(21,42,36,.5)}
+  .price-big{font-family:"Bricolage Grotesque";font-size:38px;font-weight:800;color:var(--pine);margin-top:12px}
+  .price-small{font-size:13px;color:var(--sage)}
+  .price-list{list-style:none;padding:0;margin:18px 0}.price-list li{margin:9px 0;font-size:14px;color:#46544f}
+  .evolve-box{background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px;display:grid;grid-template-columns:1fr 1fr;gap:30px}
+  .mini-note{font-size:12px;color:var(--sage);margin-top:10px;line-height:1.5}
+  @media(max-width:800px){.bot-grid,.evolve-box{grid-template-columns:1fr}.news-grid,.price-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -385,48 +397,44 @@
     <div class="nav-right">
       <nav class="nav-links" id="nav-links">
         <a href="#o-que-faz">O que faz</a>
-        <a href="#para-quem">Para quem é</a>
-        <a href="#como-funciona">Como funciona</a>
-        <a href="https://app.raizpatrimonio.com.br" target="_blank" rel="noopener">Já sou cliente</a>
+        <a href="#raiz-whatsapp">R.AI.Z</a>
+        <a href="#precos">Preço</a>
+        <a href="#novidades">Novidades</a>
+        <a href="https://app.raizpatrimonio.com.br" target="_blank" rel="noopener"><strong>Já sou cliente</strong></a>
       </nav>
-      <a class="nav-cta" href="#trial">Testar grátis</a>
       <button type="button" class="nav-toggle" onclick="toggleNavMobile()" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
+      <a class="nav-cta" href="#trial">Testar grátis</a>
     </div>
   </div>
 </header>
 
-<!-- HERO -->
+<!-- HERO v3.0.0 -->
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <span class="eyebrow">Gestão de patrimônio familiar</span>
-      <h1>O patrimônio da família <em>organizado</em>, num lugar só.</h1>
-      <p class="lead">Chega de planilhas pesadas, papéis espalhados e controle na memória. O Raiz reúne seus imóveis, contratos e recebimentos num painel só — fácil de usar e compartilhado com a família.</p>
-      <div class="launch-badge"><span class="pulse"></span> Teste grátis por 7 dias · sem cartão de crédito</div>
+      <span class="eyebrow">Gestão patrimonial no app e no WhatsApp</span>
+      <h1>Seu patrimônio imobiliário <em>sob controle</em>. Sem depender de planilhas.</h1>
+      <p class="lead">Imóveis, contratos, recebimentos, reajustes e sócios organizados — com o R.AI.Z no WhatsApp para consultar pendências e executar tarefas da rotina.</p>
+      <div class="launch-badge"><span class="pulse"></span> Teste grátis por 14 dias · sem cartão de crédito</div>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="#trial">Testar grátis agora</a>
-        <a class="btn btn-ghost" href="#como-funciona">Ver como funciona</a>
+        <a class="btn btn-primary" href="#trial">Começar 14 dias grátis</a>
+        <a class="btn btn-ghost" href="https://wa.me/5511978950609?text=Ol%C3%A1%2C%20quero%20conhecer%20o%20R.AI.Z%20-%20Assistente%20Patrimonial." target="_blank" rel="noopener">Conhecer o R.AI.Z no WhatsApp</a>
       </div>
-      <p class="hero-note">Instala como app no celular. Compatível com iPhone, Android e computador.</p>
+      <div class="hero-bot-note"><span>💬</span><span>Você não precisa escolher entre WhatsApp e sistema: o R.AI.Z agiliza a rotina e o app mantém a visão completa, histórico e controle.</span></div>
     </div>
-
-    <!-- SIGNATURE: painel de controle -->
     <div class="painel" aria-label="Exemplo de painel do Raiz Patrimônio">
-      <div class="p-head">
-        <span class="p-title">Painel · Junho</span>
-        <span class="p-chip">ATUALIZADO</span>
-      </div>
+      <div class="p-head"><span class="p-title">Hoje no seu patrimônio</span><span class="p-chip">ATUALIZADO</span></div>
       <div class="p-stats">
-        <div class="stat"><div class="n">24</div><div class="l">imóveis</div></div>
-        <div class="stat"><div class="n">21</div><div class="l">alugados</div></div>
+        <div class="stat"><div class="n">12</div><div class="l">imóveis</div></div>
+        <div class="stat"><div class="n">11</div><div class="l">ocupados</div></div>
         <div class="stat big"><div class="n">R$ 38.450</div><div class="l">recebido no mês · 92% do previsto</div></div>
       </div>
       <div class="p-rows">
-        <div class="p-row"><span><span class="dot ok"></span>Apto 302 · Centro</span><span class="v">Pago</span></div>
-        <div class="p-row"><span><span class="dot warn"></span>Contrato 14 · reajuste vencido</span><span class="v">Revisar</span></div>
-        <div class="p-row"><span><span class="dot late"></span>Casa 7 · Jardim das Acácias</span><span class="v">Atrasado</span></div>
+        <div class="p-row"><span><span class="dot warn"></span>Apto Moema · reajuste em 43 dias</span><span class="v">Acompanhar</span></div>
+        <div class="p-row"><span><span class="dot late"></span>Casa Jardins · pagamento</span><span class="v">4 dias</span></div>
+        <div class="p-row"><span><span class="dot ok"></span>R.AI.Z · pendências consultadas</span><span class="v">Agora</span></div>
       </div>
     </div>
   </div>
@@ -462,9 +470,33 @@
       <div class="feat reveal"><div class="ic">📅</div><h3>Recebimentos por mês</h3><p>Gera as mensalidades, mostra quem pagou e quem está inadimplente, competência a competência.</p></div>
       <div class="feat reveal"><div class="ic">🏦</div><h3>Conciliação bancária</h3><p>Importa o extrato e casa cada entrada com o aluguel certo, sem conferir linha por linha.</p></div>
       <div class="feat reveal"><div class="ic">🧾</div><h3>Recibos em PDF</h3><p>Recibo pronto para enviar ao inquilino em segundos, direto do celular.</p></div>
-      <div class="feat reveal"><div class="ic">💬</div><h3>Comunicação integrada</h3><p>Fale com clientes e sócios via WhatsApp e email sem sair do app. Histórico centralizado de todas as conversas.</p></div>
+      <div class="feat reveal"><div class="ic">🤖</div><h3>R.AI.Z no WhatsApp</h3><p>Consulte pendências, busque imóvel ou contrato, gere recibos, trabalhe com comprovantes e acesse a Vitrine pelo assistente patrimonial.</p></div>
       <div class="feat reveal"><div class="ic">👥</div><h3>Divisão entre sócios</h3><p>Mostra o que cabe a cada dono e registra as retiradas, com extrato por pessoa.</p></div>
       <div class="feat reveal"><div class="ic">🔔</div><h3>Alertas que importam</h3><p>Contrato vencido, reajuste pendente e imóvel vago aparecem antes de virar problema.</p></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- R.AI.Z — destaque v3.0.0 -->
+<section id="raiz-whatsapp" class="bot-section">
+  <div class="wrap bot-grid">
+    <div class="reveal">
+      <span class="eyebrow">R.AI.Z · Assistente Patrimonial</span>
+      <h2>Menos tempo aprendendo sistema. Mais coisas resolvidas pelo WhatsApp.</h2>
+      <p>O app continua sendo sua base de controle. Mas tarefas do dia a dia podem começar pelo canal que você já usa. Hoje o R.AI.Z já apoia consultas de pendências, busca de imóveis e contratos, comprovantes, recibos e Vitrine.</p>
+      <p style="margin-top:12px">No trial, a evolução planejada é usar o mesmo canal para ajudar no onboarding e mostrar alertas úteis da própria carteira — sempre com contexto e sem transformar o WhatsApp em propaganda.</p>
+      <div class="bot-actions">
+        <a class="btn btn-brass" href="https://wa.me/5511978950609?text=Ol%C3%A1%2C%20quero%20conhecer%20o%20R.AI.Z%20-%20Assistente%20Patrimonial." target="_blank" rel="noopener">Falar com o R.AI.Z</a>
+        <a class="btn" style="border:1px solid #8fa89e;color:#fff" href="#trial">Testar o Raiz</a>
+      </div>
+    </div>
+    <div class="wa-card reveal">
+      <div style="font-size:12px;color:#66736e;font-weight:700">R.AI.Z · Assistente Patrimonial</div>
+      <div class="wa-bubble">Olá! Posso consultar suas pendências, localizar um imóvel ou contrato, ajudar com comprovantes e gerar recibos.</div>
+      <div class="wa-bubble user">Quais pendências tenho hoje?</div>
+      <div class="wa-bubble">Vou consultar a empresa selecionada e te mostrar o que precisa de atenção.</div>
+      <div class="mini-note">Exemplo ilustrativo. As respostas reais dependem dos dados e permissões da sua conta.</div>
     </div>
   </div>
 </section>
@@ -497,17 +529,50 @@
   </div>
 </section>
 
-<!-- COMO FUNCIONA -->
+<!-- COMO FUNCIONA v3.0.0 -->
 <section id="como-funciona">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="eyebrow">Como funciona</span>
-      <h2>Começar é simples.</h2>
-    </div>
+    <div class="sec-head reveal"><span class="eyebrow">Como começar</span><h2>Comece sozinho — ou peça ajuda para trazer sua carteira.</h2></div>
     <div class="steps">
-      <div class="step reveal"><div class="num">1</div><h3>Escolha seu modelo</h3><p>Quer que a gente configure tudo para você? Ou prefere instalar sozinho e no seu ritmo? Você escolhe — é simples ou um clique.</p></div>
-      <div class="step reveal"><div class="num">2</div><h3>Instale no celular</h3><p>Abre como app no Android ou iPhone. Mesmo sistema no computador, quando precisar. Funciona offline também.</p></div>
-      <div class="step reveal"><div class="num">3</div><h3>Controle no dia a dia</h3><p>Registra pagamentos, gera recibos, conversa com clientes via WhatsApp e acompanha tudo pelo painel, onde estiver.</p></div>
+      <div class="step reveal"><div class="num">1</div><h3>Crie seu teste</h3><p>14 dias grátis, sem cartão. Entre no app e comece com um imóvel real.</p></div>
+      <div class="step reveal"><div class="num">2</div><h3>Use app + WhatsApp</h3><p>O app dá visão completa; o R.AI.Z agiliza consultas e tarefas pelo WhatsApp.</p></div>
+      <div class="step reveal"><div class="num">3</div><h3>Já tem muitos dados?</h3><p>Solicite a Importação Assistida. Avaliamos sua base e propomos escopo, prazo e valor.</p></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- NOVIDADES / COFRE v3.0.0 -->
+<section id="novidades">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">O Raiz está crescendo</span><h2>Dos imóveis para uma visão mais ampla do patrimônio.</h2><p>O foco atual continua sendo tornar a gestão dos imóveis excelente. Em paralelo, estamos preparando novas formas de organizar documentos e outros ativos.</p></div>
+    <div class="news-grid">
+      <div class="news-card reveal"><span class="coming">Em evolução</span><h3>🔐 Cofre de Documentos</h3><p>Uma experiência para começar pelo documento e conectá-lo ao que ele controla: imóvel, contrato, recebimento e, no futuro, outros ativos patrimoniais.</p></div>
+      <div class="news-card reveal"><span class="coming">Direção de produto</span><h3>🚗 Outros ativos</h3><p>Veículos, terrenos, seguros, fotos, contatos e vencimentos entram na visão de evolução do Cofre — sem tirar o foco da gestão imobiliária atual.</p></div>
+      <div class="news-card reveal"><span class="coming">Você participa</span><h3>💡 Evolução com clientes</h3><p>Sugestões pelo app e pelo R.AI.Z ajudam a orientar prioridades. Elas são avaliadas por aderência, recorrência, segurança, impacto e viabilidade.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PREÇOS v3.0.0 -->
+<section id="precos" class="trial-section">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">Preço de lançamento</span><h2>Transparente para você saber se faz sentido antes de começar.</h2></div>
+    <div class="price-grid">
+      <div class="price-card reveal"><h3>Teste</h3><div class="price-big">14 dias</div><div class="price-small">grátis · sem cartão</div><ul class="price-list"><li>✓ Use com seus próprios imóveis</li><li>✓ App web/mobile</li><li>✓ R.AI.Z no WhatsApp</li></ul><a class="btn btn-ghost" href="#trial">Começar teste</a></div>
+      <div class="price-card featured reveal"><span class="coming">Condição inicial</span><h3>Raiz Patrimônio</h3><div class="price-big">R$ 99<span style="font-size:16px">/mês</span></div><div class="price-small">por 12 meses para os primeiros clientes elegíveis · referência posterior R$ 149/mês</div><ul class="price-list"><li>✓ Até 20 imóveis</li><li>✓ Contratos, recebimentos e conciliação</li><li>✓ Alertas, distribuição e Vitrine</li><li>✓ R.AI.Z conforme política de uso</li></ul><a class="btn btn-primary" href="#trial">Quero experimentar</a></div>
+      <div class="price-card reveal"><h3>Importação Assistida</h3><div class="price-big">R$ 490<span style="font-size:16px">+</span></div><div class="price-small">serviço opcional · sujeito à análise da base</div><ul class="price-list"><li>✓ Planilhas ou dados existentes</li><li>✓ Escopo e prazo antes do aceite</li><li>✓ Ideal para carteiras maiores</li></ul><a class="btn btn-ghost" href="https://wa.me/5511947461828?text=Oi!%20Quero%20avaliar%20a%20Importa%C3%A7%C3%A3o%20Assistida%20do%20Raiz%20Patrim%C3%B4nio." target="_blank" rel="noopener">Avaliar minha base</a></div>
+    </div>
+    <p class="mini-note" style="text-align:center">Acima de 20 imóveis, fale conosco para uma condição adequada ao volume.</p>
+  </div>
+</section>
+
+<!-- EVOLUÇÃO CONTÍNUA v3.0.0 -->
+<section>
+  <div class="wrap">
+    <div class="evolve-box reveal">
+      <div><span class="eyebrow">Produto próximo dos clientes</span><h2 style="margin-top:10px">Você fala. Nós ouvimos, avaliamos e priorizamos.</h2></div>
+      <div><p>O Raiz evolui ouvindo quem administra patrimônio de verdade. Sugestões podem ser enviadas pelo app e pelo R.AI.Z e ajudam a orientar nossas prioridades.</p><p style="margin-top:12px"><strong>Sem promessa automática:</strong> cada ideia é avaliada por aderência ao produto, recorrência, segurança, impacto e viabilidade antes de entrar no roadmap.</p></div>
     </div>
   </div>
 </section>
@@ -517,7 +582,7 @@
   <div class="wrap">
     <div class="trial-box reveal">
       <span class="eyebrow">Comece agora</span>
-      <h2 id="trial-titulo">Teste grátis por 7 dias</h2>
+      <h2 id="trial-titulo">Teste grátis por 14 dias</h2>
       <p class="trial-sub" id="trial-subtitulo">Cadastre sua empresa e já entre direto no sistema. Sem cartão, sem instalação.</p>
 
       <!-- FASE 1A (v2.5.0) — aparece só quando a página abre com ?convite=... -->
@@ -561,7 +626,7 @@
       <div class="trial-perks">
         <span>✓ Sem cartão de crédito</span>
         <span>✓ Cancele quando quiser</span>
-        <span>✓ Suporte por WhatsApp</span>
+        <span>✓ App + R.AI.Z no WhatsApp</span>
       </div>
     </div>
   </div>
@@ -597,7 +662,7 @@
     <h2>Ganhe tempo. Organize hoje.</h2>
     <p>Com o Raiz Patrimônio, as horas que você perdia com organização viram produtividade. Fale com a gente sem compromisso.</p>
     <div class="launch-note"><strong>Lançamento v2.0.</strong> Com suporte dedicado e integração com WhatsApp, vamos junto desde o início.</div>
-    <a class="btn btn-primary" href="https://wa.me/5511947461828?text=Oi!%20Quero%20conhecer%20o%20Raiz%20Patrim%C3%B4nio." target="_blank" rel="noopener">Falar no WhatsApp</a>
+    <a class="btn btn-primary" href="https://wa.me/5511947461828?text=Oi!%20Quero%20conhecer%20o%20Raiz%20Patrim%C3%B4nio." target="_blank" rel="noopener">Falar com a equipe no WhatsApp</a>
     <p style="margin-top:18px;font-size:14px;color:#8fa89e">Prefere e-mail? <a href="mailto:contato@raizpatrimonio.com.br" style="color:#f0c88a">contato@raizpatrimonio.com.br</a></p>
   </div>
 </section>
@@ -612,9 +677,9 @@
     <details><summary>Preciso ter conhecimento técnico?</summary><p>Não. Se optar pelo modelo com configuração, a gente deixa tudo pronto. Se preferir instalar sozinho, é intuitivo e rápido — alguns cliques apenas.</p></details>
     <details><summary>Quais são os dois modelos de instalação?</summary><p>Modelo 1 — A gente configura tudo para você (imóveis, sócios, integração com seus dados). Modelo 2 — Você instala pelo seu celular, e nós temos um guia simples passo a passo. Ambos funcionam perfeitamente — escolha o que se encaixa melhor no seu ritmo.</p></details>
     <details><summary>Serve para quantos imóveis?</summary><p>É pensado para carteiras de pequeno e médio porte — até cerca de 100 imóveis funcionam perfeitamente. Acima disso, vale conversar sobre o melhor formato.</p></details>
-    <details><summary>Como funciona a comunicação com clientes e sócios?</summary><p>Integrada e centralizada. Você conversa via WhatsApp e email direto do app, e todo o histórico fica guardado ali — nada perdido, nada espalhado por vários canais.</p></details>
+    <details><summary>O que eu consigo fazer pelo WhatsApp?</summary><p>O R.AI.Z já apoia consultas de pendências, busca de imóvel/contrato, comprovantes, recibos e Vitrine. O app continua sendo a visão completa e o histórico da operação. Novas jornadas, como onboarding e alertas contextuais, estão em evolução.</p></details>
     <details><summary>Meus dados ficam seguros?</summary><p>Sim. Suas informações ficam armazenadas em infraestrutura Supabase (banco de dados profissional), com acesso restrito apenas às pessoas que você autorizar. Cada cliente tem seu próprio ambiente, isolado e seguro. Você continua dono dos seus dados — pode exportar e fazer backup quando quiser. Como o sistema lida com contratos e dados de inquilinos, o tratamento segue os princípios da LGPD.</p></details>
-    <details><summary>Quanto custa?</summary><p>O Raiz Patrimônio tem um valor de instalação/setup (ajustado ao tamanho e necessidades do seu projeto) mais uma mensalidade. Como cada carteira é diferente, o valor é montado sob medida — fale com a gente pelo WhatsApp ou e-mail e preparamos um orçamento personalizado.</p></details>
+    <details><summary>Quanto custa?</summary><p>Nesta arrancada, a condição proposta é R$ 99/mês por 12 meses para os primeiros clientes elegíveis, com referência posterior de R$ 149/mês, para até 20 imóveis. Carteiras maiores são avaliadas conforme volume. A Importação Assistida é opcional e começa em R$ 490, sujeita à análise da base.</p></details>
     <details><summary>Funciona no iPhone e no Android?</summary><p>Sim. Instala como aplicativo nos dois, e o mesmo sistema abre no computador pelo navegador. Você tem acesso sincronizado em todos os dispositivos.</p></details>
   </div>
 </section>
@@ -644,7 +709,7 @@
      Mesmo projeto Supabase do app (oduwpttbbemypiypjsux). Fluxo:
        1) supabase.auth.signUp(email, senha) — cria o login.
        2) supabase.rpc('fn_criar_trial', {...}) — cria empresa + pessoa
-          (perfil admin) + licença trial (7 dias), tudo em 1 função
+          (perfil admin) + licença trial (14 dias), tudo em 1 função
           SECURITY DEFINER no banco (ver raiz_fase1a_signup_trial.sql).
        3) Redireciona pro app com os tokens de sessão no hash da URL
           (#access_token=...&refresh_token=...&type=trial_handoff) — a
@@ -876,9 +941,5 @@
     }
   });
 </script>
-<a class="whatsapp-float" href="https://wa.me/5511947461828?text=Oi!%20Quero%20conhecer%20o%20Raiz%20Patrim%C3%B4nio." target="_blank" rel="noopener" aria-label="Falar com a Raiz no WhatsApp">
-  <svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.03c-.24.68-1.4 1.3-1.93 1.35-.5.05-1.02.24-3.42-.71-2.88-1.15-4.72-4.06-4.87-4.25-.14-.19-1.17-1.55-1.17-2.96 0-1.4.74-2.09 1-2.38.26-.28.57-.35.76-.35.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.57.81 1.98.88 2.12.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.44.29.14.46.12.63-.07.17-.19.72-.84.92-1.13.19-.28.38-.24.63-.14.26.09 1.65.78 1.93.92.29.14.48.21.55.33.07.12.07.68-.17 1.36Z"/></svg>
-</a>
-
 </body>
 </html>
