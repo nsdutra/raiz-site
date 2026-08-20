@@ -2,7 +2,45 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Landing Page (index.html)
-  VERSÃO: v3.0.0
+  VERSÃO: v3.1.1
+  NOVIDADES v3.1.1 — ajuste de regra de negócio (19/08/2026):
+    - Resumo de pagamento no banner de campanha agora distingue opção
+      grátis de opções pagas, em vez de contar "N opções" genérico —
+      regra desta fase é toda campanha de trial ter a opção grátis (R$ 0)
+      cadastrada, às vezes junto com opções pagas (upgrade futuro,
+      informativo por enquanto). "1 opção de pagamento disponível" ficava
+      confuso quando essa opção era, na prática, grátis.
+    - Nenhuma mudança de fluxo — só o texto do resumo dentro do banner.
+
+  --- HISTÓRICO ANTERIOR (v3.1.0) ---
+
+  NOVIDADES v3.1.0 — campanha dinâmica (Raiz Gestão v0.8.1):
+    - Landing passa a consultar fn_ofertas_landing_ativas() no carregamento
+      — RPC pública/anon, único ponto de leitura da oferta comercial (nunca
+      SELECT direto em tabela comercial interna). Se houver campanha
+      publicada com landing configurada, mostra um banner com título/
+      subtítulo/CTA/badge vindos do banco, acima do formulário de trial.
+    - Se a RPC falhar ou não houver oferta ativa: nada muda, a landing
+      segue 100% funcional do jeito que já era (fallback silencioso, só
+      loga warning no console).
+    - sessao_id: UUID gerado no navegador (sessionStorage, não é
+      fingerprint) — usado só pra contar sessão/sequência do funil
+      anônimo em comercial.eventos_landing.
+    - registrarVisitaLanding() virou um caso de registrarEventoLanding()
+      genérico — mesmo padrão fogo-e-esquece de sempre, agora com 4 tipos
+      de evento: page_view (já existia), campaign_impression (1x por
+      sessão/campanha, quando o banner aparece), cta_click (ao clicar no
+      CTA da campanha), trial_form_start (1x, ao começar a preencher o
+      formulário de trial).
+    - Submit do trial: se houver campanha ativa resolvida, usa
+      fn_criar_trial_campanha() (nova, grava licencas.id_campanha) em vez
+      de fn_criar_trial(). Fluxo de convite (?convite=) e fn_criar_trial
+      original PRESERVADOS sem nenhuma alteração — a função nova só entra
+      quando há campanha resolvida E não é fluxo de convite.
+    - Requer gestao_fase3_campanhas_landing_v1.sql rodado em produção.
+
+  --- HISTÓRICO ANTERIOR (v3.0.0) ---
+
   NOVIDADES v3.0.0 — reposicionamento comercial:
     - Hero passa a vender controle + R.AI.Z no WhatsApp, sem esconder o app.
     - "Já sou cliente" preservado no desktop e no menu mobile.
@@ -588,6 +626,11 @@
       <!-- FASE 1A (v2.5.0) — aparece só quando a página abre com ?convite=... -->
       <div id="convite-banner" class="hidden" style="background:var(--brass-light,#f0c88a);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:13.5px;color:#5c4318;text-align:center;"></div>
 
+      <!-- v3.1.0 — campanha dinâmica, preenchida por carregarOfertaCampanha()
+           só se houver oferta publicada. Ausência de oferta = div some,
+           formulário de trial padrão continua exatamente como sempre foi. -->
+      <div id="oferta-campanha-banner" class="hidden" style="background:#fff;border:1.5px solid var(--brass);border-radius:14px;padding:16px 18px;margin-bottom:18px;"></div>
+
       <form id="form-trial" novalidate>
         <div class="trial-field" id="campo-trial-empresa">
           <label for="trial-empresa">Nome da empresa ou família</label>
@@ -816,28 +859,138 @@
   // "comercial" (não mistura com os dados operacionais do app). Fogo-e-
   // esquece: se falhar (ex: schema ainda não exposto na API), não trava
   // nada da página, só loga no console.
+  //
+  // v3.1.0: registrarVisitaLanding() virou um caso de
+  // registrarEventoLanding(evento, extra) genérico — mesmo racional
+  // fogo-e-esquece, agora com evento/sessao_id/campanha_codigo (migration
+  // gestao_fase3_campanhas_landing_v1.sql). sessao_id é um UUID aleatório
+  // gerado no navegador e guardado em sessionStorage — NÃO é fingerprint,
+  // não deriva de IP/user-agent, não guarda PII, só serve pra contar
+  // sessão/sequência do funil anônimo.
   // ============================================================================
-  function registrarVisitaLanding() {
+  function obterSessaoIdLanding() {
+    try {
+      let s = sessionStorage.getItem('raiz_sessao_landing');
+      if (!s) {
+        s = (crypto && crypto.randomUUID) ? crypto.randomUUID() : 'sess-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+        sessionStorage.setItem('raiz_sessao_landing', s);
+      }
+      return s;
+    } catch (err) {
+      return null; // sessionStorage indisponível (modo privado restrito etc.) — evento vai sem sessao_id, sem quebrar nada
+    }
+  }
+
+  function registrarEventoLanding(evento, extra) {
     try {
       const params = new URLSearchParams(window.location.search);
-      dbTrial.schema('comercial').from('eventos_landing').insert({
+      const payload = Object.assign({
         pagina: window.location.pathname + window.location.hash,
         referrer: document.referrer || null,
         utm_source: params.get('utm_source'),
         utm_medium: params.get('utm_medium'),
         utm_campaign: params.get('utm_campaign'),
         convite: params.get('convite'),
-        user_agent: navigator.userAgent
-      }).then(function(res) {
-        if (res.error) console.warn('Falha ao registrar visita:', res.error.message);
+        user_agent: navigator.userAgent,
+        evento: evento,
+        sessao_id: obterSessaoIdLanding()
+      }, extra || {});
+
+      dbTrial.schema('comercial').from('eventos_landing').insert(payload).then(function(res) {
+        if (res.error) console.warn('Falha ao registrar evento (' + evento + '):', res.error.message);
       });
     } catch (err) {
-      console.warn('Falha ao registrar visita:', err.message);
+      console.warn('Falha ao registrar evento (' + evento + '):', err.message);
     }
+  }
+
+  function registrarVisitaLanding() {
+    registrarEventoLanding('page_view');
+  }
+
+  // ============================================================================
+  // v3.1.0 — Campanha dinâmica. Chama a ÚNICA porta pública de leitura da
+  // oferta comercial (fn_ofertas_landing_ativas — anon, retorno mínimo).
+  // Se não houver oferta publicada, ou a chamada falhar, a landing segue
+  // 100% funcional do jeito que sempre foi — nada aqui pode travar o
+  // fluxo de trial padrão.
+  // ============================================================================
+  let ofertaCampanhaAtiva = null;
+
+  async function carregarOfertaCampanha() {
+    try {
+      const { data, error } = await dbTrial.rpc('fn_ofertas_landing_ativas');
+      if (error) throw error;
+      if (!data || data.length === 0) return;
+
+      const oferta = data[0]; // já vem ordenada: destaque primeiro, depois ordem
+      ofertaCampanhaAtiva = oferta;
+
+      const banner = document.getElementById('oferta-campanha-banner');
+      const opcoes = Array.isArray(oferta.opcoes_pagamento) ? oferta.opcoes_pagamento : [];
+      // v3.1.1 — regra desta fase: toda campanha de trial tem a opção
+      // grátis (R$ 0) cadastrada; pode ter opções pagas junto (upgrade
+      // futuro, só informativo — a compra em si ainda não passa por
+      // aqui). Resumo evita dizer "1 opção de pagamento" quando na
+      // prática é grátis pra começar.
+      const opcoesGratis = opcoes.filter(o => Number(o.preco) === 0);
+      const opcoesPagas = opcoes.filter(o => Number(o.preco) > 0);
+      let resumoPagamento;
+      if (opcoesGratis.length > 0 && opcoesPagas.length > 0) {
+        resumoPagamento = 'Comece grátis · depois escolha entre ' + opcoesPagas.length + ' plano(s) pago(s)';
+      } else if (opcoesGratis.length > 0) {
+        resumoPagamento = 'Sem custo nesta condição';
+      } else if (opcoesPagas.length > 0) {
+        resumoPagamento = opcoesPagas.length + ' opç' + (opcoesPagas.length > 1 ? 'ões' : 'ão') + ' de pagamento disponíve' + (opcoesPagas.length > 1 ? 'is' : 'l');
+      } else {
+        resumoPagamento = '';
+      }
+
+      banner.innerHTML =
+        (oferta.badge_texto ? '<span style="display:inline-block;background:var(--brass);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;margin-bottom:8px;">' + escaparHtmlLanding(oferta.badge_texto) + '</span><br>' : '') +
+        '<strong style="font-size:17px;color:var(--pine);display:block;margin-top:4px;">' + escaparHtmlLanding(oferta.titulo) + '</strong>' +
+        (oferta.subtitulo ? '<p style="font-size:13.5px;color:var(--sage);margin:6px 0 10px;">' + escaparHtmlLanding(oferta.subtitulo) + '</p>' : '') +
+        (resumoPagamento ? '<p style="font-size:12px;color:var(--sage);margin:0 0 10px;">' + resumoPagamento + '</p>' : '') +
+        '<button type="button" id="oferta-campanha-cta" class="btn btn-primary" style="width:100%;text-align:center;border:none;cursor:pointer;">' + escaparHtmlLanding(oferta.cta_texto || 'Começar agora') + '</button>';
+
+      banner.classList.remove('hidden');
+
+      document.getElementById('oferta-campanha-cta').addEventListener('click', function() {
+        registrarEventoLanding('cta_click', { campanha_codigo: oferta.codigo_publico });
+        document.getElementById('trial').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // campaign_impression: no máximo 1x por sessão/campanha (front-end;
+      // reforçar no banco é evolução futura se algum dia importar de verdade).
+      const chaveImpressao = 'raiz_impressao_' + oferta.codigo_publico;
+      if (!sessionStorage.getItem(chaveImpressao)) {
+        registrarEventoLanding('campaign_impression', { campanha_codigo: oferta.codigo_publico });
+        try { sessionStorage.setItem(chaveImpressao, '1'); } catch (e) {}
+      }
+
+    } catch (err) {
+      console.warn('Oferta de campanha indisponível (landing segue funcionando normalmente):', err.message);
+    }
+  }
+
+  function escaparHtmlLanding(s) {
+    const d = document.createElement('div');
+    d.textContent = s == null ? '' : String(s);
+    return d.innerHTML;
   }
 
   registrarVisitaLanding();
   verificarConviteNaUrl();
+  carregarOfertaCampanha();
+
+  // trial_form_start — 1x por carregamento de página, no primeiro campo
+  // preenchido do formulário de trial.
+  let trialFormStartDisparado = false;
+  formTrial.addEventListener('input', function() {
+    if (trialFormStartDisparado) return;
+    trialFormStartDisparado = true;
+    registrarEventoLanding('trial_form_start', { campanha_codigo: ofertaCampanhaAtiva ? ofertaCampanhaAtiva.codigo_publico : null });
+  }, { once: true });
 
   // Faixa de imóveis — pílulas clicáveis (não é <select>/radio nativo, então
   // a obrigatoriedade é checada manualmente no submit, não pelo HTML5).
@@ -905,20 +1058,50 @@
       // 2) Cria empresa nova (fluxo normal) OU só a pessoa numa empresa
       // que já existe (fluxo de convite) — mesma validação de limite de
       // 5 pessoas e trial ainda ativo roda de novo dentro da função.
-      const { error: rpcError } = conviteClienteId
-        ? await dbTrial.rpc('fn_entrar_trial_convite', {
-            p_cliente_id: conviteClienteId,
-            p_nome_usuario: nome,
-            p_whatsapp: whatsapp,
-            p_email: email
-          })
-        : await dbTrial.rpc('fn_criar_trial', {
+      //
+      // v3.1.0: se houver campanha ativa resolvida (carregarOfertaCampanha)
+      // E não for fluxo de convite, usa fn_criar_trial_campanha() — grava
+      // licencas.id_campanha, fonte oficial de atribuição no Comercial.
+      // Convite e fn_criar_trial ORIGINAL preservados sem nenhuma mudança.
+      let rpcError;
+      if (conviteClienteId) {
+        ({ error: rpcError } = await dbTrial.rpc('fn_entrar_trial_convite', {
+          p_cliente_id: conviteClienteId,
+          p_nome_usuario: nome,
+          p_whatsapp: whatsapp,
+          p_email: email
+        }));
+      } else if (ofertaCampanhaAtiva) {
+        ({ error: rpcError } = await dbTrial.rpc('fn_criar_trial_campanha', {
+          p_codigo_publico: ofertaCampanhaAtiva.codigo_publico,
+          p_nome_empresa: empresa,
+          p_nome_usuario: nome,
+          p_whatsapp: whatsapp,
+          p_faixa_imoveis: faixaImoveis,
+          p_email: email
+        }));
+        if (rpcError) {
+          // Oferta pode ter saído do ar entre o carregamento da página e o
+          // submit (ex.: você pausou a campanha nesse meio-tempo) — cai
+          // pro fluxo padrão em vez de travar o cadastro da pessoa.
+          console.warn('Trial via campanha falhou, tentando fluxo padrão:', rpcError.message);
+          ({ error: rpcError } = await dbTrial.rpc('fn_criar_trial', {
             p_nome_empresa: empresa,
             p_nome_usuario: nome,
             p_whatsapp: whatsapp,
             p_faixa_imoveis: faixaImoveis,
             p_email: email
-          });
+          }));
+        }
+      } else {
+        ({ error: rpcError } = await dbTrial.rpc('fn_criar_trial', {
+          p_nome_empresa: empresa,
+          p_nome_usuario: nome,
+          p_whatsapp: whatsapp,
+          p_faixa_imoveis: faixaImoveis,
+          p_email: email
+        }));
+      }
       if (rpcError) throw rpcError;
 
       mostrarStatusTrial('Tudo pronto! Redirecionando...', 'ok');
