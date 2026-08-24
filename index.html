@@ -2,6 +2,31 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Landing Page (index.html)
+  VERSÃO: v3.1.1 · 1186 linhas · 2026-08-23
+  NOVIDADES v3.1.1 — correções pendentes do handoff v0.9.0 (Gestão), sem
+  migration nova (comercial.eventos_landing.sessao_id já existia):
+    - CORRIGIDO: trackEvento() nunca incluía sessao_id no insert — funil
+      não conseguia encadear visita → CTA → form → trial da MESMA sessão.
+      Gerado 1x por aba via sessionStorage (raiz_sessao_id), incluído em
+      todo evento a partir de agora.
+    - CORRIGIDO: meta description fixava "14 dias" — os 3 planos têm
+      7/14/30. Agora "a partir de 7 dias, conforme o plano".
+    - CORRIGIDO: FAQ dizia "até cerca de 100 imóveis" — o maior plano
+      publicado (Plus) vai até 50. Ajustado pro número real.
+    - CONFIRMADO (não mudou nada): renderizarPlanos()/fn_ofertas_landing_ativas()
+      e fn_criar_trial_campanha() já liam corretamente do banco antes desta
+      versão — os 2 bugs relatados em produção (23/08/2026) eram na oferta
+      publicada no banco (Essencial fora da oferta ativa) e no módulo de
+      Gestão (desempenho de campanha), não na landing. Landing já é 100%
+      dinâmica: qualquer publicar/pausar/editar feito em Comercial →
+      Campanhas (Gestão) reflete aqui sem precisar tocar neste arquivo.
+    - Pendências do handoff v0.9.0 ainda NÃO tratadas nesta rodada (fora do
+      pedido desta vez): Contador/check-up e Despesas anunciados nos planos
+      superiores sem confirmação de que existem no catálogo
+      (public.funcionalidades); limite de usuários é copy sem trava
+      técnica no banco.
+
+  --- HISTÓRICO ANTERIOR (v3.1.0) ---
   VERSÃO: v3.1.0 · 1160 linhas
   NOVIDADES v3.1.0 — 3 planos comerciais + trial variável por plano:
     - Preços deixam de ser craqueados no HTML: seção #precos agora chama
@@ -115,7 +140,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Raiz Patrimônio — controle seus imóveis pelo app e pelo WhatsApp</title>
-<meta name="description" content="Controle imóveis, contratos, recebimentos, reajustes e pendências com o Raiz Patrimônio — pelo app e com o R.AI.Z no WhatsApp. Teste grátis por 14 dias.">
+<meta name="description" content="Controle imóveis, contratos, recebimentos, reajustes e pendências com o Raiz Patrimônio — pelo app e com o R.AI.Z no WhatsApp. Teste grátis a partir de 7 dias, conforme o plano.">
 
 <!-- Favicon (v2.7.0) — antes não existia NENHUM link rel="icon", por isso
      o Chrome caía no globo genérico na aba. SVG embutido via data URI (não
@@ -759,7 +784,7 @@
     </div>
     <details><summary>Preciso ter conhecimento técnico?</summary><p>Não. Se optar pelo modelo com configuração, a gente deixa tudo pronto. Se preferir instalar sozinho, é intuitivo e rápido — alguns cliques apenas.</p></details>
     <details><summary>Quais são os dois modelos de instalação?</summary><p>Modelo 1 — A gente configura tudo para você (imóveis, sócios, integração com seus dados). Modelo 2 — Você instala pelo seu celular, e nós temos um guia simples passo a passo. Ambos funcionam perfeitamente — escolha o que se encaixa melhor no seu ritmo.</p></details>
-    <details><summary>Serve para quantos imóveis?</summary><p>É pensado para carteiras de pequeno e médio porte — até cerca de 100 imóveis funcionam perfeitamente. Acima disso, vale conversar sobre o melhor formato.</p></details>
+    <details><summary>Serve para quantos imóveis?</summary><p>É pensado para carteiras de pequeno e médio porte — até 50 imóveis, no plano Plus. Acima disso, carteiras maiores têm proposta personalizada (fale conosco).</p></details>
     <details><summary>O que eu consigo fazer pelo WhatsApp?</summary><p>O R.AI.Z já apoia consultas de pendências, busca de imóvel/contrato, comprovantes, recibos e Vitrine. O app continua sendo a visão completa e o histórico da operação. Novas jornadas, como onboarding e alertas contextuais, estão em evolução.</p></details>
     <details><summary>Meus dados ficam seguros?</summary><p>Sim. Suas informações ficam armazenadas em infraestrutura Supabase (banco de dados profissional), com acesso restrito apenas às pessoas que você autorizar. Cada cliente tem seu próprio ambiente, isolado e seguro. Você continua dono dos seus dados — pode exportar e fazer backup quando quiser. Como o sistema lida com contratos e dados de inquilinos, o tratamento segue os princípios da LGPD.</p></details>
     <details><summary>Quanto custa?</summary><p>Três planos: Essencial (R$ 69/mês, até 5 imóveis), Patrimônio (R$ 149/mês, R$ 89/mês nos 3 primeiros meses, até 20 imóveis — recomendado) e Plus (R$ 279/mês, até 50 imóveis). Carteiras acima de 50 imóveis têm proposta personalizada. A Importação Assistida é opcional: R$ 99 (até 20 imóveis) ou R$ 199 (até 50), sujeita à análise da base.</p></details>
@@ -833,6 +858,30 @@
 
   const { createClient } = supabase;
   const dbTrial = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // v3.1.1 (23/08/2026) — sessao_id do funil. Pendência registrada desde o
+  // handoff da v0.9.0 (Gestão): trackEvento() nunca incluía sessao_id no
+  // insert, então o funil não conseguia encadear visita → CTA → form →
+  // trial da MESMA sessão (cada linha ficava "solta"). Coluna já existia
+  // em comercial.eventos_landing (nunca foi usada) — sem migration, só
+  // front-end. Gerado 1x por aba/sessão (sessionStorage, não localStorage
+  // — sessão nova = novo funil, de propósito) e nunca contém PII (é só um
+  // UUID aleatório do navegador).
+  function obterSessaoId() {
+    try {
+      let id = sessionStorage.getItem('raiz_sessao_id');
+      if (!id) {
+        id = (crypto.randomUUID ? crypto.randomUUID() : 'sess-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+        sessionStorage.setItem('raiz_sessao_id', id);
+      }
+      return id;
+    } catch (err) {
+      // sessionStorage indisponível (modo privado restritivo etc.) — não
+      // quebra o tracking, só perde o encadeamento por sessão desta visita.
+      return null;
+    }
+  }
+  const sessaoIdAtual = obterSessaoId();
 
   // v3.1.0 — declarado aqui (antes de trackEvento/renderizarPlanos serem
   // chamados no load) pra evitar erro de temporal-dead-zone: trackEvento()
@@ -930,7 +979,8 @@
         convite: params.get('convite'),
         user_agent: navigator.userAgent,
         evento: evento || 'page_view',
-        campanha_codigo: campanhaCodigo || planoSelecionado || null
+        campanha_codigo: campanhaCodigo || planoSelecionado || null,
+        sessao_id: sessaoIdAtual
       }).then(function(res) {
         if (res.error) console.warn('Falha ao registrar evento (' + evento + '):', res.error.message);
       });
