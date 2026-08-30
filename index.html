@@ -2,6 +2,22 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Landing Page (index.html)
+  VERSÃO: v3.2.0 · 1234 linhas · 2026-08-30
+  NOVIDADES v3.2.0 — pedido explícito do Nicola, frente de conformidade
+  LGPD ("evoluir com tudo"): rodapé ganhou links pra Termos de Uso e
+  Política de Privacidade (páginas novas, publicadas em /termos-de-uso e
+  /politica-de-privacidade — pasta + index.html cada, funciona igual com
+  ou sem Jekyll processando o GitHub Pages). Termo de Beta (/termo-beta)
+  NÃO entrou no rodapé público de propósito — só se aplica a tenant de
+  teste, que já vê o link de dentro do app (modal de aceite), não faz
+  sentido pro visitante geral da landing. As 3 páginas têm
+  <meta name="robots" content="noindex, follow"> — ainda têm campo
+  [PREENCHER] pendente de revisão jurídica, não deviam ser indexadas pelo
+  Google antes disso (tirar o noindex quando o Nicola confirmar que os
+  documentos estão na versão final). index.html em si não mudou de
+  conteúdo além do footer — nenhuma outra seção tocada.
+
+  --- HISTÓRICO ANTERIOR (v3.1.1) ---
   VERSÃO: v3.1.1 · 1186 linhas · 2026-08-23
   NOVIDADES v3.1.1 — correções pendentes do handoff v0.9.0 (Gestão), sem
   migration nova (comercial.eventos_landing.sessao_id já existia):
@@ -797,6 +813,14 @@
   <div class="wrap foot-in">
     <a class="logo" href="#">Raiz<span class="logo-sub">Patrimônio</span></a>
     <span>© <span id="ano"></span> Raiz Patrimônio · Gestão de patrimônio familiar</span>
+  </div>
+  <!-- v3.2.0 (30/08/2026) — links legais, pedido explícito do Nicola
+       (frente de conformidade LGPD). Páginas novas em /termos-de-uso,
+       /politica-de-privacidade, /termo-beta (pasta + index.html cada,
+       funciona independente de config do Jekyll no GitHub Pages). -->
+  <div class="wrap" style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1);display:flex;gap:18px;flex-wrap:wrap">
+    <a href="/termos-de-uso" style="color:#a9b3ae;text-decoration:none;font-size:12.5px">Termos de Uso</a>
+    <a href="/politica-de-privacidade" style="color:#a9b3ae;text-decoration:none;font-size:12.5px">Política de Privacidade</a>
   </div>
 </footer>
 
