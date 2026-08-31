@@ -74,56 +74,47 @@
 <tr>
 <th>Categoria</th>
 <th>Exemplos</th>
-<th>Onde vive no sistema</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Dados de conta</td>
-<td>Nome, e-mail, telefone, empresa, perfil de acesso</td>
-<td><code>clientes</code>, usuários vinculados</td>
+<td>Nome, e-mail, telefone, empresa, nível de permissão de acesso</td>
 </tr>
 <tr>
 <td>Dados cadastrais de pessoas físicas</td>
 <td>Nome, CPF/CNPJ, contato, endereço — locatários, fiadores, sócios, prestadores</td>
-<td><code>pessoas</code>, <code>prestadores</code></td>
 </tr>
 <tr>
 <td>Dados contratuais e financeiros</td>
-<td>Contratos de locação, valores de aluguel, histórico de pagamento, repasses</td>
-<td><code>contratos</code>, <code>mensalidades</code>, <code>repasses</code>, <code>divisao_repasse_contrato</code></td>
+<td>Contratos de locação, valores de aluguel, histórico de pagamento, repasses entre sócios</td>
 </tr>
 <tr>
 <td>Documentos e arquivos</td>
 <td>Comprovantes, apólices de seguro, contratos assinados, fotos dos ativos de patrimônio</td>
-<td><code>cofre_documentos</code>, <code>cofre_ativo_fotos</code>, Storage</td>
 </tr>
 <tr>
 <td>Preferências de comunicação</td>
-<td>Avisos operacionais do contrato/ativo (canal e frequência) e, por mensagem, opt-in/opt-out de comunicações de relacionamento (onboarding, novidades)</td>
-<td><code>pessoa_preferencias_comunicacao</code>, <code>comercial.comunicacao_interacoes</code></td>
+<td>Avisos operacionais do contrato/ativo (canal e frequência) e, mensagem a mensagem, sua escolha de receber ou não comunicações de relacionamento (boas-vindas, novidades)</td>
 </tr>
 <tr>
 <td>Dados de navegação (landing)</td>
-<td>Eventos de visita, origem de campanha, identificador de sessão (não é cookie — ver §9)</td>
-<td><code>comercial.eventos_landing</code></td>
+<td>Eventos de visita, origem de campanha, identificador de sessão (ver §9)</td>
 </tr>
 <tr>
 <td>Conversas via WhatsApp</td>
-<td>Número de telefone, conteúdo de mensagens trocadas com o bot</td>
-<td>integração WhatsApp Business Platform, <code>webhook_mensagens_processadas</code></td>
+<td>Número de telefone, conteúdo de mensagens trocadas com o assistente Raiz</td>
 </tr>
 <tr>
 <td>Logs de uso e auditoria</td>
-<td>Acessos, ações administrativas, chamadas de IA (sem conteúdo bruto do documento), ações de consentimento</td>
-<td><code>log_acessos</code>, <code>gestao.log_acoes</code>, <code>ia_eventos_log</code></td>
+<td>Acessos, ações administrativas, chamadas de inteligência artificial (sem o conteúdo bruto do documento), registro de aceites e preferências</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="4-como-coletamos">4. Como coletamos</h2>
 <ul>
-<li><strong>Diretamente do usuário</strong>: cadastro no app, preenchimento de formulários (inclusive o formulário público de contratação gerado pela Vitrine, <code>processos_contratacao</code>).</li>
+<li><strong>Diretamente do usuário</strong>: cadastro no app, preenchimento de formulários (inclusive o formulário público de contratação exibido na vitrine de imóveis).</li>
 <li><strong>Inseridos por um Cliente sobre terceiros</strong>: cadastro de locatários/fiadores/sócios feito pela imobiliária/gestora.</li>
 <li><strong>Via WhatsApp</strong>: quando uma pessoa inicia ou responde conversa com o bot Raiz (+55 11 97895-0609 / +55 11 94746-1828).</li>
 <li><strong>Upload de documentos</strong>: no controle de ativos de patrimônio, via app ou via bot.</li>
@@ -153,7 +144,7 @@
 </tr>
 <tr>
 <td>Envio de avisos proativos (vencimento, pendência) via WhatsApp</td>
-<td>Execução de contrato / legítimo interesse, com opção de opt-out em <code>pessoa_preferencias_comunicacao</code></td>
+<td>Execução de contrato / legítimo interesse, com opção de desligar por preferência de comunicação</td>
 </tr>
 <tr>
 <td>Comunicação de relacionamento (onboarding, novidades, renovação)</td>
@@ -239,43 +230,43 @@
 <tr>
 <td>Dados contratuais/financeiros (contratos, mensalidades)</td>
 <td>Contrato encerrado + 5 anos</td>
-<td>Prazo de guarda fiscal/prescricional usual — <strong>sugestão, a confirmar</strong></td>
+<td>Prazo de guarda fiscal e prescricional usual no Brasil</td>
 </tr>
 <tr>
 <td>Documentos dos ativos de patrimônio</td>
 <td>Conforme instrução do Cliente (Controlador) + prazo legal do tipo de documento</td>
-<td>DPA define regra por categoria</td>
+<td>O Termo de Tratamento de Dados firmado com cada Cliente define a regra por categoria</td>
 </tr>
 <tr>
-<td>Logs de acesso/auditoria</td>
-<td>6 a 12 meses</td>
-<td>Marco Civil da Internet (art. 15, guarda mínima de 6 meses para provedores de aplicação) — <strong>sugestão, a confirmar</strong></td>
+<td>Logs de acesso e auditoria</td>
+<td>12 meses</td>
+<td>Guarda mínima exigida pelo Marco Civil da Internet, com margem de segurança</td>
 </tr>
 <tr>
-<td>Dados de conversa WhatsApp</td>
-<td>Mesmo prazo dos dados contratuais relacionados, ou até 12 meses após o fim da conversa (o que for maior)</td>
-<td><strong>Sugestão, a confirmar</strong></td>
+<td>Conversas via WhatsApp</td>
+<td>12 meses após o fim da conversa, ou o prazo dos dados contratuais relacionados, o que for maior</td>
+<td>Continuidade de atendimento e prova de comunicação</td>
 </tr>
 <tr>
 <td><strong>Após cancelamento da conta</strong></td>
 <td><strong>Anonimização ou exclusão em até 90 dias</strong>, salvo obrigação legal de guarda maior</td>
-<td>Confirmado pelo Nicola (30/08/2026)</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="9-cookies-e-rastreamento-na-landing-page">9. Cookies e rastreamento na landing page</h2>
-<p><strong>O que usamos hoje, de fato:</strong> a landing page (<code>raizpatrimonio.com.br</code>) <strong>não usa cookies de rastreamento de terceiros</strong> — não há Google Analytics, Meta Pixel ou ferramenta similar instalada. Usamos apenas um identificador de sessão salvo em <code>sessionStorage</code> do seu navegador (não é um cookie tecnicamente — dura só enquanto a aba está aberta, é apagado ao fechar), pra agrupar eventos da mesma visita (ex. "viu a página de preços" → "clicou em contratar") e entender a origem de cada visita (campanha, referência). Esses eventos ficam registrados em <code>comercial.eventos_landing</code>.</p>
-<p><strong>Banner de consentimento:</strong> mesmo não usando cookie de terceiro, exibimos um aviso na primeira visita informando essa prática, com link pra esta seção — é o item "Cookies" mencionado no rodapé do site. Como não há cookie de propaganda/rastreamento cross-site, o aviso é informativo (não é um banner de "aceitar categorias"), mas se algum dia adicionarmos uma ferramenta de terceiro (ex. Google Analytics), o banner passa a pedir consentimento explícito antes de carregar esse script, com opção de recusar — atualização que entra no changelog (§12) quando acontecer.</p>
+<p><strong>O que usamos hoje, de fato:</strong> a landing page (raizpatrimonio.com.br) <strong>não usa cookies de rastreamento de terceiros</strong> — não há Google Analytics, Meta Pixel ou ferramenta similar instalada. Usamos apenas um identificador de sessão salvo temporariamente no seu navegador (tecnicamente não é um cookie — dura só enquanto a aba está aberta, é apagado ao fechar), para agrupar eventos da mesma visita (ex. "viu a página de preços" → "clicou em contratar") e entender a origem de cada visita (campanha, referência).</p>
+<p><strong>Banner de aviso:</strong> mesmo não usando cookie de terceiro, exibimos um aviso na primeira visita informando essa prática, com link pra esta seção. Como não há cookie de propaganda ou rastreamento entre sites, o aviso é informativo — não é um banner de "aceitar categorias". Se algum dia adicionarmos uma ferramenta de terceiro (ex. Google Analytics), o banner passa a pedir consentimento explícito antes de carregar esse recurso, com opção de recusar — atualização que entra no changelog (§12) quando acontecer.</p>
 <hr />
 <h2 id="10-seguranca-da-informacao">10. Segurança da informação</h2>
 <p>Medidas técnicas e organizacionais adotadas:
-- <strong>Row Level Security (RLS)</strong> em todas as tabelas do banco, isolando dados por tenant/cliente;
-- Funções <code>SECURITY DEFINER</code> com verificação explícita de permissão (<code>fn_sou_master()</code>, <code>fn_meu_cliente_id()</code>) para qualquer leitura cross-tenant;
-- Criptografia em trânsito (HTTPS/TLS) e em repouso, fornecida pela infraestrutura Supabase;
-- Log de auditoria de acessos e ações administrativas (<code>log_acessos</code>, <code>gestao.log_acoes</code>);
-- Tokens de compartilhamento de documento (<code>cofre_compartilhamentos</code>) opacos, com expiração e validação antes de gerar link de acesso — nunca a URL assinada é armazenada diretamente;
-- Controle de acesso por perfil (<code>perfis</code>, <code>perfil_funcionalidade</code>) — cada usuário só acessa telas permitidas ao seu papel.</p>
+- <strong>Isolamento de dados por cliente</strong>: os dados de cada empresa-cliente ficam isolados uns dos outros diretamente no banco de dados — um cliente nunca consegue, tecnicamente, ler ou alterar dados de outro cliente, mesmo em caso de falha de programação em uma tela específica;
+- <strong>Verificação de permissão em toda operação sensível</strong>: qualquer leitura que cruze dados entre clientes (ex. relatórios internos nossos) passa por checagem explícita de autorização, nunca por confiança implícita;
+- <strong>Criptografia em trânsito e em repouso</strong>: toda comunicação entre seu navegador e nossos servidores é criptografada (HTTPS/TLS), e os dados armazenados também são criptografados pela nossa infraestrutura de banco de dados;
+- <strong>Log de auditoria</strong>: mantemos registro de acessos e de ações administrativas relevantes, para investigação em caso de incidente;
+- <strong>Links de compartilhamento de documento seguros</strong>: quando um documento é compartilhado por link, o link usa um código de acesso opaco (não é possível adivinhar ou construir um link válido), com prazo de expiração;
+- <strong>Controle de acesso por nível de permissão</strong>: cada usuário só acessa as telas e ações compatíveis com o papel que lhe foi atribuído pelo Cliente.</p>
 <p>Em caso de incidente de segurança que resulte em risco relevante a titulares, seguiremos o dever de comunicação previsto no art. 48 da LGPD (comunicação à ANPD e aos titulares afetados, em prazo razoável).</p>
 <hr />
 <h2 id="11-direitos-do-titular-de-dados">11. Direitos do titular de dados</h2>
