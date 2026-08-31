@@ -59,16 +59,16 @@
 <main class="wrap">
   <div class="aviso"><b>Nota:</b> este documento passou por revisão técnica interna, mas ainda não por revisão jurídica formal. Em caso de dúvida sobre um trecho específico, entre em contato pelos canais abaixo.</div>
   <h1>Política de Privacidade</h1><p class="meta">Versão vigente — Raiz Patrimônio</p><hr />
-<h2>1. Introdução e papéis</h2>
-<p>Esta Política explica como o <strong>Raiz Patrimônio</strong> ([PREENCHER Razão Social/CNPJ]) coleta, usa, armazena e compartilha dados pessoais, em conformidade com a Lei 13.709/2018 (LGPD).</p>
+<h2 id="1-introducao-e-papeis">1. Introdução e papéis</h2>
+<p>Esta Política explica como o <strong>Raiz Patrimônio</strong> (Nicola Santos Dutra, CPF 936.589.076-49 — pessoa física, ainda sem CNPJ constituído) coleta, usa, armazena e compartilha dados pessoais, em conformidade com a Lei 13.709/2018 (LGPD).</p>
 <p>Como explicado nos <a href="https://raizpatrimonio.com.br/termos-de-uso">Termos de Uso, §4</a>, o Raiz Patrimônio atua em dois papéis:
 - <strong>Controlador</strong> dos dados da própria conta de quem usa a plataforma (usuário cadastrado, empresa-cliente).
 - <strong>Operador</strong> dos dados de terceiros que o Cliente insere no sistema sobre outras pessoas (locatários, fiadores, sócios) — nesse caso, o Cliente é o Controlador, e as regras específicas de tratamento estão no Termo de Tratamento de Dados (DPA).</p>
 <hr />
-<h2>2. Encarregado de Dados (DPO)</h2>
-<p>Nos termos do art. 41 da LGPD, o encarregado pelo tratamento de dados pessoais é: <strong>[PREENCHER nome]</strong>, contato: <strong>[PREENCHER e-mail — sugestão: privacidade@raizpatrimonio.com.br]</strong>.</p>
+<h2 id="2-encarregado-de-dados-dpo">2. Encarregado de Dados (DPO)</h2>
+<p>Nos termos do art. 41 da LGPD, o encarregado pelo tratamento de dados pessoais é: <strong>Nicola Santos Dutra</strong>, contato: <strong>contato@raizpatrimonio.com.br</strong>.</p>
 <hr />
-<h2>3. Quais dados coletamos</h2>
+<h2 id="3-quais-dados-coletamos">3. Quais dados coletamos</h2>
 <table>
 <thead>
 <tr>
@@ -95,17 +95,17 @@
 </tr>
 <tr>
 <td>Documentos e arquivos</td>
-<td>Comprovantes, apólices de seguro, contratos assinados, fotos de imóveis/ativos</td>
+<td>Comprovantes, apólices de seguro, contratos assinados, fotos dos ativos de patrimônio</td>
 <td><code>cofre_documentos</code>, <code>cofre_ativo_fotos</code>, Storage</td>
 </tr>
 <tr>
 <td>Preferências de comunicação</td>
-<td>Canal e frequência de avisos proativos (WhatsApp)</td>
-<td><code>pessoa_preferencias_comunicacao</code></td>
+<td>Avisos operacionais do contrato/ativo (canal e frequência) e, por mensagem, opt-in/opt-out de comunicações de relacionamento (onboarding, novidades)</td>
+<td><code>pessoa_preferencias_comunicacao</code>, <code>comercial.comunicacao_interacoes</code></td>
 </tr>
 <tr>
 <td>Dados de navegação (landing)</td>
-<td>Eventos de visita, origem de campanha</td>
+<td>Eventos de visita, origem de campanha, identificador de sessão (não é cookie — ver §9)</td>
 <td><code>comercial.eventos_landing</code></td>
 </tr>
 <tr>
@@ -115,22 +115,22 @@
 </tr>
 <tr>
 <td>Logs de uso e auditoria</td>
-<td>Acessos, ações administrativas, chamadas de IA (sem conteúdo bruto do documento)</td>
+<td>Acessos, ações administrativas, chamadas de IA (sem conteúdo bruto do documento), ações de consentimento</td>
 <td><code>log_acessos</code>, <code>gestao.log_acoes</code>, <code>ia_eventos_log</code></td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2>4. Como coletamos</h2>
+<h2 id="4-como-coletamos">4. Como coletamos</h2>
 <ul>
 <li><strong>Diretamente do usuário</strong>: cadastro no app, preenchimento de formulários (inclusive o formulário público de contratação gerado pela Vitrine, <code>processos_contratacao</code>).</li>
 <li><strong>Inseridos por um Cliente sobre terceiros</strong>: cadastro de locatários/fiadores/sócios feito pela imobiliária/gestora.</li>
 <li><strong>Via WhatsApp</strong>: quando uma pessoa inicia ou responde conversa com o bot Raiz (+55 11 97895-0609 / +55 11 94746-1828).</li>
-<li><strong>Upload de documentos</strong>: no módulo Cofre, via app ou via bot.</li>
+<li><strong>Upload de documentos</strong>: no controle de ativos de patrimônio, via app ou via bot.</li>
 <li><strong>Navegação na landing page</strong>: cookies e eventos de página (ver §9).</li>
 </ul>
 <hr />
-<h2>5. Finalidades e bases legais</h2>
+<h2 id="5-finalidades-e-bases-legais">5. Finalidades e bases legais</h2>
 <table>
 <thead>
 <tr>
@@ -156,8 +156,8 @@
 <td>Execução de contrato / legítimo interesse, com opção de opt-out em <code>pessoa_preferencias_comunicacao</code></td>
 </tr>
 <tr>
-<td>Comunicação de marketing/upsell (campanhas, novidades)</td>
-<td>Consentimento (inciso I) — <strong>exige opt-in explícito, separado da comunicação transacional</strong></td>
+<td>Comunicação de relacionamento (onboarding, novidades, renovação)</td>
+<td>Legítimo interesse (inciso IX), por já existir relação comercial ativa — cada mensagem pode ser desligada individualmente pelo usuário (opt-out fácil, tela de preferências)</td>
 </tr>
 <tr>
 <td>Cumprimento de obrigação legal/fiscal (guarda de contratos, notas)</td>
@@ -174,7 +174,7 @@
 </tbody>
 </table>
 <hr />
-<h2>6. Com quem compartilhamos dados</h2>
+<h2 id="6-com-quem-compartilhamos-dados">6. Com quem compartilhamos dados</h2>
 <p>Não vendemos dados pessoais. Compartilhamos apenas com prestadores que operam em nosso nome, sob instrução e finalidade limitada:</p>
 <table>
 <thead>
@@ -218,16 +218,15 @@
 </tbody>
 </table>
 <hr />
-<h2>7. Transferência internacional de dados</h2>
+<h2 id="7-transferencia-internacional-de-dados">7. Transferência internacional de dados</h2>
 <p>Alguns dos prestadores acima (Anthropic, Google) processam dados fora do Brasil. Essa transferência ocorre com base nas garantias contratuais e de proteção de dados oferecidas por esses fornecedores em nível empresarial (cláusulas de proteção de dados, conforme art. 33 da LGPD). Buscamos minimizar o volume de dado pessoal enviado a esses serviços ao estritamente necessário para a funcionalidade solicitada.</p>
 <hr />
-<h2>8. Retenção e descarte</h2>
-<p><strong>[PREENCHER prazos definitivos — sugestão de ponto de partida abaixo, a validar com jurídico]</strong></p>
+<h2 id="8-retencao-e-descarte">8. Retenção e descarte</h2>
 <table>
 <thead>
 <tr>
 <th>Tipo de dado</th>
-<th>Prazo sugerido</th>
+<th>Prazo</th>
 <th>Justificativa</th>
 </tr>
 </thead>
@@ -240,35 +239,36 @@
 <tr>
 <td>Dados contratuais/financeiros (contratos, mensalidades)</td>
 <td>Contrato encerrado + 5 anos</td>
-<td>Prazo de guarda fiscal/prescricional usual</td>
+<td>Prazo de guarda fiscal/prescricional usual — <strong>sugestão, a confirmar</strong></td>
 </tr>
 <tr>
-<td>Documentos do Cofre</td>
+<td>Documentos dos ativos de patrimônio</td>
 <td>Conforme instrução do Cliente (Controlador) + prazo legal do tipo de documento</td>
 <td>DPA define regra por categoria</td>
 </tr>
 <tr>
 <td>Logs de acesso/auditoria</td>
-<td>6 meses a 12 meses</td>
-<td>Marco Civil da Internet (art. 15, guarda mínima de 6 meses para provedores de aplicação)</td>
+<td>6 a 12 meses</td>
+<td>Marco Civil da Internet (art. 15, guarda mínima de 6 meses para provedores de aplicação) — <strong>sugestão, a confirmar</strong></td>
 </tr>
 <tr>
 <td>Dados de conversa WhatsApp</td>
-<td><strong>[PREENCHER]</strong></td>
-<td>—</td>
+<td>Mesmo prazo dos dados contratuais relacionados, ou até 12 meses após o fim da conversa (o que for maior)</td>
+<td><strong>Sugestão, a confirmar</strong></td>
 </tr>
 <tr>
-<td>Após cancelamento da conta</td>
-<td>Anonimização ou exclusão em até <strong>[PREENCHER, sugestão 90 dias]</strong>, salvo obrigação legal de guarda maior</td>
-<td>—</td>
+<td><strong>Após cancelamento da conta</strong></td>
+<td><strong>Anonimização ou exclusão em até 90 dias</strong>, salvo obrigação legal de guarda maior</td>
+<td>Confirmado pelo Nicola (30/08/2026)</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2>9. Cookies e rastreamento na landing page</h2>
-<p>A landing page (<code>raizpatrimonio.com.br</code>) registra eventos de visita (<code>comercial.eventos_landing</code>) para entender origem de tráfego e campanhas. <strong>[PREENCHER conforme a implementação real: se usa cookies de terceiros (ex. Google Analytics/Meta Pixel), é necessário banner de consentimento antes de carregar cookies não-essenciais, com opção de recusar.]</strong> Cookies estritamente necessários (ex. sessão) não exigem consentimento prévio, mas devem ser listados aqui por transparência.</p>
+<h2 id="9-cookies-e-rastreamento-na-landing-page">9. Cookies e rastreamento na landing page</h2>
+<p><strong>O que usamos hoje, de fato:</strong> a landing page (<code>raizpatrimonio.com.br</code>) <strong>não usa cookies de rastreamento de terceiros</strong> — não há Google Analytics, Meta Pixel ou ferramenta similar instalada. Usamos apenas um identificador de sessão salvo em <code>sessionStorage</code> do seu navegador (não é um cookie tecnicamente — dura só enquanto a aba está aberta, é apagado ao fechar), pra agrupar eventos da mesma visita (ex. "viu a página de preços" → "clicou em contratar") e entender a origem de cada visita (campanha, referência). Esses eventos ficam registrados em <code>comercial.eventos_landing</code>.</p>
+<p><strong>Banner de consentimento:</strong> mesmo não usando cookie de terceiro, exibimos um aviso na primeira visita informando essa prática, com link pra esta seção — é o item "Cookies" mencionado no rodapé do site. Como não há cookie de propaganda/rastreamento cross-site, o aviso é informativo (não é um banner de "aceitar categorias"), mas se algum dia adicionarmos uma ferramenta de terceiro (ex. Google Analytics), o banner passa a pedir consentimento explícito antes de carregar esse script, com opção de recusar — atualização que entra no changelog (§12) quando acontecer.</p>
 <hr />
-<h2>10. Segurança da informação</h2>
+<h2 id="10-seguranca-da-informacao">10. Segurança da informação</h2>
 <p>Medidas técnicas e organizacionais adotadas:
 - <strong>Row Level Security (RLS)</strong> em todas as tabelas do banco, isolando dados por tenant/cliente;
 - Funções <code>SECURITY DEFINER</code> com verificação explícita de permissão (<code>fn_sou_master()</code>, <code>fn_meu_cliente_id()</code>) para qualquer leitura cross-tenant;
@@ -278,7 +278,7 @@
 - Controle de acesso por perfil (<code>perfis</code>, <code>perfil_funcionalidade</code>) — cada usuário só acessa telas permitidas ao seu papel.</p>
 <p>Em caso de incidente de segurança que resulte em risco relevante a titulares, seguiremos o dever de comunicação previsto no art. 48 da LGPD (comunicação à ANPD e aos titulares afetados, em prazo razoável).</p>
 <hr />
-<h2>11. Direitos do titular de dados</h2>
+<h2 id="11-direitos-do-titular-de-dados">11. Direitos do titular de dados</h2>
 <p>Nos termos do art. 18 da LGPD, você pode solicitar, a qualquer momento, mediante contato com nosso Encarregado (§2):
 - Confirmação de que tratamos seus dados, e acesso a eles;
 - Correção de dados incompletos, inexatos ou desatualizados;
@@ -288,7 +288,7 @@
 - Revogação do consentimento, quando o tratamento se basear nele (ex. comunicação de marketing);
 - Revisão de decisões automatizadas, quando aplicável.</p>
 <p>Se você é locatário, fiador ou terceiro cadastrado por uma imobiliária/gestora cliente do Raiz Patrimônio, sua solicitação também pode (e talvez deva) ser direcionada diretamente a essa empresa, que é a Controladora dos seus dados — mas atendemos e encaminhamos qualquer pedido recebido diretamente.</p>
-<p><strong>Prazo de resposta:</strong> buscamos responder em até <strong>[PREENCHER — sugestão 15 dias úteis]</strong>.</p>
+<p><strong>Prazo de resposta:</strong> buscamos responder em até <strong>7 (sete) dias úteis</strong>, mesmo SLA de atendimento geral definido nos <a href="https://raizpatrimonio.com.br/termos-de-uso">Termos de Uso, §9.2</a>.</p>
 </main>
 
 <footer>
@@ -297,10 +297,12 @@
     <div class="foot-links">
       <a href="https://raizpatrimonio.com.br/termos-de-uso">Termos de Uso</a>
       <a href="https://raizpatrimonio.com.br/politica-de-privacidade">Política de Privacidade</a>
+      <a href="https://raizpatrimonio.com.br/politica-de-privacidade#9-cookies-e-rastreamento-na-landing-page">Cookies</a>
       <a href="https://raizpatrimonio.com.br/termo-beta">Termo de Beta</a>
     </div>
   </div>
 </footer>
+<script src="/cookie-banner.js"></script>
 
 </body>
 </html>

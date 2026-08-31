@@ -2,6 +2,29 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Landing Page (index.html)
+  VERSÃO: v3.3.0 · 1237 linhas · 2026-08-30
+  NOVIDADES v3.3.0 — rodada de revisão pedida pelo Nicola nos 3 documentos
+  legais e nesta página:
+    - Terminologia "módulo"/"Cofre de Documentos" removida de todo o texto
+      visível (seção Novidades, notas de franquia) — reposicionado como
+      "controle de ativos de patrimônio" (documentos, alertas, receitas,
+      despesas, obrigações). Comentários de changelog de versões antigas
+      NÃO foram reescritos (são histórico, não texto visível).
+    - CORRIGIDO: "Minutas de contratação incluídas"/"Minutas incluídas"
+      nos planos Essencial/Patrimônio — a funcionalidade real é ANEXAR
+      minuta, não gerar/incluir. Texto agora diz "Anexar minutas de
+      contratação"/"Anexar minutas".
+    - Novo cookie-banner.js (arquivo compartilhado com as 3 páginas
+      legais) — aviso informativo confirmando que não há cookie de
+      terceiro hoje (só sessionStorage de sessão, ver Política §9).
+    - Rodapé ganhou 2 links novos: "Cookies" (âncora direta pra Política
+      §9) e "Termo de Beta" — antes só tinha Termos+Política.
+    - Os 3 documentos legais (Termos, Política, Beta) foram atualizados
+      nesta mesma rodada com CPF do prestador, SLA, retenção de 90 dias,
+      teto de responsabilidade — ver CONFORMIDADE_LGPD_RAIZ_PATRIMONIO.md
+      pro changelog completo dessa parte.
+
+  --- HISTÓRICO ANTERIOR (v3.2.0) ---
   VERSÃO: v3.2.0 · 1234 linhas · 2026-08-30
   NOVIDADES v3.2.0 — pedido explícito do Nicola, frente de conformidade
   LGPD ("evoluir com tudo"): rodapé ganhou links pra Termos de Uso e
@@ -579,7 +602,7 @@
         <a class="btn btn-brass" href="https://wa.me/5511978950609?text=Ol%C3%A1%2C%20quero%20conhecer%20o%20R.AI.Z%20-%20Assistente%20Patrimonial." target="_blank" rel="noopener" onclick="trackEvento('cta_click','cta_click:whatsapp_raiz_secao')">Falar com o R.AI.Z</a>
         <a class="btn" style="border:1px solid #8fa89e;color:#fff" href="#precos">Testar o Raiz</a>
       </div>
-      <p class="mini-note" style="color:#a9c0b6;margin-top:14px">* O R.AI.Z e o Cofre possuem franquias de uso proporcionais ao plano contratado, dimensionadas para o uso normal das funcionalidades. Pacotes adicionais de capacidade poderão ser contratados conforme necessidade.</p>
+      <p class="mini-note" style="color:#a9c0b6;margin-top:14px">* O R.AI.Z e o controle de ativos de patrimônio possuem franquias de uso proporcionais ao plano contratado, dimensionadas para o uso normal das funcionalidades. Pacotes adicionais de capacidade poderão ser contratados conforme necessidade.</p>
     </div>
     <div class="wa-card reveal">
       <div style="font-size:12px;color:#66736e;font-weight:700">R.AI.Z · Assistente Patrimonial</div>
@@ -632,13 +655,13 @@
 </section>
 
 
-<!-- NOVIDADES / COFRE v3.0.0 -->
+<!-- NOVIDADES / ATIVOS DE PATRIMÔNIO v3.3.0 -->
 <section id="novidades">
   <div class="wrap">
-    <div class="sec-head reveal"><span class="eyebrow">O Raiz está crescendo</span><h2>Dos imóveis para uma visão mais ampla do patrimônio.</h2><p>O foco atual continua sendo tornar a gestão dos imóveis excelente. Em paralelo, estamos preparando novas formas de organizar documentos e outros ativos.</p></div>
+    <div class="sec-head reveal"><span class="eyebrow">O Raiz está crescendo</span><h2>Dos imóveis para uma visão mais ampla do patrimônio.</h2><p>O foco atual continua sendo tornar a gestão dos imóveis excelente. Em paralelo, estamos preparando o controle de ativos de patrimônio — documentos, alertas, receitas, despesas e obrigações de manutenção, seguro e tributos, tudo num só lugar.</p></div>
     <div class="news-grid">
-      <div class="news-card reveal"><span class="coming">Em evolução</span><h3>🔐 Cofre de Documentos</h3><p>Uma experiência para começar pelo documento e conectá-lo ao que ele controla: imóvel, contrato, recebimento e, no futuro, outros ativos patrimoniais.</p></div>
-      <div class="news-card reveal"><span class="coming">Direção de produto</span><h3>🚗 Outros ativos</h3><p>Veículos, terrenos, seguros, fotos, contatos e vencimentos entram na visão de evolução do Cofre — sem tirar o foco da gestão imobiliária atual.</p></div>
+      <div class="news-card reveal"><span class="coming">Em evolução</span><h3>📂 Controle de ativos</h3><p>Uma experiência para começar pelo documento e conectá-lo ao que ele controla: imóvel, contrato, recebimento e, no futuro, outros ativos patrimoniais.</p></div>
+      <div class="news-card reveal"><span class="coming">Direção de produto</span><h3>🚗 Outros ativos</h3><p>Veículos, terrenos, seguros, fotos, contatos e vencimentos entram na visão de evolução do controle de ativos — sem tirar o foco da gestão imobiliária atual.</p></div>
       <div class="news-card reveal"><span class="coming">Você participa</span><h3>💡 Evolução com clientes</h3><p>Sugestões pelo app e pelo R.AI.Z ajudam a orientar prioridades. Elas são avaliadas por aderência, recorrência, segurança, impacto e viabilidade.</p></div>
     </div>
   </div>
@@ -654,12 +677,12 @@
            exposto) — nunca deixamos a seção de preços vazia. -->
       <div class="price-card reveal" data-plano-fallback="essencial">
         <h3>Essencial</h3><div class="price-big">R$ 69<span style="font-size:16px">/mês</span></div><div class="price-small">teste grátis por 7 dias</div>
-        <ul class="price-list"><li>✓ Até 5 imóveis</li><li>✓ Imóveis, contratos e recibos</li><li>✓ Recebimentos e cobranças</li><li>✓ Minutas de contratação incluídas</li><li>✓ Conciliação manual</li><li>— Sem distribuição, despesas ou contador/check-up</li></ul>
+        <ul class="price-list"><li>✓ Até 5 imóveis</li><li>✓ Imóveis, contratos e recibos</li><li>✓ Recebimentos e cobranças</li><li>✓ Anexar minutas de contratação</li><li>✓ Conciliação manual</li><li>— Sem distribuição, despesas ou contador/check-up</li></ul>
         <a class="btn btn-ghost" href="#trial" onclick="selecionarPlano('essencial')">Testar Essencial</a>
       </div>
       <div class="price-card featured reveal" data-plano-fallback="patrimonio">
         <span class="coming">Recomendado</span><h3>Patrimônio</h3><div class="price-big">R$ 89<span style="font-size:16px">/mês</span></div><div class="price-small">nos 3 primeiros meses · depois R$ 149/mês (preço cheio) · teste grátis por 14 dias</div>
-        <ul class="price-list"><li>✓ Até 20 imóveis</li><li>✓ Tudo do Essencial</li><li>✓ Conciliação manual + extratos bancários</li><li>✓ Distribuição entre sócios</li><li>✓ Contador/check-up</li><li>✓ Minutas incluídas</li></ul>
+        <ul class="price-list"><li>✓ Até 20 imóveis</li><li>✓ Tudo do Essencial</li><li>✓ Conciliação manual + extratos bancários</li><li>✓ Distribuição entre sócios</li><li>✓ Contador/check-up</li><li>✓ Anexar minutas</li></ul>
         <a class="btn btn-primary" href="#trial" onclick="selecionarPlano('patrimonio')">Testar Patrimônio</a>
       </div>
       <div class="price-card reveal" data-plano-fallback="plus">
@@ -668,7 +691,7 @@
         <a class="btn btn-ghost" href="#trial" onclick="selecionarPlano('plus')">Testar Plus</a>
       </div>
     </div>
-    <p class="mini-note" style="text-align:center;margin-top:18px">Acima de 50 imóveis, carteiras maiores têm proposta personalizada — fale conosco. * R.AI.Z, recursos de IA/WhatsApp e Cofre possuem franquias de uso proporcionais ao plano; pacotes adicionais podem ser contratados conforme necessidade.</p>
+    <p class="mini-note" style="text-align:center;margin-top:18px">Acima de 50 imóveis, carteiras maiores têm proposta personalizada — fale conosco. * R.AI.Z, recursos de IA/WhatsApp e controle de ativos possuem franquias de uso proporcionais ao plano; pacotes adicionais podem ser contratados conforme necessidade.</p>
   </div>
 </section>
 
@@ -821,6 +844,8 @@
   <div class="wrap" style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1);display:flex;gap:18px;flex-wrap:wrap">
     <a href="/termos-de-uso" style="color:#a9b3ae;text-decoration:none;font-size:12.5px">Termos de Uso</a>
     <a href="/politica-de-privacidade" style="color:#a9b3ae;text-decoration:none;font-size:12.5px">Política de Privacidade</a>
+    <a href="/politica-de-privacidade#9-cookies-e-rastreamento-na-landing-page" style="color:#a9b3ae;text-decoration:none;font-size:12.5px">Cookies</a>
+    <a href="/termo-beta" style="color:#a9b3ae;text-decoration:none;font-size:12.5px">Termo de Beta</a>
   </div>
 </footer>
 
@@ -1230,5 +1255,6 @@
     }
   });
 </script>
+<script src="/cookie-banner.js"></script>
 </body>
 </html>
