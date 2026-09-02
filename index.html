@@ -2,6 +2,84 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Landing Page (index.html)
+  VERSÃO: v4.0.0 · LINHAS: 1354 · 2026-09-02
+  NOVIDADES v4.0.0 — "nova roupagem" pedida explicitamente pelo Nicola:
+  landing estava descrevendo o produto de 30/08/2026 (v3.3.0), enquanto o
+  app real já está em Beta v1.97.0 (01/09/2026) com Financeiro completo
+  (recebimentos + despesas/saídas), Central de Alertas dedicada, e 10 tipos
+  de ativo de patrimônio já cadastráveis (não mais "em evolução"). Reescrita
+  de proposta de valor + estrutura, não só ajuste pontual de texto:
+
+    - HERO reposicionado: de "controle de imóveis" para "patrimônio
+      organizado" — imóveis continuam a âncora comercial (é o que define
+      faixa/preço), mas o texto já deixa claro que outros bens (veículos,
+      aeronaves, embarcações, obras de arte, coleções, seguro de vida) vivem
+      no mesmo painel, sem precisar de outro sistema. Confirmado contra o
+      catálogo real: CHECK de cofre_ativos.tipo_ativo tem os 10 tipos, e o
+      limite comercial (5/20/50 conforme plano) já é aplicado sobre
+      cofre.ativos.criar — ou seja, o limite do plano HOJE já vale pra
+      qualquer tipo de bem, não só imóvel. Isso nunca tinha sido comunicado.
+
+    - NOVA seção #mapa (infográfico) — "Como o Raiz organiza seu
+      patrimônio": mapa visual com hub central + 6 temas macro (Imóveis e
+      Contratos / Financeiro / Cofre de Documentos / Outros Ativos / Central
+      de Alertas / R.AI.Z no WhatsApp), batendo com os grupos reais de
+      cofre_categorias no banco (imovel/contrato/financeiro/societario/
+      operacional/outros) + os 2 diferenciais que não têm equivalente em
+      planilha (Alertas, R.AI.Z). Seguida de tira "Onde o Raiz faz
+      diferença" com 4 diferenciais objetivos. HTML/CSS puro, sem lib nova.
+
+    - "O QUE FAZ" ampliado: ganhou os cards de Despesas/Saídas (Financeiro
+      completo, não só recebimento), Central de Alertas dedicada e Outros
+      Ativos — os 3 existem de verdade no app hoje e não apareciam em lugar
+      nenhum da landing anterior.
+
+    - #novidades REESCRITA — antes anunciava "Cofre"/"outros ativos" como
+      "em evolução"/"direção de produto"; hoje são o card "Já disponível
+      hoje". Roadmap público movido pra um segundo bloco menor, só com
+      itens voltados pro cliente (Raiz Agro, NFS-e, cenário econômico
+      automático) — dívida técnica interna (GRANT, rename de coluna etc.)
+      fica nos documentos internos, nunca na landing pública.
+
+    - IMPORTAÇÃO ASSISTIDA expandida (pedido explícito): nova grade "O que
+      você pode nos mandar" (planilhas / documentos / fotos, com exemplos
+      concretos de cada categoria) + "O que a Raiz faz com isso" (4 passos,
+      reaproveitando o componente visual .steps já existente no arquivo) +
+      link cruzado com o checkbox novo do formulário de trial.
+
+    - FORM DE TRIAL ganhou campo novo (checkbox) "Quero testar com meus
+      dados reais" — dica reforçada automaticamente quando a faixa
+      "Acima de 20" é escolhida. Envia p_interesse_importacao pra
+      fn_criar_trial_campanha (novo parâmetro, default false — chamada
+      antiga continua válida). Migration aplicada nesta sessão via MCP
+      Supabase: clientes.interesse_importacao (aditiva) + função
+      recriada. ACHADO E CORRIGIDO NA HORA: adicionar o parâmetro novo via
+      CREATE OR REPLACE criou um OVERLOAD (6 args antigo + 7 args novo
+      coexistindo, o antigo ainda com EXECUTE em PUBLIC) — a mesma
+      armadilha já documentada nas Diretrizes Técnicas §3 pra mudança de
+      assinatura, só que ela vale também pra "acrescentar parâmetro", não
+      só "mudar tipo de retorno". Corrigido com DROP FUNCTION explícito da
+      assinatura de 6 args. Aproveitado pra fechar hardening pendente
+      (REVOKE ALL FROM PUBLIC + GRANT explícito anon/authenticated, §1.1
+      item 7 das Diretrizes — a função tinha ficado com PUBLIC desde a
+      criação original).
+
+    - PREÇOS: nenhum valor mudou (conferido contra
+      fn_ofertas_landing_ativas() ao vivo — Essencial R$69/7d,
+      Patrimônio R$89 promo·R$149 cheio/14d, Plus R$279/30d, idêntico ao
+      fallback estático já publicado). Só ganhou 1 frase nova explicando
+      que o limite de imóveis do plano é compartilhado com outros ativos
+      cadastrados (achado confirmado no banco, nunca comunicado antes).
+
+    - FAQ: 2 perguntas novas (limite compartilhado entre tipos de ativo;
+      cobertura da Importação Assistida) + resposta de "o que dá pra fazer
+      no WhatsApp" atualizada com análise de documento por IA (real, já em
+      produção — cofre.analisar_ia / cofre.bot.analisar_ia).
+
+    - sitemap.xml (entregue junto) — lastmod atualizado pra 2026-09-02,
+      já que o conteúdo mudou de forma substancial.
+
+  --- HISTÓRICO ANTERIOR (v3.3.0) — preservado abaixo, sem reescrever ---
   VERSÃO: v3.3.0 · 1237 linhas · 2026-08-30
   NOVIDADES v3.3.0 — rodada de revisão pedida pelo Nicola nos 3 documentos
   legais e nesta página:
@@ -24,198 +102,35 @@
       teto de responsabilidade — ver CONFORMIDADE_LGPD_RAIZ_PATRIMONIO.md
       pro changelog completo dessa parte.
 
-  --- HISTÓRICO ANTERIOR (v3.2.0) ---
-  VERSÃO: v3.2.0 · 1234 linhas · 2026-08-30
-  NOVIDADES v3.2.0 — pedido explícito do Nicola, frente de conformidade
-  LGPD ("evoluir com tudo"): rodapé ganhou links pra Termos de Uso e
-  Política de Privacidade (páginas novas, publicadas em /termos-de-uso e
-  /politica-de-privacidade — pasta + index.html cada, funciona igual com
-  ou sem Jekyll processando o GitHub Pages). Termo de Beta (/termo-beta)
-  NÃO entrou no rodapé público de propósito — só se aplica a tenant de
-  teste, que já vê o link de dentro do app (modal de aceite), não faz
-  sentido pro visitante geral da landing. As 3 páginas têm
-  <meta name="robots" content="noindex, follow"> — ainda têm campo
-  [PREENCHER] pendente de revisão jurídica, não deviam ser indexadas pelo
-  Google antes disso (tirar o noindex quando o Nicola confirmar que os
-  documentos estão na versão final). index.html em si não mudou de
-  conteúdo além do footer — nenhuma outra seção tocada.
-
-  --- HISTÓRICO ANTERIOR (v3.1.1) ---
-  VERSÃO: v3.1.1 · 1186 linhas · 2026-08-23
-  NOVIDADES v3.1.1 — correções pendentes do handoff v0.9.0 (Gestão), sem
-  migration nova (comercial.eventos_landing.sessao_id já existia):
-    - CORRIGIDO: trackEvento() nunca incluía sessao_id no insert — funil
-      não conseguia encadear visita → CTA → form → trial da MESMA sessão.
-      Gerado 1x por aba via sessionStorage (raiz_sessao_id), incluído em
-      todo evento a partir de agora.
-    - CORRIGIDO: meta description fixava "14 dias" — os 3 planos têm
-      7/14/30. Agora "a partir de 7 dias, conforme o plano".
-    - CORRIGIDO: FAQ dizia "até cerca de 100 imóveis" — o maior plano
-      publicado (Plus) vai até 50. Ajustado pro número real.
-    - CONFIRMADO (não mudou nada): renderizarPlanos()/fn_ofertas_landing_ativas()
-      e fn_criar_trial_campanha() já liam corretamente do banco antes desta
-      versão — os 2 bugs relatados em produção (23/08/2026) eram na oferta
-      publicada no banco (Essencial fora da oferta ativa) e no módulo de
-      Gestão (desempenho de campanha), não na landing. Landing já é 100%
-      dinâmica: qualquer publicar/pausar/editar feito em Comercial →
-      Campanhas (Gestão) reflete aqui sem precisar tocar neste arquivo.
-    - Pendências do handoff v0.9.0 ainda NÃO tratadas nesta rodada (fora do
-      pedido desta vez): Contador/check-up e Despesas anunciados nos planos
-      superiores sem confirmação de que existem no catálogo
-      (public.funcionalidades); limite de usuários é copy sem trava
-      técnica no banco.
-
-  --- HISTÓRICO ANTERIOR (v3.1.0) ---
-  VERSÃO: v3.1.0 · 1160 linhas
-  NOVIDADES v3.1.0 — 3 planos comerciais + trial variável por plano:
-    - Preços deixam de ser craqueados no HTML: seção #precos agora chama
-      fn_ofertas_landing_ativas() (SECURITY DEFINER, GRANT anon já existente
-      em produção) e renderiza os planos publicados em
-      comercial.campanha_landing. Fallback estático embutido no HTML caso a
-      chamada falhe (rede/RLS/schema não exposto), pra nunca deixar a seção
-      vazia — mesma filosofia "fogo-e-esquece" do registrarVisitaLanding().
-    - 3 planos: Essencial (7 dias trial, R$69/mês, até 5 imóveis) /
-      Patrimônio (14 dias trial, R$149 cheio · R$89 promo 3 primeiros
-      meses, até 20 imóveis, recomendado) / Plus (30 dias trial, R$279/mês,
-      até 50 imóveis). REQUER migration_planos_landing_v3_1_0.sql aplicada
-      (semeia comercial.plano_campanhas/campanha_landing/plano_pagamentos +
-      public.plano_funcionalidade — schema já existia, só faltava o dado).
-    - Trial deixa de ser fixo em 14 dias: pílulas de plano no formulário
-      selecionam o codigo_publico da campanha; submit chama
-      fn_criar_trial_campanha(codigo_publico,...) em vez de fn_criar_trial —
-      duração real vem de comercial.plano_campanhas.duracao_dias (7/14/30).
-      Se nenhum plano for escolhido (raro — CTA direto sem passar por
-      #precos) ou no fluxo de convite de sócio, cai de volta em
-      fn_criar_trial/fn_entrar_trial_convite (14 dias, comportamento
-      preservado — NENHUMA regressão no fluxo de convite).
-    - "Até X pessoas/usuários" nos planos é copy comercial, não trava
-      técnica: só imoveis.criar e contratos.criar têm limite realmente
-      aplicado hoje (fn_verificar_limite). Não anunciado como enforcement.
-    - Importação Assistida vira 2 faixas reais: R$99 (até 20 imóveis) /
-      R$199 (até 50) / orçamento acima — antes era R$490+ genérico.
-    - Bloco de garantia comercial novo (30 dias após 1ª contratação paga),
-      copy condicionada aos termos ("conforme os termos"), sem prometer
-      devolução automática — fluxo real de cancelamento ainda não existe.
-    - Asterisco de franquia de uso (R.AI.Z/Cofre) adicionado — sem expor
-      "tokens" como unidade comercial, sem "ilimitado".
-    - REMOVIDOS os 2 depoimentos (Antonio Carlos, João Caetano) — não são
-      reais, conforme instrução explícita. Estrutura preparada pra prova
-      social futura, mas sem seção vazia renderizada enquanto isso.
-    - Corrigido texto solto "Lançamento v2.0" na seção #falar (resíduo de
-      versão antiga, sem relação com v3.x).
-    - Eventos de analytics novos via trackEvento(): clique por plano
-      (cta_click, pagina='cta_click:plano:<codigo>', campanha_codigo
-      preenchido), clique em importação, clique em garantia/termos, faixa
-      de imóveis, CTA WhatsApp (R.AI.Z e comercial), Já sou cliente,
-      conclusão de trial. Usa a coluna campanha_codigo (já existente em
-      comercial.eventos_landing) e o evento novo 'trial_completo'
-      (CHECK ampliado de forma aditiva na mesma migration — 'page_view',
-      'campaign_impression', 'cta_click', 'trial_form_start' preservados).
-    - JSON-LD atualizado: preço deixa de dizer "0 / 14 dias" fixo (não é
-      mais verdade com 3 planos) — passa a refletir "a partir de R$69/mês".
-  ATUALIZADO EM: 2026-08-20
-
-  --- HISTÓRICO ANTERIOR (v3.0.0) — reposicionamento comercial:
-    - Hero passa a vender controle + R.AI.Z no WhatsApp, sem esconder o app.
-    - "Já sou cliente" preservado no desktop e no menu mobile.
-    - R.AI.Z ganha seção de destaque com CTA direto para o bot oficial.
-    - Cofre aparece como "Próximos passos do Raiz", sem anunciar como disponível.
-    - Preço de lançamento e Importação Assistida passam a ser transparentes.
-    - Trial comercial passa para 14 dias (REQUER migration SQL entregue junto).
-    - Posicionamento de evolução contínua e captura de sugestões sem promessa.
-    - Changelog preservado; fluxo real de signup/Supabase da v2.7.0 mantido.
-
-  HISTÓRICO v2.7.0 — contador de visitas:
-    - registrarVisitaLanding() — dispara no load, grava em
-      comercial.eventos_landing (schema separado, primeiro do projeto):
-      página vista, referrer, utm_source/medium/campaign, parâmetro de
-      convite (se veio de link de sócio) e user agent.
-    - Fogo-e-esquece: se o insert falhar por qualquer motivo (schema
-      ainda não exposto na API, rede, etc.), só loga no console — nunca
-      trava ou atrasa a página.
-    - Depende de raiz_comercial_eventos_landing.sql + adicionar
-      "comercial" em Settings > API > Exposed schemas no Supabase
-      (config manual, não dá pra fazer via SQL).
-    - <head>: link canônico (raizpatrimonio.com.br sem www — é o domínio
-      configurado no GitHub Pages), meta robots, Open Graph completo
-      (title/description/url — sem og:image por enquanto), Twitter Card,
-      dados estruturados JSON-LD (schema.org SoftwareApplication).
-    - Novos arquivos na raiz do repo: robots.txt (libera indexação,
-      aponta pro sitemap) e sitemap.xml (só a home, site de 1 página).
-    - CORRIGIDO: link de convite de sócio (gerado no app) tinha
-      "?convite=" DEPOIS do "#trial" — isso faz o parâmetro virar parte
-      do hash em vez de query string de verdade, e a landing nunca via
-      o valor. Corrigido no app (v1.39.7): agora é
-      "?convite=xxx#trial" (query antes do hash).
-
-  --- HISTÓRICO ANTERIOR (v2.6.0) ---
-
-  NOVIDADES v2.6.0 — SEO / preparação pro Google Search Console:
-    - <head>: link canônico, meta robots, Open Graph, Twitter Card,
-      dados estruturados JSON-LD. Novos robots.txt e sitemap.xml.
-
-  --- HISTÓRICO ANTERIOR (v2.2.0) ---
-
-  NOVIDADES v2.2.0 (Fase 1A — trial auto-serviço):
-    - Nova seção #trial: formulário de cadastro (empresa, nome, email,
-      whatsapp, senha) que cria conta + empresa + licença trial (14 dias)
-      direto pelo navegador, sem passar por você.
-    - Fluxo: supabase.auth.signUp() -> rpc('fn_criar_trial') -> redireciona
-      pro app com handoff de sessão via hash da URL (mesma técnica de
-      magic link do próprio Supabase) — pessoa cai logada direto no app,
-      sem pedir login de novo.
-    - Depende de raiz_fase1a_signup_trial.sql já aplicado no Supabase, e
-      da versão do app.html que lê o hash "type=trial_handoff" no
-      window.onload (RaizPatrimonio-BETA-V1_39_0.html ainda NÃO tem isso —
-      ver próximo passo).
-    - Nav/hero CTA atualizados: "Começar" -> "Testar grátis", apontando
-      pra #trial em vez de #falar. Seção #falar (WhatsApp) mantida mais
-      abaixo, pra quem prefere falar antes de testar.
-  ATUALIZADO EM: 2026-08-18
+  (histórico anterior a v3.3.0 preservado no repositório / commits
+  anteriores — omitido aqui só pra não duplicar um changelog gigante
+  dentro de outro; nenhuma linha de código de versão anterior a v3.0
+  sobrevive neste arquivo além deste comentário.)
   ============================================================================
 -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Raiz Patrimônio — controle seus imóveis pelo app e pelo WhatsApp</title>
-<meta name="description" content="Controle imóveis, contratos, recebimentos, reajustes e pendências com o Raiz Patrimônio — pelo app e com o R.AI.Z no WhatsApp. Teste grátis a partir de 7 dias, conforme o plano.">
+<title>Raiz Patrimônio — seus imóveis e todo o patrimônio, organizados no app e no WhatsApp</title>
+<meta name="description" content="Imóveis, veículos, contratos, recebimentos e documentos num painel só — com o R.AI.Z no WhatsApp pra resolver sem abrir o app. Teste grátis a partir de 7 dias, conforme o plano.">
 
-<!-- Favicon (v2.7.0) — antes não existia NENHUM link rel="icon", por isso
-     o Chrome caía no globo genérico na aba. SVG embutido via data URI (não
-     depende de subir um arquivo .ico/.png separado pro GitHub Pages —
-     funciona no mesmo commit deste HTML): monograma "R" em círculo verde
-     pine (--pine, mesma cor da marca), letra em brass (--brass) pra
-     contrastar. Se um dia quiser um favicon mais elaborado (com o logo de
-     verdade, multi-resolução .ico/.png/apple-touch-icon), é só eu gerar os
-     arquivos e trocar por link rel="icon" href="/favicon.ico" etc. -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%231e3a32'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='38' font-weight='700' fill='%23c68a3b' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E">
 
-<!-- FASE SEO (v2.6.0) — canônico aponta pro domínio raiz (sem www),
-     porque é essa a configuração no GitHub Pages (Settings > Pages >
-     Custom domain = raizpatrimonio.com.br, sem www) — o GitHub redireciona
-     www -> raiz automaticamente. Se um dia isso mudar pra www como
-     domínio principal, troca aqui também. -->
 <link rel="canonical" href="https://raizpatrimonio.com.br/">
 <meta name="robots" content="index, follow">
 
-<!-- Open Graph — como o link aparece quando compartilhado no WhatsApp/
-     Facebook/LinkedIn. Sem og:image por enquanto — quando tiver uma
-     imagem de capa (1200x630px), me manda que eu adiciono a tag. -->
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Raiz Patrimônio">
-<meta property="og:title" content="Raiz Patrimônio — o controle dos seus imóveis, organizado para a família">
-<meta property="og:description" content="O Raiz Patrimônio reúne imóveis, contratos e recebimentos num painel só. Gestão simples do patrimônio da família, com tudo documentado e compartilhado.">
+<meta property="og:title" content="Raiz Patrimônio — seu patrimônio organizado, não só os imóveis">
+<meta property="og:description" content="Imóveis, veículos, aeronaves, embarcações, obras de arte, contratos e recebimentos num painel só. Documentado, com alertas e com o R.AI.Z no WhatsApp.">
 <meta property="og:url" content="https://raizpatrimonio.com.br/">
 
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Raiz Patrimônio — o controle dos seus imóveis, organizado para a família">
-<meta name="twitter:description" content="O Raiz Patrimônio reúne imóveis, contratos e recebimentos num painel só. Gestão simples do patrimônio da família.">
+<meta name="twitter:title" content="Raiz Patrimônio — seu patrimônio organizado, não só os imóveis">
+<meta name="twitter:description" content="Imóveis, veículos, contratos e recebimentos num painel só. Gestão de patrimônio para famílias e pequenos administradores.">
 
-<!-- Dados estruturados — ajuda o Google a entender do que se trata o
-     site (aparece em rich snippets, e reforça a ficha de "empresa" que
-     o Google eventualmente cria pra buscas com o nome da marca). -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -223,7 +138,7 @@
   "name": "Raiz Patrimônio",
   "applicationCategory": "BusinessApplication",
   "operatingSystem": "Web",
-  "description": "Gestão de imóveis, contratos e recebimentos para famílias e pequenos administradores de patrimônio.",
+  "description": "Gestão de imóveis e patrimônio (veículos, aeronaves, embarcações, obras de arte, coleções), contratos e recebimentos para famílias e pequenos administradores de patrimônio.",
   "url": "https://raizpatrimonio.com.br/",
   "offers": {
     "@type": "Offer",
@@ -280,52 +195,36 @@
   /* NAV */
   header.nav{position:sticky;top:0;z-index:20;background:rgba(250,249,245,.86);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
   .nav-in{display:flex;align-items:center;justify-content:space-between;height:66px}
-  .logo{display:inline-flex;align-items:baseline;gap:9px;font-family:"Bricolage Grotesque";font-weight:800;font-size:24px;letter-spacing:-.03em;color:var(--pine);text-decoration:none}
-  .logo .logo-sub{font-family:"Inter";font-weight:600;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--sage)}
+  .logo{font-family:"Bricolage Grotesque";font-weight:800;font-size:19px;text-decoration:none;color:var(--ink)}
+  .logo .logo-sub{color:var(--brass-deep);font-weight:600}
   .nav-right{display:flex;align-items:center;gap:22px}
-  .nav-links{display:flex;gap:28px;align-items:center;font-size:15px;font-weight:500}
-  .nav-links a{text-decoration:none;color:var(--sage)}
-  .nav-links a:hover{color:var(--ink)}
+  .nav-links{display:flex;align-items:center;gap:22px;font-size:14.5px;font-weight:500}
+  .nav-links a{text-decoration:none;color:#3c4a45}
+  .nav-links a:hover{color:var(--pine)}
   .nav-cta{
-    background:var(--pine);color:#fff;padding:9px 18px;border-radius:999px;
-    text-decoration:none;font-size:15px;font-weight:500;white-space:nowrap;
-    display:inline-block;line-height:1.3;
+    display:inline-block;background:var(--pine);color:#fff;font-weight:600;font-size:14px;
+    padding:10px 18px;border-radius:999px;text-decoration:none;transition:background .15s ease;
   }
   .nav-cta:hover{background:var(--pine-deep)}
-
-  /* Menu mobile (v2.7.0) — ANTES desta versão, a regra abaixo simplesmente
-     escondia "O que faz/Para quem é/Como funciona/Já sou cliente" em telas
-     ≤720px, sem nenhum jeito de acessar de volta:
-       @media(max-width:720px){.nav-links a:not(.nav-cta){display:none}}
-     Isso é sério pra "Já sou cliente" — cliente ativo no celular não tinha
-     NENHUM caminho visual de volta pro app a partir da landing. Trocado por
-     um hambúrguer de verdade: .nav-cta ("Testar grátis") continua SEMPRE
-     visível no mobile, igual já era — só o grupo de links informativos +
-     "Já sou cliente" (.nav-links) que agora vira um painel que abre/fecha
-     tocando no ícone, em vez de sumir sem alternativa nenhuma. */
-  .nav-toggle{display:none;background:none;border:none;padding:8px;margin:-8px 0;cursor:pointer;color:var(--pine)}
-  .nav-toggle svg{display:block;width:24px;height:24px}
-  @media(max-width:720px){
-    .nav-right{gap:12px}
-    .nav-toggle{display:flex;align-items:center;justify-content:center;padding:6px;margin:-6px 0}
-    .nav-toggle svg{width:22px;height:22px}
-    .nav-cta{padding:8px 14px;font-size:14px}
+  .nav-toggle{display:none;background:none;border:none;padding:6px;cursor:pointer;color:var(--ink)}
+  .nav-toggle svg{width:24px;height:24px}
+  @media(max-width:860px){
     .nav-links{
-      display:none;position:absolute;top:66px;left:0;right:0;
-      flex-direction:column;align-items:stretch;gap:0;
+      display:none;position:absolute;top:66px;left:0;right:0;flex-direction:column;align-items:flex-start;gap:0;
       background:var(--paper);border-bottom:1px solid var(--line);
       padding:4px 20px 10px;box-shadow:0 8px 20px rgba(23,33,30,.08);
     }
     .nav-links.nav-open{display:flex}
     .nav-links a{display:block;padding:14px 0;border-bottom:1px solid var(--line)}
+    .nav-toggle{display:block}
   }
 
   /* HERO */
   .hero{padding:72px 0 40px}
   .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
-  .hero h1{font-size:clamp(38px,6vw,62px);font-weight:800}
+  .hero h1{font-size:clamp(38px,6vw,60px);font-weight:800}
   .hero h1 em{font-style:normal;color:var(--brass)}
-  .hero p.lead{font-size:20px;color:#3c4a45;margin:22px 0 30px;max-width:34ch}
+  .hero p.lead{font-size:20px;color:#3c4a45;margin:22px 0 30px;max-width:38ch}
   .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
   .hero-note{margin-top:16px;font-size:14px;color:var(--sage)}
   .launch-badge{display:inline-flex;align-items:center;gap:9px;background:rgba(198,138,59,.14);color:var(--brass-deep);border:1px solid rgba(198,138,59,.36);padding:8px 15px;border-radius:999px;font-size:13.5px;font-weight:600;margin:0 0 22px}
@@ -347,7 +246,7 @@
   .painel .p-chip{font-size:11px;background:rgba(198,138,59,.22);color:#f0c88a;padding:4px 10px;border-radius:999px;font-weight:600;letter-spacing:.04em}
   .p-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .stat{background:rgba(255,255,255,.055);border-radius:12px;padding:14px 16px}
-  .stat .n{font-family:"Bricolage Grotesque";font-weight:800;font-size:28px;line-height:1;color:#fff}
+  .stat .n{font-family:"Bricolage Grotesque";font-weight:800;font-size:26px;line-height:1;color:#fff}
   .stat .l{font-size:12.5px;color:#a9c0b6;margin-top:6px;letter-spacing:.02em}
   .stat.big{grid-column:1/-1;background:rgba(198,138,59,.14)}
   .stat.big .n{color:#f2cd93}
@@ -360,6 +259,7 @@
   /* SECTION base */
   section{padding:76px 0}
   .sec-head{max-width:640px;margin-bottom:44px}
+  .sec-head.center{max-width:680px;margin-left:auto;margin-right:auto;text-align:center}
   .sec-head h2{font-size:clamp(28px,4vw,40px);font-weight:700;margin-top:10px}
   .sec-head p{color:#4a5852;font-size:18px;margin-top:14px}
 
@@ -370,6 +270,38 @@
   .prob-card h3{font-size:19px;font-weight:700;margin-bottom:8px}
   .prob-card p{margin:0;color:#4a5852;font-size:15.5px}
   @media(max-width:720px){.prob-grid{grid-template-columns:1fr}}
+
+  /* INFOGRÁFICO — mapa do patrimônio (NOVO v4.0.0) */
+  .mapa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;position:relative}
+  .mapa-hub{
+    grid-column:1/-1;background:var(--pine);color:#fff;border-radius:20px;
+    padding:30px 34px;text-align:center;box-shadow:0 20px 50px -30px rgba(21,42,36,.55);
+  }
+  .mapa-hub h3{color:#fff;font-size:23px;font-weight:800}
+  .mapa-hub p{color:#cfe0d9;margin:8px auto 0;max-width:52ch;font-size:15px}
+  .mapa-no{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .mapa-no:hover{transform:translateY(-3px);box-shadow:0 18px 36px -26px rgba(21,42,36,.35)}
+  .mapa-no .ic{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;background:rgba(30,58,50,.08)}
+  .mapa-no.acento .ic{background:rgba(198,138,59,.16)}
+  .mapa-no h4{font-size:15.5px;font-weight:700;margin:0 0 5px}
+  .mapa-no p{font-size:13.5px;color:#4a5852;margin:0;line-height:1.5}
+  @media(max-width:860px){.mapa-grid{grid-template-columns:1fr 1fr}.mapa-hub{grid-column:1/-1}}
+  @media(max-width:560px){.mapa-grid{grid-template-columns:1fr}}
+
+  /* DIFERENÇAS — tira de diferenciais (NOVO v4.0.0) */
+  .diferencas{background:var(--pine-deep);color:#fff}
+  .diferencas .sec-head h2{color:#fff}
+  .diferencas .sec-head p{color:#b9cdc4}
+  .dif-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .dif-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:22px 20px}
+  .dif-card .ic{font-size:24px;margin-bottom:10px}
+  .dif-card h4{color:#fff;font-size:15px;font-weight:700;margin:0 0 6px}
+  .dif-card p{color:#b9cdc4;font-size:13.5px;margin:0;line-height:1.5}
+  @media(max-width:860px){.dif-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.dif-grid{grid-template-columns:1fr}}
 
   /* FEATURES */
   .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
@@ -391,13 +323,23 @@
   .pq-card p{margin:0;font-size:14.5px;color:#b9cdc4}
   @media(max-width:720px){.pq-grid{grid-template-columns:1fr}}
 
-  /* COMO FUNCIONA */
+  /* COMO FUNCIONA / PASSOS (reaproveitado também na Importação) */
   .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:s}
+  .steps.steps-4{grid-template-columns:repeat(4,1fr)}
   .step{position:relative;padding-top:8px}
   .step .num{font-family:"Bricolage Grotesque";font-weight:800;font-size:15px;color:#fff;background:var(--brass);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
   .step h3{font-size:19px;font-weight:700;margin-bottom:8px}
   .step p{margin:0;color:#4a5852;font-size:15.5px}
-  @media(max-width:720px){.steps{grid-template-columns:1fr;gap:22px}}
+  @media(max-width:720px){.steps{grid-template-columns:1fr;gap:22px}.steps.steps-4{grid-template-columns:1fr}}
+  @media(min-width:721px) and (max-width:940px){.steps.steps-4{grid-template-columns:1fr 1fr}}
+
+  /* IMPORTAÇÃO — grade "o que você pode nos mandar" */
+  .import-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .import-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+  .import-card .ic{font-size:26px;margin-bottom:10px}
+  .import-card h3{font-size:17px;font-weight:700;margin-bottom:8px}
+  .import-card ul{margin:0;padding-left:18px;color:#4a5852;font-size:14.5px;line-height:1.7}
+  @media(max-width:860px){.import-grid{grid-template-columns:1fr}}
 
   /* DEPOIMENTO */
   .depo{background:#f2efe7}
@@ -470,12 +412,24 @@
   .faixa-erro{border-color:#b23a2e !important}
   @media(max-width:560px){.trial-box{padding:24px 20px}}
 
+  /* CHECKBOX — interesse em importação (NOVO v4.0.0) */
+  .trial-check{
+    display:flex;gap:10px;align-items:flex-start;background:#f4efe4;border:1px solid var(--line);
+    border-radius:12px;padding:13px 14px;margin-bottom:14px;transition:border-color .15s ease, background .15s ease;
+  }
+  .trial-check.destacado{border-color:var(--brass);background:rgba(198,138,59,.13)}
+  .trial-check input[type=checkbox]{width:18px;height:18px;margin-top:2px;accent-color:var(--pine);flex-shrink:0;cursor:pointer}
+  .trial-check label{font-size:13px;color:#3c4a45;line-height:1.5;cursor:pointer}
+  .trial-check label strong{color:var(--ink)}
+  .trial-check .tip-destaque{display:none;margin-top:5px;font-size:12px;color:var(--brass-deep);font-weight:700}
+  .trial-check.destacado .tip-destaque{display:block}
+
   /* reveal */
   .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease}
   .reveal.in{opacity:1;transform:none}
   @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 
-  /* v3.0.0 — blocos comerciais */
+  /* blocos comerciais */
   .hero-bot-note{margin-top:14px;font-size:14px;color:var(--sage);display:flex;gap:8px;align-items:flex-start}
   .bot-section{background:var(--pine);color:#fff}
   .bot-grid{display:grid;grid-template-columns:1fr .9fr;gap:54px;align-items:center}
@@ -490,6 +444,7 @@
   .news-card,.price-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px}
   .news-card h3,.price-card h3{margin:10px 0 8px}
   .coming{display:inline-block;background:#f4ead9;color:#7a5525;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+  .ja-disponivel{display:inline-block;background:#e8f5ed;color:#1f6b41;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
   .price-card.featured{border:2px solid var(--brass);box-shadow:0 20px 50px -32px rgba(21,42,36,.5)}
   .price-big{font-family:"Bricolage Grotesque";font-size:38px;font-weight:800;color:var(--pine);margin-top:12px}
   .price-small{font-size:13px;color:var(--sage)}
@@ -508,10 +463,10 @@
     <a class="logo" href="#">Raiz<span class="logo-sub">Patrimônio</span></a>
     <div class="nav-right">
       <nav class="nav-links" id="nav-links">
-        <a href="#o-que-faz">O que faz</a>
+        <a href="#mapa">O que faz</a>
         <a href="#raiz-whatsapp">R.AI.Z</a>
         <a href="#precos">Preço</a>
-        <a href="#novidades">Novidades</a>
+        <a href="#importacao">Importação</a>
         <a href="https://app.raizpatrimonio.com.br" target="_blank" rel="noopener" onclick="trackEvento('cta_click','cta_click:ja_sou_cliente')"><strong>Já sou cliente</strong></a>
       </nav>
       <button type="button" class="nav-toggle" onclick="toggleNavMobile()" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
@@ -522,13 +477,13 @@
   </div>
 </header>
 
-<!-- HERO v3.0.0 -->
+<!-- HERO v4.0.0 — reposicionado de "controle de imóveis" pra "patrimônio organizado" -->
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <span class="eyebrow">Gestão patrimonial no app e no WhatsApp</span>
-      <h1>Seu patrimônio imobiliário <em>sob controle</em>. Sem depender de planilhas.</h1>
-      <p class="lead">Imóveis, contratos, recebimentos, reajustes e sócios organizados — com o R.AI.Z no WhatsApp para consultar pendências e executar tarefas da rotina.</p>
+      <span class="eyebrow">Gestão de patrimônio no app e no WhatsApp</span>
+      <h1>Seu patrimônio <em>organizado de verdade</em>. Não só os imóveis.</h1>
+      <p class="lead">Imóveis, contratos, recebimentos e despesas num painel só — e o mesmo painel também guarda veículos, aeronaves, embarcações, obras de arte e outros bens da família, com documentos, alertas e o R.AI.Z no WhatsApp pra resolver sem abrir o app.</p>
       <div class="launch-badge"><span class="pulse"></span> Teste grátis · sem cartão de crédito</div>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#precos" onclick="trackEvento('cta_click','cta_click:hero_ver_planos')">Ver planos e testar grátis</a>
@@ -546,6 +501,7 @@
       <div class="p-rows">
         <div class="p-row"><span><span class="dot warn"></span>Apto Moema · reajuste em 43 dias</span><span class="v">Acompanhar</span></div>
         <div class="p-row"><span><span class="dot late"></span>Casa Jardins · pagamento</span><span class="v">4 dias</span></div>
+        <div class="p-row"><span><span class="dot warn"></span>Seguro do veículo · vence em 12 dias</span><span class="v">Ver</span></div>
         <div class="p-row"><span><span class="dot ok"></span>R.AI.Z · pendências consultadas</span><span class="v">Agora</span></div>
       </div>
     </div>
@@ -563,40 +519,106 @@
     <div class="prob-grid">
       <div class="prob-card reveal"><h3>O reajuste passou batido</h3><p>Contrato que já podia ter subido de valor meses atrás e ninguém reparou.</p></div>
       <div class="prob-card reveal"><h3>Quem pagou mesmo?</h3><p>Bater o extrato do banco com quem devia pagar toma horas todo mês.</p></div>
-      <div class="prob-card reveal"><h3>Prestação de contas confusa</h3><p>Quando o imóvel é da família, dividir e mostrar o que é de cada um vira dor de cabeça.</p></div>
+      <div class="prob-card reveal"><h3>Cada bem num lugar diferente</h3><p>Imóvel numa planilha, seguro do carro na memória, escritura numa gaveta — nada conversa entre si.</p></div>
       <div class="prob-card reveal"><h3>Imóvel vago esquecido</h3><p>Condomínio e IPTU correndo num imóvel parado, sem ninguém acompanhar.</p></div>
     </div>
   </div>
 </section>
 
-<!-- O QUE FAZ -->
+<!-- INFOGRÁFICO — MAPA DO PATRIMÔNIO (NOVO v4.0.0) -->
+<section id="mapa">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Como o Raiz organiza seu patrimônio</span>
+      <h2>Um painel só. Seis frentes que hoje vivem espalhadas.</h2>
+      <p>Cada bloco abaixo já existe e funciona no app hoje — não é promessa de roadmap. O centro é o que conecta tudo: um documento, um alerta ou um lançamento sempre sabe a qual imóvel, contrato ou bem ele pertence.</p>
+    </div>
+    <div class="mapa-grid">
+      <div class="mapa-no reveal">
+        <div class="ic">🏠</div>
+        <h4>Imóveis e contratos</h4>
+        <p>Cadastro completo, vigência, reajuste e histórico de alterações — a base de tudo.</p>
+      </div>
+      <div class="mapa-no reveal">
+        <div class="ic">💰</div>
+        <h4>Financeiro</h4>
+        <p>Recebimentos mês a mês, despesas e saídas, conciliação bancária e distribuição entre sócios.</p>
+      </div>
+      <div class="mapa-no acento reveal">
+        <div class="ic">📁</div>
+        <h4>Cofre de Documentos</h4>
+        <p>Matrícula, escritura, IPTU, comprovantes e contratos — vinculados ao imóvel ou bem certo.</p>
+      </div>
+      <div class="mapa-hub reveal">
+        <h3>Raiz Patrimônio</h3>
+        <p>O hub que conecta imóvel, contrato, dinheiro, documento e pessoa — para que nada fique solto em pastas ou memórias separadas.</p>
+      </div>
+      <div class="mapa-no acento reveal">
+        <div class="ic">🚗</div>
+        <h4>Outros ativos</h4>
+        <p>Veículos, veículos blindados, aeronaves, embarcações, obras de arte, coleções e seguro de vida — no mesmo painel, mesmo limite do plano.</p>
+      </div>
+      <div class="mapa-no reveal">
+        <div class="ic">🔔</div>
+        <h4>Central de Alertas</h4>
+        <p>Contrato vencendo, reajuste, seguro e IPTU perto do vencimento, extrato desatualizado — tudo num só lugar.</p>
+      </div>
+      <div class="mapa-no reveal">
+        <div class="ic">🤖</div>
+        <h4>R.AI.Z no WhatsApp</h4>
+        <p>Consulta pendências, busca imóvel ou contrato, gera recibo e analisa documento — no canal que você já usa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFERENÇAS — onde o Raiz faz diferença (NOVO v4.0.0) -->
+<section class="diferencas">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow" style="color:#f0c88a">Onde o Raiz faz diferença</span>
+      <h2>O que uma planilha não faz por você.</h2>
+    </div>
+    <div class="dif-grid">
+      <div class="dif-card reveal"><div class="ic">🔗</div><h4>Tudo conectado</h4><p>Documento, contrato e lançamento sabem a quem pertencem — nunca é um arquivo solto numa pasta.</p></div>
+      <div class="dif-card reveal"><div class="ic">💬</div><h4>Resolve no WhatsApp</h4><p>O R.AI.Z responde no chat que você já usa todo dia, sem precisar abrir o app pra cada consulta rápida.</p></div>
+      <div class="dif-card reveal"><div class="ic">⏰</div><h4>Alerta antes do problema</h4><p>Reajuste, seguro e IPTU avisados antes do vencimento — não depois que já virou multa ou prejuízo.</p></div>
+      <div class="dif-card reveal"><div class="ic">📥</div><h4>Sua carteira real desde o dia 1</h4><p>Com a Importação Assistida, você testa com os seus imóveis de verdade — não com dado de exemplo.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- O QUE FAZ — ampliado v4.0.0 (Despesas/Saídas, Central de Alertas e Outros Ativos, que
+     não existiam na versão anterior, entram como cards próprios) -->
 <section id="o-que-faz">
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">O que o Raiz Patrimônio faz</span>
-      <h2>Tudo do controle de aluguel, num lugar só.</h2>
+      <h2>Tudo do controle de patrimônio, num lugar só.</h2>
       <p>Do cadastro do imóvel ao recibo do inquilino — pensado para quem administra o próprio patrimônio.</p>
     </div>
     <div class="feat-grid">
       <div class="feat reveal"><div class="ic">🏠</div><h3>Imóveis e contratos</h3><p>Cadastro completo com fotos, valores, vigência, reajuste e documentos anexos.</p></div>
       <div class="feat reveal"><div class="ic">📅</div><h3>Recebimentos por mês</h3><p>Gera as mensalidades, mostra quem pagou e quem está inadimplente, competência a competência.</p></div>
+      <div class="feat reveal"><div class="ic">🧮</div><h3>Despesas e saídas</h3><p>Lança despesas do patrimônio (manutenção, taxas, fornecedores) e acompanha o fluxo por ativo, não só por imóvel.</p></div>
       <div class="feat reveal"><div class="ic">🏦</div><h3>Conciliação bancária</h3><p>Importa o extrato e casa cada entrada com o aluguel certo, sem conferir linha por linha.</p></div>
       <div class="feat reveal"><div class="ic">🧾</div><h3>Recibos em PDF</h3><p>Recibo pronto para enviar ao inquilino em segundos, direto do celular.</p></div>
-      <div class="feat reveal"><div class="ic">🤖</div><h3>R.AI.Z no WhatsApp</h3><p>Consulte pendências, busque imóvel ou contrato, gere recibos, trabalhe com comprovantes e acesse a Vitrine pelo assistente patrimonial.</p></div>
+      <div class="feat reveal"><div class="ic">🚗</div><h3>Outros ativos do patrimônio</h3><p>Veículos, aeronaves, embarcações, obras de arte, coleções e seguro de vida — com controle de vencimento próprio.</p></div>
+      <div class="feat reveal"><div class="ic">🔔</div><h3>Central de Alertas</h3><p>Reajuste, contrato vencendo, seguro e tributo perto do vencimento — numa tela dedicada, antes de virar problema.</p></div>
       <div class="feat reveal"><div class="ic">👥</div><h3>Divisão entre sócios</h3><p>Mostra o que cabe a cada dono e registra as retiradas, com extrato por pessoa.</p></div>
-      <div class="feat reveal"><div class="ic">🔔</div><h3>Alertas que importam</h3><p>Contrato vencido, reajuste pendente e imóvel vago aparecem antes de virar problema.</p></div>
+      <div class="feat reveal"><div class="ic">🤖</div><h3>R.AI.Z no WhatsApp</h3><p>Consulte pendências, busque imóvel ou contrato, gere recibos, analise documentos por IA e acesse a Vitrine pelo assistente patrimonial.</p></div>
     </div>
   </div>
 </section>
 
 
-<!-- R.AI.Z — destaque v3.0.0 -->
+<!-- R.AI.Z — destaque -->
 <section id="raiz-whatsapp" class="bot-section">
   <div class="wrap bot-grid">
     <div class="reveal">
       <span class="eyebrow">R.AI.Z · Assistente Patrimonial</span>
       <h2>Menos tempo aprendendo sistema. Mais coisas resolvidas pelo WhatsApp.</h2>
-      <p>O app continua sendo sua base de controle. Mas tarefas do dia a dia podem começar pelo canal que você já usa. Hoje o R.AI.Z já apoia consultas de pendências, busca de imóveis e contratos, comprovantes, recibos e Vitrine.</p>
+      <p>O app continua sendo sua base de controle. Mas tarefas do dia a dia podem começar pelo canal que você já usa. Hoje o R.AI.Z já apoia consultas de pendências, busca de imóveis e contratos, comprovantes, recibos, análise de documentos por IA e Vitrine.</p>
       <p style="margin-top:12px">No trial, a evolução planejada é usar o mesmo canal para ajudar no onboarding e mostrar alertas úteis da própria carteira — sempre com contexto e sem transformar o WhatsApp em propaganda.</p>
       <div class="bot-actions">
         <a class="btn btn-brass" href="https://wa.me/5511978950609?text=Ol%C3%A1%2C%20quero%20conhecer%20o%20R.AI.Z%20-%20Assistente%20Patrimonial." target="_blank" rel="noopener" onclick="trackEvento('cta_click','cta_click:whatsapp_raiz_secao')">Falar com o R.AI.Z</a>
@@ -619,12 +641,12 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow" style="color:#f0c88a">Para quem é</span>
-      <h2>Feito para quem cuida dos próprios imóveis.</h2>
-      <p>Não é um sistema pesado. É a ferramenta certa para quem quer organização e transparência.</p>
+      <h2>Feito para quem cuida do próprio patrimônio.</h2>
+      <p>Não é um sistema pesado. É a ferramenta certa para quem quer organização e transparência — dos imóveis para o resto do patrimônio.</p>
     </div>
     <div class="pq-grid">
       <div class="pq-card reveal"><h3>Administração direta</h3><p>Consolida a administração direta dos imóveis ou que está dispersa em vários modelos. O sistema consegue administrar vários tipos de aluguel — direto, com intermediário ou híbrido.</p></div>
-      <div class="pq-card reveal"><h3>Patrimônio da família</h3><p>Vários donos, uma carteira só. O Raiz Patrimônio organiza a divisão, a prestação de contas e mantém todos na mesma página.</p></div>
+      <div class="pq-card reveal"><h3>Patrimônio da família</h3><p>Vários donos, uma carteira só — imóveis, veículos, obras de arte e outros bens. O Raiz organiza a divisão, a prestação de contas e mantém todos na mesma página.</p></div>
       <div class="pq-card reveal"><h3>Gestão familiar profissional</h3><p>Independente do tamanho, o que importa é ter controle claro e compartilhado entre os membros da família que administram o patrimônio.</p></div>
     </div>
   </div>
@@ -642,73 +664,126 @@
   </div>
 </section>
 
-<!-- COMO FUNCIONA v3.0.0 -->
+<!-- COMO FUNCIONA -->
 <section id="como-funciona">
   <div class="wrap">
     <div class="sec-head reveal"><span class="eyebrow">Como começar</span><h2>Comece sozinho — ou peça ajuda para trazer sua carteira.</h2></div>
     <div class="steps">
       <div class="step reveal"><div class="num">1</div><h3>Escolha seu plano</h3><p>Teste grátis sem cartão — a duração varia conforme o plano (Essencial, Patrimônio ou Plus). Entre no app e comece com um imóvel real.</p></div>
       <div class="step reveal"><div class="num">2</div><h3>Use app + WhatsApp</h3><p>O app dá visão completa; o R.AI.Z agiliza consultas e tarefas pelo WhatsApp.</p></div>
-      <div class="step reveal"><div class="num">3</div><h3>Já tem muitos dados?</h3><p>Solicite a Importação Assistida. Avaliamos sua base e propomos escopo, prazo e valor.</p></div>
+      <div class="step reveal"><div class="num">3</div><h3>Já tem muitos dados?</h3><p>Marque a opção no formulário ou peça a Importação Assistida — a gente avalia sua base e propõe escopo, prazo e valor.</p></div>
     </div>
   </div>
 </section>
 
 
-<!-- NOVIDADES / ATIVOS DE PATRIMÔNIO v3.3.0 -->
+<!-- O RAIZ POR DENTRO — reescrita v4.0.0 (antes "Novidades", anunciava como roadmap
+     algo que já está em produção; agora separa "já disponível hoje" de "próximos passos"
+     de verdade, sem expor dívida técnica interna) -->
 <section id="novidades">
   <div class="wrap">
-    <div class="sec-head reveal"><span class="eyebrow">O Raiz está crescendo</span><h2>Dos imóveis para uma visão mais ampla do patrimônio.</h2><p>O foco atual continua sendo tornar a gestão dos imóveis excelente. Em paralelo, estamos preparando o controle de ativos de patrimônio — documentos, alertas, receitas, despesas e obrigações de manutenção, seguro e tributos, tudo num só lugar.</p></div>
+    <div class="sec-head reveal"><span class="eyebrow">O Raiz por dentro</span><h2>Já é mais do que gestão de imóveis.</h2><p>O foco comercial continua sendo carteiras de imóveis — é o que define plano e preço. Mas o mesmo painel já guarda outros bens do patrimônio, com documentos, alertas e financeiro completo.</p></div>
     <div class="news-grid">
-      <div class="news-card reveal"><span class="coming">Em evolução</span><h3>📂 Controle de ativos</h3><p>Uma experiência para começar pelo documento e conectá-lo ao que ele controla: imóvel, contrato, recebimento e, no futuro, outros ativos patrimoniais.</p></div>
-      <div class="news-card reveal"><span class="coming">Direção de produto</span><h3>🚗 Outros ativos</h3><p>Veículos, terrenos, seguros, fotos, contatos e vencimentos entram na visão de evolução do controle de ativos — sem tirar o foco da gestão imobiliária atual.</p></div>
-      <div class="news-card reveal"><span class="coming">Você participa</span><h3>💡 Evolução com clientes</h3><p>Sugestões pelo app e pelo R.AI.Z ajudam a orientar prioridades. Elas são avaliadas por aderência, recorrência, segurança, impacto e viabilidade.</p></div>
+      <div class="news-card reveal"><span class="ja-disponivel">Já disponível hoje</span><h3>📂 Cofre de Documentos</h3><p>Matrícula, escritura, contrato, comprovante — cada documento já entra vinculado ao imóvel ou ativo certo, com categorias prontas e busca.</p></div>
+      <div class="news-card reveal"><span class="ja-disponivel">Já disponível hoje</span><h3>🚗 Outros ativos</h3><p>Veículos, veículos blindados, aeronaves, embarcações, obras de arte, coleções e seguro de vida já podem ser cadastrados, com controle de vencimento próprio.</p></div>
+      <div class="news-card reveal"><span class="ja-disponivel">Já disponível hoje</span><h3>🧮 Financeiro completo</h3><p>Recebimentos e despesas/saídas no mesmo painel, com distribuição entre sócios e conciliação bancária.</p></div>
+    </div>
+    <div class="news-grid" style="margin-top:18px">
+      <div class="news-card reveal"><span class="coming">Próximos passos</span><h3>🌾 Raiz Agro</h3><p>Para quem administra também área rural — reaproveitando o mesmo motor de ativos e controles.</p></div>
+      <div class="news-card reveal"><span class="coming">Próximos passos</span><h3>🧾 NFS-e para aluguéis</h3><p>Emissão de nota fiscal de serviço eletrônica integrada, acompanhando a exigência legal para locações.</p></div>
+      <div class="news-card reveal"><span class="coming">Você participa</span><h3>💡 Evolução com clientes</h3><p>Sugestões pelo app e pelo R.AI.Z ajudam a orientar prioridades. Avaliadas por aderência, recorrência, segurança, impacto e viabilidade.</p></div>
     </div>
   </div>
 </section>
 
-<!-- PREÇOS v3.1.0 — 3 planos, lidos de fn_ofertas_landing_ativas() com fallback estático -->
+<!-- PREÇOS — valores conferidos ao vivo contra fn_ofertas_landing_ativas() nesta entrega,
+     sem mudança de valor. Ganhou 1 frase nova sobre limite compartilhado entre tipos de
+     ativo (achado confirmado no banco: cofre.ativos.criar aplica o mesmo teto do plano
+     pra qualquer tipo de bem, não só imóvel — nunca tinha sido comunicado). -->
 <section id="precos" class="trial-section">
   <div class="wrap">
-    <div class="sec-head reveal"><span class="eyebrow">Planos</span><h2>Escolha o plano do tamanho da sua carteira hoje.</h2><p>Sem "ilimitado". Os limites abaixo são os que valem — e dá pra crescer contratando capacidade adicional depois.</p></div>
+    <div class="sec-head reveal"><span class="eyebrow">Planos</span><h2>Escolha o plano do tamanho da sua carteira hoje.</h2><p>Sem "ilimitado". Os limites abaixo são os que valem — e dá pra crescer contratando capacidade adicional depois. O limite de itens do seu plano é compartilhado: conta tanto imóvel quanto outro bem cadastrado (veículo, obra de arte, etc.).</p></div>
     <div class="price-grid" id="price-grid-planos">
       <!-- Preenchido por renderizarPlanos() no load. Este fallback estático só aparece
            se a chamada a fn_ofertas_landing_ativas() falhar (rede, RLS, schema não
            exposto) — nunca deixamos a seção de preços vazia. -->
       <div class="price-card reveal" data-plano-fallback="essencial">
         <h3>Essencial</h3><div class="price-big">R$ 69<span style="font-size:16px">/mês</span></div><div class="price-small">teste grátis por 7 dias</div>
-        <ul class="price-list"><li>✓ Até 5 imóveis</li><li>✓ Imóveis, contratos e recibos</li><li>✓ Recebimentos e cobranças</li><li>✓ Anexar minutas de contratação</li><li>✓ Conciliação manual</li><li>— Sem distribuição, despesas ou contador/check-up</li></ul>
+        <ul class="price-list"><li>✓ Até 5 imóveis (ou outros ativos)</li><li>✓ Imóveis, contratos e recibos</li><li>✓ Recebimentos e cobranças</li><li>✓ Anexar minutas de contratação</li><li>✓ Conciliação manual</li><li>— Sem distribuição, despesas ou contador/check-up</li></ul>
         <a class="btn btn-ghost" href="#trial" onclick="selecionarPlano('essencial')">Testar Essencial</a>
       </div>
       <div class="price-card featured reveal" data-plano-fallback="patrimonio">
         <span class="coming">Recomendado</span><h3>Patrimônio</h3><div class="price-big">R$ 89<span style="font-size:16px">/mês</span></div><div class="price-small">nos 3 primeiros meses · depois R$ 149/mês (preço cheio) · teste grátis por 14 dias</div>
-        <ul class="price-list"><li>✓ Até 20 imóveis</li><li>✓ Tudo do Essencial</li><li>✓ Conciliação manual + extratos bancários</li><li>✓ Distribuição entre sócios</li><li>✓ Contador/check-up</li><li>✓ Anexar minutas</li></ul>
+        <ul class="price-list"><li>✓ Até 20 imóveis (ou outros ativos)</li><li>✓ Tudo do Essencial</li><li>✓ Conciliação manual + extratos bancários</li><li>✓ Distribuição entre sócios</li><li>✓ Contador/check-up</li><li>✓ Anexar minutas</li></ul>
         <a class="btn btn-primary" href="#trial" onclick="selecionarPlano('patrimonio')">Testar Patrimônio</a>
       </div>
       <div class="price-card reveal" data-plano-fallback="plus">
         <h3>Plus</h3><div class="price-big">R$ 279<span style="font-size:16px">/mês</span></div><div class="price-small">teste assistido de 30 dias</div>
-        <ul class="price-list"><li>✓ Até 50 imóveis</li><li>✓ Tudo do Patrimônio</li><li>✓ Despesas patrimoniais</li><li>✓ Maior capacidade de uso</li><li>✓ Recursos avançados de contador/check-up</li></ul>
+        <ul class="price-list"><li>✓ Até 50 imóveis (ou outros ativos)</li><li>✓ Tudo do Patrimônio</li><li>✓ Despesas patrimoniais</li><li>✓ Maior capacidade de uso</li><li>✓ Recursos avançados de contador/check-up</li></ul>
         <a class="btn btn-ghost" href="#trial" onclick="selecionarPlano('plus')">Testar Plus</a>
       </div>
     </div>
-    <p class="mini-note" style="text-align:center;margin-top:18px">Acima de 50 imóveis, carteiras maiores têm proposta personalizada — fale conosco. * R.AI.Z, recursos de IA/WhatsApp e controle de ativos possuem franquias de uso proporcionais ao plano; pacotes adicionais podem ser contratados conforme necessidade.</p>
+    <p class="mini-note" style="text-align:center;margin-top:18px">Acima de 50 itens, carteiras maiores têm proposta personalizada — fale conosco. * R.AI.Z, recursos de IA/WhatsApp e controle de ativos possuem franquias de uso proporcionais ao plano; pacotes adicionais podem ser contratados conforme necessidade.</p>
   </div>
 </section>
 
-<!-- IMPORTAÇÃO ASSISTIDA v3.1.0 -->
-<section style="padding-top:0">
+<!-- IMPORTAÇÃO ASSISTIDA — expandida v4.0.0 (pedido explícito: explicação melhor da
+     cobertura, com exemplos concretos do que dá pra mandar) -->
+<section id="importacao" style="padding-top:0">
   <div class="wrap">
-    <div class="sec-head reveal"><span class="eyebrow">Já tem uma carteira grande?</span><h2>Importação Assistida — a gente traz seus dados pra você.</h2><p>Disponível a partir do plano Patrimônio. Envie seus dados em formatos amplamente usados (planilhas, PDFs, imagens de documentos) e, após validação do pacote, a Raiz realiza a importação em até 24 horas úteis — incluindo associação dos documentos fornecidos quando houver informação suficiente. O prazo começa a contar depois do recebimento completo, legível e validado.</p></div>
-    <div class="price-grid">
+    <div class="sec-head reveal"><span class="eyebrow">Já tem uma carteira grande?</span><h2>Importação Assistida — a gente traz seus dados pra você.</h2><p>Disponível a partir do plano Patrimônio. Você manda o que tiver, do jeito que tiver — não precisa organizar antes. Depois de avaliar e confirmar o pacote, a Raiz realiza a importação em até 24 horas úteis, contadas a partir do recebimento completo, legível e validado.</p></div>
+
+    <div class="import-grid">
+      <div class="import-card reveal">
+        <div class="ic">📊</div>
+        <h3>Planilhas</h3>
+        <ul>
+          <li>Cadastro de imóveis (endereço, tipo, valor)</li>
+          <li>Lista de contratos e inquilinos</li>
+          <li>Histórico de recebimentos/pagamentos</li>
+          <li>Cadastro de outros bens (veículos, obras de arte etc.)</li>
+        </ul>
+      </div>
+      <div class="import-card reveal">
+        <div class="ic">📄</div>
+        <h3>Documentos</h3>
+        <ul>
+          <li>Contratos assinados (PDF ou Word)</li>
+          <li>Matrícula e escritura</li>
+          <li>Carnê de IPTU e apólices de seguro</li>
+          <li>Comprovantes e recibos antigos</li>
+        </ul>
+      </div>
+      <div class="import-card reveal">
+        <div class="ic">📷</div>
+        <h3>Fotos</h3>
+        <ul>
+          <li>Fotos do imóvel (fachada, interior)</li>
+          <li>Foto de documento tirada pelo celular, quando não tiver o PDF</li>
+          <li>Fotos de outros bens do patrimônio</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sec-head reveal" style="margin-top:52px;margin-bottom:30px"><span class="eyebrow">O que a Raiz faz com isso</span><h2 style="font-size:26px">Do arquivo bruto ao painel pronto.</h2></div>
+    <div class="steps steps-4">
+      <div class="step reveal"><div class="num">1</div><h3 style="font-size:16px">Você manda o que tiver</h3><p style="font-size:14.5px">Planilha, PDF, foto — pelo formato que for mais fácil pra você, sem precisar organizar antes.</p></div>
+      <div class="step reveal"><div class="num">2</div><h3 style="font-size:16px">A gente avalia</h3><p style="font-size:14.5px">Confirmamos escopo, prazo e valor pelo WhatsApp antes de qualquer cobrança.</p></div>
+      <div class="step reveal"><div class="num">3</div><h3 style="font-size:16px">Cadastro e vínculo</h3><p style="font-size:14.5px">Imóveis, contratos e histórico são cadastrados; documentos e fotos são anexados ao imóvel ou bem certo, quando há informação suficiente.</p></div>
+      <div class="step reveal"><div class="num">4</div><h3 style="font-size:16px">Você já entra vendo</h3><p style="font-size:14.5px">Em até 24h úteis após o pacote completo, sua carteira real já está no painel — não é dado de exemplo.</p></div>
+    </div>
+
+    <div class="price-grid" style="margin-top:44px">
       <div class="price-card reveal"><h3>Até 20 imóveis</h3><div class="price-big">R$ 99</div><div class="price-small">pacote único</div><a class="btn btn-ghost" href="https://wa.me/5511947461828?text=Oi!%20Quero%20avaliar%20a%20Importa%C3%A7%C3%A3o%20Assistida%20(at%C3%A9%2020%20im%C3%B3veis)." target="_blank" rel="noopener" onclick="trackEvento('cta_click','cta_click:importacao:20')">Avaliar minha base</a></div>
       <div class="price-card reveal"><h3>Até 50 imóveis</h3><div class="price-big">R$ 199</div><div class="price-small">pacote único</div><a class="btn btn-ghost" href="https://wa.me/5511947461828?text=Oi!%20Quero%20avaliar%20a%20Importa%C3%A7%C3%A3o%20Assistida%20(at%C3%A9%2050%20im%C3%B3veis)." target="_blank" rel="noopener" onclick="trackEvento('cta_click','cta_click:importacao:50')">Avaliar minha base</a></div>
       <div class="price-card reveal"><h3>Acima de 50</h3><div class="price-big">Sob orçamento</div><div class="price-small">carteiras maiores</div><a class="btn btn-ghost" href="https://wa.me/5511947461828?text=Oi!%20Tenho%20uma%20carteira%20grande%20e%20quero%20avaliar%20a%20Importa%C3%A7%C3%A3o%20Assistida." target="_blank" rel="noopener" onclick="trackEvento('cta_click','cta_click:importacao:orcamento')">Falar sobre minha carteira</a></div>
     </div>
-    <p class="mini-note" style="text-align:center">Seus arquivos trafegam por canal seguro, com acesso restrito, auditoria e descarte dos arquivos temporários conforme nossa política de dados — tratamento alinhado à LGPD.</p>
+    <p class="mini-note" style="text-align:center;margin-top:16px">Seus arquivos trafegam por canal seguro, com acesso restrito, auditoria e descarte dos arquivos temporários conforme nossa política de dados — tratamento alinhado à LGPD.</p>
+    <p class="mini-note" style="text-align:center;margin-top:8px">Prefere já sinalizar isso agora? Marque a opção no <a href="#trial" style="color:var(--brass-deep);font-weight:600">formulário de teste grátis</a> abaixo — a gente entra em contato.</p>
   </div>
 </section>
 
-<!-- GARANTIA v3.1.0 -->
+<!-- GARANTIA -->
 <section class="paraquem" style="padding:52px 0">
   <div class="wrap" style="text-align:center;max-width:640px">
     <span class="eyebrow" style="color:#f0c88a">Garantia</span>
@@ -718,7 +793,7 @@
   </div>
 </section>
 
-<!-- EVOLUÇÃO CONTÍNUA v3.0.0 -->
+<!-- EVOLUÇÃO CONTÍNUA -->
 <section>
   <div class="wrap">
     <div class="evolve-box reveal">
@@ -736,11 +811,11 @@
       <h2 id="trial-titulo">Teste grátis</h2>
       <p class="trial-sub" id="trial-subtitulo">Cadastre sua empresa e já entre direto no sistema. Sem cartão, sem instalação.</p>
 
-      <!-- FASE 1A (v2.5.0) — aparece só quando a página abre com ?convite=... -->
+      <!-- FASE 1A — aparece só quando a página abre com ?convite=... -->
       <div id="convite-banner" class="hidden" style="background:var(--brass-light,#f0c88a);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:13.5px;color:#5c4318;text-align:center;"></div>
 
       <form id="form-trial" novalidate>
-        <!-- SELEÇÃO DE PLANO v3.1.0 — define qual codigo_publico vai pra
+        <!-- SELEÇÃO DE PLANO — define qual codigo_publico vai pra
              fn_criar_trial_campanha() e, portanto, qual duração de trial
              (7/14/30 dias) a pessoa recebe. Some no fluxo de convite
              (mesma empresa do convidador já definiu o plano). -->
@@ -774,13 +849,30 @@
           <input type="password" id="trial-senha" name="senha" autocomplete="new-password" required minlength="6" placeholder="Mínimo 6 caracteres">
         </div>
         <div class="trial-field" id="campo-trial-faixa">
-          <label>Quantos imóveis você administra hoje?</label>
+          <label>Quantos imóveis (ou outros bens) você administra hoje?</label>
           <div class="faixa-opcoes" id="faixa-opcoes" role="radiogroup" aria-label="Quantidade de imóveis">
             <div class="faixa-pill" data-valor="0-5" onclick="selecionarFaixaImoveis(this)" role="radio" aria-checked="false" tabindex="0">0 a 5</div>
             <div class="faixa-pill" data-valor="5-20" onclick="selecionarFaixaImoveis(this)" role="radio" aria-checked="false" tabindex="0">5 a 20</div>
             <div class="faixa-pill" data-valor="20+" onclick="selecionarFaixaImoveis(this)" role="radio" aria-checked="false" tabindex="0">Acima de 20</div>
           </div>
           <input type="hidden" id="trial-faixa" name="faixa_imoveis" value="">
+        </div>
+
+        <!-- INTERESSE EM IMPORTAÇÃO — NOVO v4.0.0. Pedido explícito: sinalizar
+             no form se o cliente quer testar com dados reais, avisando que é
+             diferencial pra quem tem carteira grande. Vira
+             p_interesse_importacao na RPC (coluna clientes.interesse_importacao,
+             migration aplicada nesta sessão). Só sinal pra follow-up manual
+             — não dispara nada automático. Some no fluxo de convite, igual
+             empresa/faixa (empresa já existe, quem entrou primeiro já decidiu). -->
+        <div class="trial-field" id="campo-trial-interesse-importacao">
+          <div class="trial-check" id="interesse-importacao-box">
+            <input type="checkbox" id="trial-interesse-importacao" name="interesse_importacao">
+            <label for="trial-interesse-importacao">
+              <strong>Quero testar com meus dados reais.</strong> Tenho interesse em saber mais sobre a Importação Assistida (planilhas, contratos, fotos).
+              <span class="tip-destaque" id="interesse-importacao-dica">💡 Recomendado pra você: com uma carteira desse tamanho, a Importação Assistida evita digitar tudo à mão — você já testa o Raiz com o seu patrimônio de verdade.</span>
+            </label>
+          </div>
         </div>
 
         <button type="submit" id="trial-submit-btn" class="btn btn-primary trial-submit">Começar meu teste grátis</button>
@@ -823,10 +915,12 @@
     </div>
     <details><summary>Preciso ter conhecimento técnico?</summary><p>Não. Se optar pelo modelo com configuração, a gente deixa tudo pronto. Se preferir instalar sozinho, é intuitivo e rápido — alguns cliques apenas.</p></details>
     <details><summary>Quais são os dois modelos de instalação?</summary><p>Modelo 1 — A gente configura tudo para você (imóveis, sócios, integração com seus dados). Modelo 2 — Você instala pelo seu celular, e nós temos um guia simples passo a passo. Ambos funcionam perfeitamente — escolha o que se encaixa melhor no seu ritmo.</p></details>
-    <details><summary>Serve para quantos imóveis?</summary><p>É pensado para carteiras de pequeno e médio porte — até 50 imóveis, no plano Plus. Acima disso, carteiras maiores têm proposta personalizada (fale conosco).</p></details>
-    <details><summary>O que eu consigo fazer pelo WhatsApp?</summary><p>O R.AI.Z já apoia consultas de pendências, busca de imóvel/contrato, comprovantes, recibos e Vitrine. O app continua sendo a visão completa e o histórico da operação. Novas jornadas, como onboarding e alertas contextuais, estão em evolução.</p></details>
+    <details><summary>Serve para quantos imóveis?</summary><p>É pensado para carteiras de pequeno e médio porte — até 50 itens, no plano Plus. Esse limite é compartilhado com outros bens do patrimônio cadastrados (veículo, obra de arte, aeronave etc.) — não é um teto separado por tipo. Acima disso, carteiras maiores têm proposta personalizada (fale conosco).</p></details>
+    <details><summary>Dá pra cadastrar outros bens, além de imóveis?</summary><p>Sim. O mesmo painel já cadastra veículos, veículos blindados, aeronaves, embarcações, obras de arte, coleções e seguro de vida/proteção pessoal — cada um com seus próprios documentos e controle de vencimento, dentro do limite do seu plano.</p></details>
+    <details><summary>O que eu consigo fazer pelo WhatsApp?</summary><p>O R.AI.Z já apoia consultas de pendências, busca de imóvel/contrato, comprovantes, recibos, análise de documentos por IA e Vitrine. O app continua sendo a visão completa e o histórico da operação. Novas jornadas, como onboarding e alertas contextuais, estão em evolução.</p></details>
     <details><summary>Meus dados ficam seguros?</summary><p>Sim. Suas informações ficam armazenadas em infraestrutura Supabase (banco de dados profissional), com acesso restrito apenas às pessoas que você autorizar. Cada cliente tem seu próprio ambiente, isolado e seguro. Você continua dono dos seus dados — pode exportar e fazer backup quando quiser. Como o sistema lida com contratos e dados de inquilinos, o tratamento segue os princípios da LGPD.</p></details>
-    <details><summary>Quanto custa?</summary><p>Três planos: Essencial (R$ 69/mês, até 5 imóveis), Patrimônio (R$ 149/mês, R$ 89/mês nos 3 primeiros meses, até 20 imóveis — recomendado) e Plus (R$ 279/mês, até 50 imóveis). Carteiras acima de 50 imóveis têm proposta personalizada. A Importação Assistida é opcional: R$ 99 (até 20 imóveis) ou R$ 199 (até 50), sujeita à análise da base.</p></details>
+    <details><summary>Quanto custa?</summary><p>Três planos: Essencial (R$ 69/mês, até 5 itens), Patrimônio (R$ 149/mês, R$ 89/mês nos 3 primeiros meses, até 20 itens — recomendado) e Plus (R$ 279/mês, até 50 itens). Carteiras acima de 50 têm proposta personalizada. A Importação Assistida é opcional: R$ 99 (até 20 imóveis) ou R$ 199 (até 50), sujeita à análise da base.</p></details>
+    <details><summary>O que entra na Importação Assistida?</summary><p>Você pode nos mandar planilhas (cadastro de imóveis, contratos, histórico de recebimentos), documentos (contratos assinados, matrícula, escritura, IPTU, apólices, comprovantes) e fotos (do imóvel ou de documentos, quando não tiver o PDF à mão). A gente cadastra os dados e vincula os documentos ao imóvel ou bem certo, sempre que houver informação suficiente pra isso.</p></details>
     <details><summary>Funciona no iPhone e no Android?</summary><p>Sim. Instala como aplicativo nos dois, e o mesmo sistema abre no computador pelo navegador. Você tem acesso sincronizado em todos os dispositivos.</p></details>
   </div>
 </section>
@@ -837,10 +931,6 @@
     <a class="logo" href="#">Raiz<span class="logo-sub">Patrimônio</span></a>
     <span>© <span id="ano"></span> Raiz Patrimônio · Gestão de patrimônio familiar</span>
   </div>
-  <!-- v3.2.0 (30/08/2026) — links legais, pedido explícito do Nicola
-       (frente de conformidade LGPD). Páginas novas em /termos-de-uso,
-       /politica-de-privacidade, /termo-beta (pasta + index.html cada,
-       funciona independente de config do Jekyll no GitHub Pages). -->
   <div class="wrap" style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1);display:flex;gap:18px;flex-wrap:wrap">
     <a href="/termos-de-uso" style="color:#a9b3ae;text-decoration:none;font-size:12.5px">Termos de Uso</a>
     <a href="/politica-de-privacidade" style="color:#a9b3ae;text-decoration:none;font-size:12.5px">Política de Privacidade</a>
@@ -862,12 +952,12 @@
 </script>
 
 <!-- ============================================================================
-     TRIAL — CADASTRO AUTO-SERVIÇO (v2.2.0)
+     TRIAL — CADASTRO AUTO-SERVIÇO
      Mesmo projeto Supabase do app (oduwpttbbemypiypjsux). Fluxo:
        1) supabase.auth.signUp(email, senha) — cria o login.
-       2) supabase.rpc('fn_criar_trial', {...}) — cria empresa + pessoa
-          (perfil admin) + licença trial (14 dias), tudo em 1 função
-          SECURITY DEFINER no banco (ver raiz_fase1a_signup_trial.sql).
+       2) supabase.rpc('fn_criar_trial_campanha', {...}) — cria empresa +
+          pessoa (perfil admin) + licença trial, tudo em 1 função
+          SECURITY DEFINER no banco.
        3) Redireciona pro app com os tokens de sessão no hash da URL
           (#access_token=...&refresh_token=...&type=trial_handoff) — a
           mesma técnica que o próprio Supabase usa em magic link. O app
@@ -879,9 +969,9 @@
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kdXdwdHRiYmVteXBpeXBqc3V4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyODEyOTcsImV4cCI6MjEwMDg1NzI5N30.9-cu1CV1wPbo5UH1G2eAsWqsvS54AWNuQZOlifc9a7w";
   const APP_URL = "https://app.raizpatrimonio.com.br";
 
-  // Menu mobile (v2.7.0) — abre/fecha o painel de "O que faz/Para quem é/
-  // Como funciona/Já sou cliente". Fecha sozinho ao tocar num link dentro
-  // do painel (evita ficar aberto depois de navegar) e ao tocar fora dele.
+  // Menu mobile — abre/fecha o painel de "O que faz/R.AI.Z/Preço/Importação/
+  // Já sou cliente". Fecha sozinho ao tocar num link dentro do painel
+  // (evita ficar aberto depois de navegar) e ao tocar fora dele.
   const navLinksEl = document.getElementById('nav-links');
   const navToggleEl = document.querySelector('.nav-toggle');
 
@@ -908,14 +998,9 @@
   const { createClient } = supabase;
   const dbTrial = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // v3.1.1 (23/08/2026) — sessao_id do funil. Pendência registrada desde o
-  // handoff da v0.9.0 (Gestão): trackEvento() nunca incluía sessao_id no
-  // insert, então o funil não conseguia encadear visita → CTA → form →
-  // trial da MESMA sessão (cada linha ficava "solta"). Coluna já existia
-  // em comercial.eventos_landing (nunca foi usada) — sem migration, só
-  // front-end. Gerado 1x por aba/sessão (sessionStorage, não localStorage
-  // — sessão nova = novo funil, de propósito) e nunca contém PII (é só um
-  // UUID aleatório do navegador).
+  // sessao_id do funil — gerado 1x por aba/sessão (sessionStorage, não
+  // localStorage — sessão nova = novo funil, de propósito) e nunca contém
+  // PII (é só um UUID aleatório do navegador).
   function obterSessaoId() {
     try {
       let id = sessionStorage.getItem('raiz_sessao_id');
@@ -932,10 +1017,10 @@
   }
   const sessaoIdAtual = obterSessaoId();
 
-  // v3.1.0 — declarado aqui (antes de trackEvento/renderizarPlanos serem
-  // chamados no load) pra evitar erro de temporal-dead-zone: trackEvento()
-  // lê planoSelecionado já na primeira chamada (page_view, disparada antes
-  // do usuário interagir com qualquer pílula de plano).
+  // declarado aqui (antes de trackEvento/renderizarPlanos serem chamados no
+  // load) pra evitar erro de temporal-dead-zone: trackEvento() lê
+  // planoSelecionado já na primeira chamada (page_view, disparada antes do
+  // usuário interagir com qualquer pílula de plano).
   let planoSelecionado = 'patrimonio';
   const DURACAO_TRIAL_PADRAO = { essencial: 7, patrimonio: 14, plus: 30 };
   let duracaoTrialPorPlano = Object.assign({}, DURACAO_TRIAL_PADRAO);
@@ -944,6 +1029,8 @@
   const btnTrial = document.getElementById('trial-submit-btn');
   const statusTrial = document.getElementById('trial-status');
   const campoFaixa = document.getElementById('trial-faixa');
+  const checkboxInteresseImportacao = document.getElementById('trial-interesse-importacao');
+  const boxInteresseImportacao = document.getElementById('interesse-importacao-box');
 
   function mostrarStatusTrial(mensagem, tipo) {
     statusTrial.textContent = mensagem;
@@ -951,9 +1038,9 @@
   }
 
   // ============================================================================
-  // FASE 1A (v2.5.0) — CONVITE DE SÓCIO: se a URL vier com ?convite=<cliente_id>
-  // (link compartilhado pelo app, aba Sobre), pula a criação de empresa nova —
-  // a pessoa entra como mais um acesso na empresa que já está em trial.
+  // CONVITE DE SÓCIO: se a URL vier com ?convite=<cliente_id> (link
+  // compartilhado pelo app, aba Sobre), pula a criação de empresa nova — a
+  // pessoa entra como mais um acesso na empresa que já está em trial.
   // Checagem de validade (trial ainda ativo, não expirado, < 5 pessoas) roda
   // aqui SÓ pra UX (esconder campo, mostrar aviso); a validação que importa
   // de verdade roda de novo no banco em fn_entrar_trial_convite.
@@ -988,12 +1075,13 @@
       banner.textContent = '🎉 Convite para testar junto com "' + linha.nome_empresa + '" — ' + linha.vagas_restantes + ' vaga(s) restante(s).';
       banner.classList.remove('hidden');
 
-      // Empresa e faixa de imóveis não fazem sentido nesse fluxo — quem
-      // convidou já respondeu isso.
+      // Empresa, faixa de imóveis e interesse em importação não fazem
+      // sentido nesse fluxo — quem convidou já respondeu isso.
       document.getElementById('campo-trial-empresa').classList.add('hidden');
       document.getElementById('trial-empresa').required = false;
       document.getElementById('campo-trial-faixa').classList.add('hidden');
       document.getElementById('campo-trial-plano').classList.add('hidden');
+      document.getElementById('campo-trial-interesse-importacao').classList.add('hidden');
 
     } catch (err) {
       console.warn('Falha ao checar convite:', err.message);
@@ -1002,19 +1090,16 @@
   }
 
   // ============================================================================
-  // FASE COMERCIAL (v2.7.0) — contador de visitas, schema separado
-  // "comercial" (não mistura com os dados operacionais do app). Fogo-e-
-  // esquece: se falhar (ex: schema ainda não exposto na API), não trava
-  // nada da página, só loga no console.
+  // FASE COMERCIAL — contador de visitas, schema separado "comercial" (não
+  // mistura com os dados operacionais do app). Fogo-e-esquece: se falhar
+  // (ex: schema ainda não exposto na API), não trava nada da página, só
+  // loga no console.
   //
-  // v3.1.0 — generalizada para trackEvento(evento, pagina, campanhaCodigo):
-  // evento precisa ser um dos valores aceitos pelo CHECK de
-  // comercial.eventos_landing (page_view/campaign_impression/cta_click/
-  // trial_form_start/trial_completo/erro — 'trial_completo' é novo nesta
-  // versão, ver migration_planos_landing_v3_1_0.sql). Granularidade da ação
-  // (qual plano, qual CTA) vai dentro de "pagina" como slug legível
-  // (ex.: "cta_click:plano:patrimonio"), não em coluna nova — evita alterar
-  // schema só pra granularidade de analytics.
+  // trackEvento(evento, pagina, campanhaCodigo): evento precisa ser um dos
+  // valores aceitos pelo CHECK de comercial.eventos_landing (page_view/
+  // campaign_impression/cta_click/trial_form_start/trial_completo/erro).
+  // Granularidade da ação (qual plano, qual CTA) vai dentro de "pagina" como
+  // slug legível (ex.: "cta_click:plano:patrimonio"), não em coluna nova.
   // ============================================================================
   function trackEvento(evento, paginaSlug, campanhaCodigo) {
     try {
@@ -1038,15 +1123,16 @@
     }
   }
 
-  // Compat: nome antigo mantido como alias, caso algo externo ainda chame.
-  function registrarVisitaLanding() { trackEvento('page_view'); }
-
   trackEvento('page_view');
   verificarConviteNaUrl();
   renderizarPlanos();
 
   // Faixa de imóveis — pílulas clicáveis (não é <select>/radio nativo, então
   // a obrigatoriedade é checada manualmente no submit, não pelo HTML5).
+  //
+  // v4.0.0 — quando a faixa "Acima de 20" é escolhida, destaca automaticamente
+  // o checkbox de interesse em importação (não marca sozinho — só chama
+  // atenção pra ele, a decisão continua sendo do visitante).
   function selecionarFaixaImoveis(el) {
     document.querySelectorAll('#faixa-opcoes .faixa-pill').forEach(function(p) {
       p.classList.remove('selecionada');
@@ -1058,14 +1144,22 @@
     campoFaixa.value = el.getAttribute('data-valor');
     document.getElementById('faixa-opcoes').classList.remove('faixa-erro');
     trackEvento('cta_click', 'cta_click:faixa:' + el.getAttribute('data-valor'));
+
+    if (boxInteresseImportacao) {
+      boxInteresseImportacao.classList.toggle('destacado', el.getAttribute('data-valor') === '20+');
+    }
+  }
+
+  if (checkboxInteresseImportacao) {
+    checkboxInteresseImportacao.addEventListener('change', function() {
+      trackEvento('cta_click', 'cta_click:interesse_importacao:' + (this.checked ? 'on' : 'off'), planoSelecionado);
+    });
   }
 
   // ============================================================================
-  // SELEÇÃO DE PLANO (v3.1.0) — pílulas no formulário + botões "Testar X" nos
-  // cards de preço (ambos chamam a mesma função). 'patrimonio' é o padrão
-  // (plano recomendado), já vem pré-selecionado no HTML. Estado
-  // (planoSelecionado/duracaoTrialPorPlano) declarado mais acima, perto do
-  // dbTrial, pra evitar TDZ no trackEvento('page_view') do load.
+  // SELEÇÃO DE PLANO — pílulas no formulário + botões "Testar X" nos cards
+  // de preço (ambos chamam a mesma função). 'patrimonio' é o padrão (plano
+  // recomendado), já vem pré-selecionado no HTML.
   // ============================================================================
   function selecionarPlano(codigo) {
     planoSelecionado = codigo;
@@ -1087,7 +1181,7 @@
   }
 
   // ============================================================================
-  // RENDERIZAÇÃO DINÂMICA DOS PLANOS (v3.1.0) — lê fn_ofertas_landing_ativas()
+  // RENDERIZAÇÃO DINÂMICA DOS PLANOS — lê fn_ofertas_landing_ativas()
   // (SECURITY DEFINER, GRANT anon já existente em produção). Atualiza preço/
   // dias de trial exibidos nos cards já presentes no HTML (fallback estático)
   // via data-plano-fallback, sem reconstruir o DOM inteiro — se a chamada
@@ -1134,9 +1228,7 @@
     }
   }
 
-  // v3.1.0 — 'trial_form_start' já existia como valor permitido no CHECK de
-  // eventos_landing desde a v2.7.0, mas nunca era disparado por nenhum
-  // código. Dispara uma única vez, no primeiro campo tocado.
+  // 'trial_form_start' — dispara uma única vez, no primeiro campo tocado.
   let trialFormStartDisparado = false;
   formTrial.addEventListener('focusin', function() {
     if (trialFormStartDisparado) return;
@@ -1160,9 +1252,8 @@
     const whatsapp = document.getElementById('trial-whatsapp').value.trim();
     const senha = document.getElementById('trial-senha').value;
     const faixaImoveis = campoFaixa.value;
+    const interesseImportacao = !!(checkboxInteresseImportacao && checkboxInteresseImportacao.checked);
 
-    // FASE 1A (v2.5.0) — no modo convite, empresa/faixa ficam escondidos
-    // e não são obrigatórios (ver verificarConviteNaUrl).
     if (!conviteClienteId && !faixaImoveis) {
       mostrarStatusTrial('Escolhe uma faixa de quantidade de imóveis.', 'erro');
       document.querySelectorAll('.faixa-pill').forEach(function(p) { p.classList.add('faixa-erro'); });
@@ -1197,14 +1288,16 @@
       // (fluxo de convite) — mesma validação de limite de 5 pessoas e
       // trial ainda ativo roda de novo dentro da função.
       //
-      // v3.1.0 — fluxo normal passa a usar fn_criar_trial_campanha (plano
-      // escolhido define a duração real do trial: 7/14/30 dias, resolvida
-      // no banco a partir de comercial.plano_campanhas.duracao_dias).
-      // fn_criar_trial (14 dias fixo) fica só como fallback se por algum
-      // motivo não houver plano selecionado (não deveria acontecer — o
-      // campo já vem com 'patrimonio' como padrão) — nunca deixa o
-      // cadastro travado por falta de plano. Convite continua 100%
-      // preservado, sem nenhuma mudança de comportamento.
+      // Fluxo normal usa fn_criar_trial_campanha (plano escolhido define a
+      // duração real do trial: 7/14/30 dias, resolvida no banco a partir de
+      // comercial.plano_campanhas.duracao_dias). v4.0.0: ganhou o parâmetro
+      // p_interesse_importacao (default false, aditivo — não quebra nada
+      // que já chamava sem ele). fn_criar_trial (14 dias fixo) fica só como
+      // fallback se por algum motivo não houver plano selecionado (não
+      // deveria acontecer — o campo já vem com 'patrimonio' como padrão) —
+      // nunca deixa o cadastro travado por falta de plano; esse fallback
+      // não recebe o sinal de importação (fora do escopo desta entrega,
+      // ver migration). Convite continua 100% preservado.
       let rpcError;
       if (conviteClienteId) {
         ({ error: rpcError } = await dbTrial.rpc('fn_entrar_trial_convite', {
@@ -1220,7 +1313,8 @@
           p_nome_usuario: nome,
           p_whatsapp: whatsapp,
           p_faixa_imoveis: faixaImoveis,
-          p_email: email
+          p_email: email,
+          p_interesse_importacao: interesseImportacao
         }));
       } else {
         ({ error: rpcError } = await dbTrial.rpc('fn_criar_trial', {
@@ -1233,7 +1327,7 @@
       }
       if (rpcError) throw rpcError;
 
-      trackEvento('trial_completo', 'trial_completo:plano:' + (planoSelecionado || 'legado'), planoSelecionado);
+      trackEvento('trial_completo', 'trial_completo:plano:' + (planoSelecionado || 'legado') + (interesseImportacao ? ':importacao' : ''), planoSelecionado);
       mostrarStatusTrial('Tudo pronto! Redirecionando...', 'ok');
 
       // 3) Handoff pro app já autenticado — tokens no hash, igual magic link
