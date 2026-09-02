@@ -2,6 +2,74 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Landing Page (index.html)
+  VERSÃO: v4.1.0 · LINHAS: 1463 · 2026-09-02
+  NOVIDADES v4.1.0 — rodada de revisão a partir do teste real do Nicola na
+  v4.0.0 (11 screenshots do celular), pedidos pontuais e específicos:
+
+    - TOM "EXPLICANDO O PROJETO" REMOVIDO: frases que soavam como
+      justificativa interna, não copy pro visitante, foram reescritas.
+      H1 do hero ("Não só os imóveis.") virou "Seu patrimônio inteiro, num
+      painel só." — descreve o benefício direto, sem comparar com o que
+      "não é". A frase "Cada bloco abaixo já existe e funciona no app hoje
+      — não é promessa de roadmap" (seção #mapa) foi cortada por inteiro —
+      um visitante não precisa saber que existe uma distinção interna
+      entre roadmap e produto real; ele só precisa ver o que o produto
+      faz. O H2 "Já é mais do que gestão de imóveis." (seção #novidades)
+      virou "Cuida do imóvel. E do resto do patrimônio também." — mesmo
+      recado, sem o "já é mais que" que soa como quem está se explicando.
+
+    - PÚBLICO-ALVO AMPLIADO (pedido explícito): a landing falava só de
+      quem administra o próprio patrimônio sozinho. Seção #para-quem
+      ganhou 4º card "Administradoras e holdings" (escritórios de
+      administração de imóveis e holdings familiares que cuidam de
+      patrimônio de terceiros/múltiplos sócios) — H2 e subtítulo da seção
+      reescritos pra não soarem exclusivos de autogestão. Reflete melhor
+      a base real de clientes (Rumo Empreendimentos, Rabelo Silva
+      Construções — ambas administradoras, não donos-únicos). Meta
+      description (twitter/JSON-LD) ampliada no mesmo sentido.
+
+    - RAIZ AGRO REMOVIDO da seção "Próximos passos" (pedido explícito) —
+      card cortado, sem substituto (a fileira passou a ter 2 cards; CSS de
+      .news-grid virou auto-fit pra distribuir bem com 2 ou 3 itens, sem
+      precisar de classe/breakpoint novo).
+
+    - NFS-e → REFORMA TRIBUTÁRIA (pedido explícito): card "NFS-e para
+      aluguéis" reformulado pra sinalizar intenção mais ampla — cobertura
+      dos requisitos da Reforma Tributária tanto pra emissão de documento
+      fiscal quanto simulação de cenário pra ajudar a reduzir carga
+      tributária. Fica como intenção declarada ("acompanhando"), não
+      promessa de prazo — os detalhes da reforma ainda estão em definição
+      no país inteiro, não só no produto.
+
+    - "CONTADOR/CHECK-UP" → "RELATÓRIOS PARA CONTABILIDADE" (pedido
+      explícito, achado real): a funcionalidade é geração de relatório pra
+      enviar à contabilidade, não um serviço de contador prestado pela
+      Raiz — o nome antigo dava a entender o contrário. Corrigido nos 3
+      lugares (bullet negativo do Essencial, bullet positivo do
+      Patrimônio, bullet "avançado" do Plus).
+
+    - IMPORTAÇÃO ASSISTIDA — MODELO DE PREÇO TROCADO (pedido explícito,
+      mudança estrutural): de "por tamanho de carteira" (até 20/até
+      50/acima) para "por tipo de conteúdo": Planilhas e PDFs R$ 199
+      (valor de referência) · Documentos e fotos R$ 499 (valor de
+      referência, exige conferência manual) · Histórico de recebimentos
+      sempre sob cotação à parte (complexidade varia demais por volume/
+      formato pra ter um número de referência único). Disclaimer novo e
+      explícito: "valores de referência — orçamento final sempre
+      confirmado depois de avaliarmos sua base". FAQ ("Quanto custa?" e
+      "O que entra na Importação Assistida?") atualizado no mesmo sentido.
+      Mensagens de WhatsApp pré-preenchidas e slugs de analytics
+      (trackEvento) ajustados pros 3 novos pacotes.
+
+    - NOVA SEÇÃO "Segurança e tecnologia" (pedido explícito de reforço):
+      3 blocos — ambiente isolado por cliente (LGPD, infraestrutura
+      profissional), IA no dia a dia (documentos lidos/classificados
+      automaticamente, comprovantes conferidos sozinhos, R.AI.Z no
+      WhatsApp) e "seus dados sempre seus" (backup, acesso de qualquer
+      lugar, exportação). Reaproveita .feat-grid/.feat já existentes, sem
+      CSS novo. Posicionada entre "Para quem é" e "Organização".
+
+  --- HISTÓRICO ANTERIOR (v4.0.0) ---
   VERSÃO: v4.0.0 · LINHAS: 1354 · 2026-09-02
   NOVIDADES v4.0.0 — "nova roupagem" pedida explicitamente pelo Nicola:
   landing estava descrevendo o produto de 30/08/2026 (v3.3.0), enquanto o
@@ -129,7 +197,7 @@
 
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Raiz Patrimônio — seu patrimônio organizado, não só os imóveis">
-<meta name="twitter:description" content="Imóveis, veículos, contratos e recebimentos num painel só. Gestão de patrimônio para famílias e pequenos administradores.">
+<meta name="twitter:description" content="Imóveis, veículos, contratos e recebimentos num painel só. Gestão de patrimônio para famílias, administradoras e holdings familiares.">
 
 <script type="application/ld+json">
 {
@@ -138,7 +206,7 @@
   "name": "Raiz Patrimônio",
   "applicationCategory": "BusinessApplication",
   "operatingSystem": "Web",
-  "description": "Gestão de imóveis e patrimônio (veículos, aeronaves, embarcações, obras de arte, coleções), contratos e recebimentos para famílias e pequenos administradores de patrimônio.",
+  "description": "Gestão de imóveis e patrimônio (veículos, aeronaves, embarcações, obras de arte, coleções), contratos e recebimentos para famílias, administradoras de imóveis e holdings familiares.",
   "url": "https://raizpatrimonio.com.br/",
   "offers": {
     "@type": "Offer",
@@ -317,7 +385,7 @@
   .paraquem{background:var(--pine);color:#eef3f0}
   .paraquem .sec-head h2{color:#fff}
   .paraquem .sec-head p{color:#b9cdc4}
-  .pq-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .pq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
   .pq-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:var(--radius);padding:24px}
   .pq-card h3{font-size:17px;color:#fff;margin-bottom:6px}
   .pq-card p{margin:0;font-size:14.5px;color:#b9cdc4}
@@ -440,7 +508,8 @@
   .wa-card{background:#f7f7f3;color:var(--ink);border-radius:20px;padding:22px;box-shadow:0 24px 60px rgba(0,0,0,.18)}
   .wa-bubble{background:#fff;border-radius:16px 16px 16px 4px;padding:13px 15px;margin:10px 0;font-size:14px;line-height:1.45}
   .wa-bubble.user{background:#dcf8c6;border-radius:16px 16px 4px 16px;margin-left:44px}
-  .news-grid,.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+  .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   .news-card,.price-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px}
   .news-card h3,.price-card h3{margin:10px 0 8px}
   .coming{display:inline-block;background:#f4ead9;color:#7a5525;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
@@ -482,8 +551,8 @@
   <div class="wrap hero-grid">
     <div>
       <span class="eyebrow">Gestão de patrimônio no app e no WhatsApp</span>
-      <h1>Seu patrimônio <em>organizado de verdade</em>. Não só os imóveis.</h1>
-      <p class="lead">Imóveis, contratos, recebimentos e despesas num painel só — e o mesmo painel também guarda veículos, aeronaves, embarcações, obras de arte e outros bens da família, com documentos, alertas e o R.AI.Z no WhatsApp pra resolver sem abrir o app.</p>
+      <h1>Seu patrimônio inteiro, <em>num painel só</em>.</h1>
+      <p class="lead">Imóveis, contratos, recebimentos, despesas, veículos, aeronaves, embarcações e obras de arte — cada bem da família documentado, com alertas e o R.AI.Z no WhatsApp para resolver sem abrir o app.</p>
       <div class="launch-badge"><span class="pulse"></span> Teste grátis · sem cartão de crédito</div>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#precos" onclick="trackEvento('cta_click','cta_click:hero_ver_planos')">Ver planos e testar grátis</a>
@@ -531,7 +600,7 @@
     <div class="sec-head center reveal">
       <span class="eyebrow">Como o Raiz organiza seu patrimônio</span>
       <h2>Um painel só. Seis frentes que hoje vivem espalhadas.</h2>
-      <p>Cada bloco abaixo já existe e funciona no app hoje — não é promessa de roadmap. O centro é o que conecta tudo: um documento, um alerta ou um lançamento sempre sabe a qual imóvel, contrato ou bem ele pertence.</p>
+      <p>O centro é o que conecta tudo: cada documento, alerta ou lançamento sempre sabe a qual imóvel, contrato ou bem pertence.</p>
     </div>
     <div class="mapa-grid">
       <div class="mapa-no reveal">
@@ -641,13 +710,31 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow" style="color:#f0c88a">Para quem é</span>
-      <h2>Feito para quem cuida do próprio patrimônio.</h2>
-      <p>Não é um sistema pesado. É a ferramenta certa para quem quer organização e transparência — dos imóveis para o resto do patrimônio.</p>
+      <h2>Feito para quem cuida de patrimônio — o seu ou o de terceiros.</h2>
+      <p>Não é um sistema pesado. É a ferramenta certa para quem quer organização e transparência, administrando direto ou cuidando do patrimônio de outras famílias.</p>
     </div>
     <div class="pq-grid">
       <div class="pq-card reveal"><h3>Administração direta</h3><p>Consolida a administração direta dos imóveis ou que está dispersa em vários modelos. O sistema consegue administrar vários tipos de aluguel — direto, com intermediário ou híbrido.</p></div>
       <div class="pq-card reveal"><h3>Patrimônio da família</h3><p>Vários donos, uma carteira só — imóveis, veículos, obras de arte e outros bens. O Raiz organiza a divisão, a prestação de contas e mantém todos na mesma página.</p></div>
-      <div class="pq-card reveal"><h3>Gestão familiar profissional</h3><p>Independente do tamanho, o que importa é ter controle claro e compartilhado entre os membros da família que administram o patrimônio.</p></div>
+      <div class="pq-card reveal"><h3>Administradoras e holdings</h3><p>Escritórios de administração de imóveis e holdings familiares que cuidam do patrimônio de terceiros ou de múltiplos sócios também organizam tudo no Raiz, com controle e transparência por cliente.</p></div>
+      <div class="pq-card reveal"><h3>Gestão familiar profissional</h3><p>Independente do tamanho, o que importa é ter controle claro e compartilhado entre quem administra o patrimônio.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SEGURANÇA E TECNOLOGIA (NOVO) — reforça tratamento de dados e tecnologia
+     moderna a favor do dia a dia do gestor. Reaproveita .feat-grid/.feat, sem CSS novo. -->
+<section class="problema">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Segurança e tecnologia</span>
+      <h2>Tecnologia séria por trás, simplicidade no seu dia a dia.</h2>
+      <p>Seus dados protegidos com infraestrutura profissional — e inteligência artificial cuidando do trabalho repetitivo, pra você ganhar tempo.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat reveal"><div class="ic">🔒</div><h3>Ambiente isolado por cliente</h3><p>Cada conta tem seu próprio espaço de dados, com acesso restrito só a quem você autorizar. Tratamento alinhado à LGPD, em infraestrutura profissional (Supabase).</p></div>
+      <div class="feat reveal"><div class="ic">🤖</div><h3>IA no dia a dia, não só no discurso</h3><p>Documentos são lidos e classificados automaticamente, comprovantes são conferidos sozinhos e o R.AI.Z responde no WhatsApp — menos tarefa manual repetida todo mês.</p></div>
+      <div class="feat reveal"><div class="ic">☁️</div><h3>Seus dados, sempre seus</h3><p>Backup automático, acesso de qualquer lugar (app ou navegador) e exportação disponível quando você quiser — sem depender de um único dispositivo ou planilha local.</p></div>
     </div>
   </div>
 </section>
@@ -682,15 +769,14 @@
      de verdade, sem expor dívida técnica interna) -->
 <section id="novidades">
   <div class="wrap">
-    <div class="sec-head reveal"><span class="eyebrow">O Raiz por dentro</span><h2>Já é mais do que gestão de imóveis.</h2><p>O foco comercial continua sendo carteiras de imóveis — é o que define plano e preço. Mas o mesmo painel já guarda outros bens do patrimônio, com documentos, alertas e financeiro completo.</p></div>
+    <div class="sec-head reveal"><span class="eyebrow">O Raiz por dentro</span><h2>Cuida do imóvel. E do resto do patrimônio também.</h2><p>Sua carteira de imóveis continua sendo a base do plano. Mas o mesmo painel já guarda outros bens da família — com documentos, alertas e financeiro completo, sem precisar de outro sistema.</p></div>
     <div class="news-grid">
       <div class="news-card reveal"><span class="ja-disponivel">Já disponível hoje</span><h3>📂 Cofre de Documentos</h3><p>Matrícula, escritura, contrato, comprovante — cada documento já entra vinculado ao imóvel ou ativo certo, com categorias prontas e busca.</p></div>
       <div class="news-card reveal"><span class="ja-disponivel">Já disponível hoje</span><h3>🚗 Outros ativos</h3><p>Veículos, veículos blindados, aeronaves, embarcações, obras de arte, coleções e seguro de vida já podem ser cadastrados, com controle de vencimento próprio.</p></div>
       <div class="news-card reveal"><span class="ja-disponivel">Já disponível hoje</span><h3>🧮 Financeiro completo</h3><p>Recebimentos e despesas/saídas no mesmo painel, com distribuição entre sócios e conciliação bancária.</p></div>
     </div>
     <div class="news-grid" style="margin-top:18px">
-      <div class="news-card reveal"><span class="coming">Próximos passos</span><h3>🌾 Raiz Agro</h3><p>Para quem administra também área rural — reaproveitando o mesmo motor de ativos e controles.</p></div>
-      <div class="news-card reveal"><span class="coming">Próximos passos</span><h3>🧾 NFS-e para aluguéis</h3><p>Emissão de nota fiscal de serviço eletrônica integrada, acompanhando a exigência legal para locações.</p></div>
+      <div class="news-card reveal"><span class="coming">Próximos passos</span><h3>🧾 Reforma Tributária</h3><p>Acompanhando a Reforma Tributária: emissão de documento fiscal para aluguéis dentro das novas regras e simulações de cenário para ajudar a reduzir a carga tributária.</p></div>
       <div class="news-card reveal"><span class="coming">Você participa</span><h3>💡 Evolução com clientes</h3><p>Sugestões pelo app e pelo R.AI.Z ajudam a orientar prioridades. Avaliadas por aderência, recorrência, segurança, impacto e viabilidade.</p></div>
     </div>
   </div>
@@ -709,17 +795,17 @@
            exposto) — nunca deixamos a seção de preços vazia. -->
       <div class="price-card reveal" data-plano-fallback="essencial">
         <h3>Essencial</h3><div class="price-big">R$ 69<span style="font-size:16px">/mês</span></div><div class="price-small">teste grátis por 7 dias</div>
-        <ul class="price-list"><li>✓ Até 5 imóveis (ou outros ativos)</li><li>✓ Imóveis, contratos e recibos</li><li>✓ Recebimentos e cobranças</li><li>✓ Anexar minutas de contratação</li><li>✓ Conciliação manual</li><li>— Sem distribuição, despesas ou contador/check-up</li></ul>
+        <ul class="price-list"><li>✓ Até 5 imóveis (ou outros ativos)</li><li>✓ Imóveis, contratos e recibos</li><li>✓ Recebimentos e cobranças</li><li>✓ Anexar minutas de contratação</li><li>✓ Conciliação manual</li><li>— Sem distribuição, despesas ou relatórios para contabilidade</li></ul>
         <a class="btn btn-ghost" href="#trial" onclick="selecionarPlano('essencial')">Testar Essencial</a>
       </div>
       <div class="price-card featured reveal" data-plano-fallback="patrimonio">
         <span class="coming">Recomendado</span><h3>Patrimônio</h3><div class="price-big">R$ 89<span style="font-size:16px">/mês</span></div><div class="price-small">nos 3 primeiros meses · depois R$ 149/mês (preço cheio) · teste grátis por 14 dias</div>
-        <ul class="price-list"><li>✓ Até 20 imóveis (ou outros ativos)</li><li>✓ Tudo do Essencial</li><li>✓ Conciliação manual + extratos bancários</li><li>✓ Distribuição entre sócios</li><li>✓ Contador/check-up</li><li>✓ Anexar minutas</li></ul>
+        <ul class="price-list"><li>✓ Até 20 imóveis (ou outros ativos)</li><li>✓ Tudo do Essencial</li><li>✓ Conciliação manual + extratos bancários</li><li>✓ Distribuição entre sócios</li><li>✓ Relatórios para contabilidade</li><li>✓ Anexar minutas</li></ul>
         <a class="btn btn-primary" href="#trial" onclick="selecionarPlano('patrimonio')">Testar Patrimônio</a>
       </div>
       <div class="price-card reveal" data-plano-fallback="plus">
         <h3>Plus</h3><div class="price-big">R$ 279<span style="font-size:16px">/mês</span></div><div class="price-small">teste assistido de 30 dias</div>
-        <ul class="price-list"><li>✓ Até 50 imóveis (ou outros ativos)</li><li>✓ Tudo do Patrimônio</li><li>✓ Despesas patrimoniais</li><li>✓ Maior capacidade de uso</li><li>✓ Recursos avançados de contador/check-up</li></ul>
+        <ul class="price-list"><li>✓ Até 50 imóveis (ou outros ativos)</li><li>✓ Tudo do Patrimônio</li><li>✓ Despesas patrimoniais</li><li>✓ Maior capacidade de uso</li><li>✓ Relatórios avançados para contabilidade</li></ul>
         <a class="btn btn-ghost" href="#trial" onclick="selecionarPlano('plus')">Testar Plus</a>
       </div>
     </div>
@@ -731,7 +817,7 @@
      cobertura, com exemplos concretos do que dá pra mandar) -->
 <section id="importacao" style="padding-top:0">
   <div class="wrap">
-    <div class="sec-head reveal"><span class="eyebrow">Já tem uma carteira grande?</span><h2>Importação Assistida — a gente traz seus dados pra você.</h2><p>Disponível a partir do plano Patrimônio. Você manda o que tiver, do jeito que tiver — não precisa organizar antes. Depois de avaliar e confirmar o pacote, a Raiz realiza a importação em até 24 horas úteis, contadas a partir do recebimento completo, legível e validado.</p></div>
+    <div class="sec-head reveal"><span class="eyebrow">Já tem uma carteira grande?</span><h2>Importação Assistida — a gente traz seus dados pra você.</h2><p>Disponível a partir do plano Patrimônio. Você manda o que tiver, do jeito que tiver — não precisa organizar antes. Avaliamos sua base e confirmamos escopo, prazo e valor pelo WhatsApp antes de qualquer cobrança.</p></div>
 
     <div class="import-grid">
       <div class="import-card reveal">
@@ -764,21 +850,44 @@
         </ul>
       </div>
     </div>
+    <p class="mini-note" style="text-align:center;margin-top:16px">Importação de histórico de recebimentos/pagamentos é sempre orçada à parte — a complexidade varia muito conforme o volume e o formato disponível.</p>
 
     <div class="sec-head reveal" style="margin-top:52px;margin-bottom:30px"><span class="eyebrow">O que a Raiz faz com isso</span><h2 style="font-size:26px">Do arquivo bruto ao painel pronto.</h2></div>
     <div class="steps steps-4">
       <div class="step reveal"><div class="num">1</div><h3 style="font-size:16px">Você manda o que tiver</h3><p style="font-size:14.5px">Planilha, PDF, foto — pelo formato que for mais fácil pra você, sem precisar organizar antes.</p></div>
       <div class="step reveal"><div class="num">2</div><h3 style="font-size:16px">A gente avalia</h3><p style="font-size:14.5px">Confirmamos escopo, prazo e valor pelo WhatsApp antes de qualquer cobrança.</p></div>
       <div class="step reveal"><div class="num">3</div><h3 style="font-size:16px">Cadastro e vínculo</h3><p style="font-size:14.5px">Imóveis, contratos e histórico são cadastrados; documentos e fotos são anexados ao imóvel ou bem certo, quando há informação suficiente.</p></div>
-      <div class="step reveal"><div class="num">4</div><h3 style="font-size:16px">Você já entra vendo</h3><p style="font-size:14.5px">Em até 24h úteis após o pacote completo, sua carteira real já está no painel — não é dado de exemplo.</p></div>
+      <div class="step reveal"><div class="num">4</div><h3 style="font-size:16px">Você já entra vendo</h3><p style="font-size:14.5px">Planilhas e PDF: até 24h úteis após o pacote completo. Documentos/fotos e histórico têm prazo combinado conforme o escopo confirmado.</p></div>
     </div>
 
+    <!-- Preços por TIPO de conteúdo (não mais por tamanho de carteira) — pedido
+         explícito do Nicola. Valores de referência, orçamento sempre confirmado
+         depois de avaliar a base real. -->
     <div class="price-grid" style="margin-top:44px">
-      <div class="price-card reveal"><h3>Até 20 imóveis</h3><div class="price-big">R$ 99</div><div class="price-small">pacote único</div><a class="btn btn-ghost" href="https://wa.me/5511947461828?text=Oi!%20Quero%20avaliar%20a%20Importa%C3%A7%C3%A3o%20Assistida%20(at%C3%A9%2020%20im%C3%B3veis)." target="_blank" rel="noopener" onclick="trackEvento('cta_click','cta_click:importacao:20')">Avaliar minha base</a></div>
-      <div class="price-card reveal"><h3>Até 50 imóveis</h3><div class="price-big">R$ 199</div><div class="price-small">pacote único</div><a class="btn btn-ghost" href="https://wa.me/5511947461828?text=Oi!%20Quero%20avaliar%20a%20Importa%C3%A7%C3%A3o%20Assistida%20(at%C3%A9%2050%20im%C3%B3veis)." target="_blank" rel="noopener" onclick="trackEvento('cta_click','cta_click:importacao:50')">Avaliar minha base</a></div>
-      <div class="price-card reveal"><h3>Acima de 50</h3><div class="price-big">Sob orçamento</div><div class="price-small">carteiras maiores</div><a class="btn btn-ghost" href="https://wa.me/5511947461828?text=Oi!%20Tenho%20uma%20carteira%20grande%20e%20quero%20avaliar%20a%20Importa%C3%A7%C3%A3o%20Assistida." target="_blank" rel="noopener" onclick="trackEvento('cta_click','cta_click:importacao:orcamento')">Falar sobre minha carteira</a></div>
+      <div class="price-card reveal">
+        <h3>Planilhas e PDFs</h3>
+        <div class="price-big">R$ 199</div>
+        <div class="price-small">valor de referência</div>
+        <p style="font-size:13.5px;color:#4a5852;margin:14px 0 18px;line-height:1.5">Cadastro de imóveis, contratos e outros bens a partir de planilhas e documentos com texto pesquisável.</p>
+        <a class="btn btn-ghost" href="https://wa.me/5511947461828?text=Oi!%20Quero%20avaliar%20a%20Importa%C3%A7%C3%A3o%20Assistida%20de%20planilhas%20e%20PDF." target="_blank" rel="noopener" onclick="trackEvento('cta_click','cta_click:importacao:texto_pdf')">Avaliar minha base</a>
+      </div>
+      <div class="price-card reveal">
+        <h3>Documentos e fotos</h3>
+        <div class="price-big">R$ 499</div>
+        <div class="price-small">valor de referência</div>
+        <p style="font-size:13.5px;color:#4a5852;margin:14px 0 18px;line-height:1.5">Inclui documentos escaneados ou fotografados e fotos do imóvel/bem — exige conferência manual, por isso o valor é maior.</p>
+        <a class="btn btn-ghost" href="https://wa.me/5511947461828?text=Oi!%20Quero%20avaliar%20a%20Importa%C3%A7%C3%A3o%20Assistida%20de%20documentos%20e%20fotos." target="_blank" rel="noopener" onclick="trackEvento('cta_click','cta_click:importacao:documentos_fotos')">Avaliar minha base</a>
+      </div>
+      <div class="price-card reveal">
+        <h3>Histórico de recebimentos</h3>
+        <div class="price-big">Sob cotação</div>
+        <div class="price-small">avaliado caso a caso</div>
+        <p style="font-size:13.5px;color:#4a5852;margin:14px 0 18px;line-height:1.5">Reconstituir seu histórico financeiro depende do volume e do formato disponível — orçamento feito depois de avaliar sua base.</p>
+        <a class="btn btn-ghost" href="https://wa.me/5511947461828?text=Oi!%20Quero%20uma%20cota%C3%A7%C3%A3o%20pra%20importar%20meu%20hist%C3%B3rico%20de%20recebimentos%2Fpagamentos." target="_blank" rel="noopener" onclick="trackEvento('cta_click','cta_click:importacao:historico')">Solicitar cotação</a>
+      </div>
     </div>
-    <p class="mini-note" style="text-align:center;margin-top:16px">Seus arquivos trafegam por canal seguro, com acesso restrito, auditoria e descarte dos arquivos temporários conforme nossa política de dados — tratamento alinhado à LGPD.</p>
+    <p class="mini-note" style="text-align:center;margin-top:16px">Valores de referência — o orçamento final é sempre confirmado depois de avaliarmos sua base, podendo variar conforme volume e complexidade.</p>
+    <p class="mini-note" style="text-align:center;margin-top:8px">Seus arquivos trafegam por canal seguro, com acesso restrito, auditoria e descarte dos arquivos temporários conforme nossa política de dados — tratamento alinhado à LGPD.</p>
     <p class="mini-note" style="text-align:center;margin-top:8px">Prefere já sinalizar isso agora? Marque a opção no <a href="#trial" style="color:var(--brass-deep);font-weight:600">formulário de teste grátis</a> abaixo — a gente entra em contato.</p>
   </div>
 </section>
@@ -919,8 +1028,8 @@
     <details><summary>Dá pra cadastrar outros bens, além de imóveis?</summary><p>Sim. O mesmo painel já cadastra veículos, veículos blindados, aeronaves, embarcações, obras de arte, coleções e seguro de vida/proteção pessoal — cada um com seus próprios documentos e controle de vencimento, dentro do limite do seu plano.</p></details>
     <details><summary>O que eu consigo fazer pelo WhatsApp?</summary><p>O R.AI.Z já apoia consultas de pendências, busca de imóvel/contrato, comprovantes, recibos, análise de documentos por IA e Vitrine. O app continua sendo a visão completa e o histórico da operação. Novas jornadas, como onboarding e alertas contextuais, estão em evolução.</p></details>
     <details><summary>Meus dados ficam seguros?</summary><p>Sim. Suas informações ficam armazenadas em infraestrutura Supabase (banco de dados profissional), com acesso restrito apenas às pessoas que você autorizar. Cada cliente tem seu próprio ambiente, isolado e seguro. Você continua dono dos seus dados — pode exportar e fazer backup quando quiser. Como o sistema lida com contratos e dados de inquilinos, o tratamento segue os princípios da LGPD.</p></details>
-    <details><summary>Quanto custa?</summary><p>Três planos: Essencial (R$ 69/mês, até 5 itens), Patrimônio (R$ 149/mês, R$ 89/mês nos 3 primeiros meses, até 20 itens — recomendado) e Plus (R$ 279/mês, até 50 itens). Carteiras acima de 50 têm proposta personalizada. A Importação Assistida é opcional: R$ 99 (até 20 imóveis) ou R$ 199 (até 50), sujeita à análise da base.</p></details>
-    <details><summary>O que entra na Importação Assistida?</summary><p>Você pode nos mandar planilhas (cadastro de imóveis, contratos, histórico de recebimentos), documentos (contratos assinados, matrícula, escritura, IPTU, apólices, comprovantes) e fotos (do imóvel ou de documentos, quando não tiver o PDF à mão). A gente cadastra os dados e vincula os documentos ao imóvel ou bem certo, sempre que houver informação suficiente pra isso.</p></details>
+    <details><summary>Quanto custa?</summary><p>Três planos: Essencial (R$ 69/mês, até 5 itens), Patrimônio (R$ 149/mês, R$ 89/mês nos 3 primeiros meses, até 20 itens — recomendado) e Plus (R$ 279/mês, até 50 itens). Carteiras acima de 50 têm proposta personalizada. A Importação Assistida é opcional, com valores de referência: R$ 199 (planilhas e PDF), R$ 499 (documentos e fotos) ou sob cotação (histórico de recebimentos/pagamentos) — orçamento final sempre confirmado depois de avaliarmos sua base.</p></details>
+    <details><summary>O que entra na Importação Assistida?</summary><p>Você pode nos mandar planilhas (cadastro de imóveis, contratos, histórico de recebimentos), documentos (contratos assinados, matrícula, escritura, IPTU, apólices, comprovantes) e fotos (do imóvel ou de documentos, quando não tiver o PDF à mão). A gente cadastra os dados e vincula os documentos ao imóvel ou bem certo, sempre que houver informação suficiente pra isso. Planilhas e documentos em texto entram no pacote de R$ 199 (referência); documentos escaneados ou fotografados entram no pacote de R$ 499 (referência); histórico de recebimentos/pagamentos é sempre orçado à parte.</p></details>
     <details><summary>Funciona no iPhone e no Android?</summary><p>Sim. Instala como aplicativo nos dois, e o mesmo sistema abre no computador pelo navegador. Você tem acesso sincronizado em todos os dispositivos.</p></details>
   </div>
 </section>
