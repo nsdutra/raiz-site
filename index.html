@@ -2,6 +2,22 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Landing Page (index.html)
+  VERSÃO: v4.1.1 · 2026-09-21
+  NOVIDADES v4.1.1 — correção de exibição dos planos (achado em 21/09/2026,
+  depois de o Nicola incluir a opção "Trial gratuito" (preço 0) nas ofertas
+  Patrimônio e Plus e passar as 3 ofertas para 60 dias de teste):
+    - renderizarPlanos escolhia o MENOR preço de opcoes_pagamento para o
+      card. Com a opção gratuita, Patrimônio e Plus passariam a mostrar
+      "R$ 0/mês". Agora opções com preço 0 são ignoradas no preço do card
+      (o teste gratuito já é comunicado pela linha "teste grátis por N dias").
+    - As pílulas de plano do formulário tinham "7/14/30 dias" fixo no HTML e
+      não acompanhavam a duração publicada. Agora são reescritas com
+      duracao_dias de fn_ofertas_landing_ativas(), como os cards já eram.
+    - Título do formulário mostrava "Patrimonio" sem acento (nome montado
+      a partir do código). Agora usa o nome do plano.
+  Nenhuma mudança de fluxo de cadastro, convite de sócio ou tracking.
+
+  --- HISTÓRICO ANTERIOR (v4.1.0) ---
   VERSÃO: v4.1.0 · LINHAS: 1463 · 2026-09-02
   NOVIDADES v4.1.0 — rodada de revisão a partir do teste real do Nicola na
   v4.0.0 (11 screenshots do celular), pedidos pontuais e específicos:
@@ -1133,6 +1149,7 @@
   let planoSelecionado = 'patrimonio';
   const DURACAO_TRIAL_PADRAO = { essencial: 7, patrimonio: 14, plus: 30 };
   let duracaoTrialPorPlano = Object.assign({}, DURACAO_TRIAL_PADRAO);
+  const NOME_PLANO = { essencial: 'Essencial', patrimonio: 'Patrimônio', plus: 'Plus' };  // v4.1.1 — nome com acento no título do formulário
 
   const formTrial = document.getElementById('form-trial');
   const btnTrial = document.getElementById('trial-submit-btn');
@@ -1280,7 +1297,7 @@
     });
     if (!conviteClienteId) {
       const dias = duracaoTrialPorPlano[codigo] || DURACAO_TRIAL_PADRAO[codigo] || 14;
-      const nomePlano = codigo.charAt(0).toUpperCase() + codigo.slice(1);
+      const nomePlano = NOME_PLANO[codigo] || (codigo.charAt(0).toUpperCase() + codigo.slice(1));
       document.getElementById('trial-titulo').textContent = 'Teste grátis do plano ' + nomePlano + ' por ' + dias + ' dias';
     }
     trackEvento('cta_click', 'cta_click:plano:' + codigo, codigo);
@@ -1316,8 +1333,16 @@
         const badge = card.querySelector('.coming');
         if (badge && oferta.badge_texto) badge.textContent = oferta.badge_texto;
 
-        if (Array.isArray(oferta.opcoes_pagamento) && oferta.opcoes_pagamento.length) {
-          const menor = oferta.opcoes_pagamento.reduce(function(a, b) { return (b.preco < a.preco ? b : a); });
+        // v4.1.1 — pílula do formulário acompanha a duração publicada
+        const pilula = document.querySelector('#plano-opcoes .faixa-pill[data-valor="' + oferta.codigo_publico + '"]');
+        if (pilula && oferta.duracao_dias) {
+          pilula.textContent = (oferta.titulo || pilula.textContent.split('·')[0].trim()) + ' · ' + oferta.duracao_dias + ' dias';
+        }
+
+        // v4.1.1 — opção gratuita (preço 0) não entra no preço do card
+        const pagas = Array.isArray(oferta.opcoes_pagamento) ? oferta.opcoes_pagamento.filter(function(o) { return Number(o.preco) > 0; }) : [];
+        if (pagas.length) {
+          const menor = pagas.reduce(function(a, b) { return (b.preco < a.preco ? b : a); });
           const priceBig = card.querySelector('.price-big');
           if (priceBig && menor.preco) {
             priceBig.innerHTML = 'R$ ' + Number(menor.preco).toFixed(0) + '<span style="font-size:16px">/mês</span>';
@@ -1329,7 +1354,7 @@
       // sobrescrever "Você foi convidado!" numa corrida entre esta chamada
       // assíncrona e verificarConviteNaUrl().
       if (!conviteClienteId && duracaoTrialPorPlano[planoSelecionado]) {
-        const nomePlano = planoSelecionado.charAt(0).toUpperCase() + planoSelecionado.slice(1);
+        const nomePlano = NOME_PLANO[planoSelecionado] || (planoSelecionado.charAt(0).toUpperCase() + planoSelecionado.slice(1));
         document.getElementById('trial-titulo').textContent = 'Teste grátis do plano ' + nomePlano + ' por ' + duracaoTrialPorPlano[planoSelecionado] + ' dias';
       }
     } catch (err) {

@@ -2,6 +2,28 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Página de convite para amigos (amigos/index.html)
+  VERSÃO: v1.1.0 · 2026-09-21
+
+  NOVIDADES v1.1.0 — ajustes pedidos pelo Nicola no mesmo dia:
+    - Os 3 planos (Essencial, Patrimônio, Plus) ficam à escolha, com o preço
+      mensal riscado e "grátis por N dias" (N = duracao_dias da oferta; hoje
+      60 nas três). Preço e duração lidos de fn_ofertas_landing_ativas(),
+      ignorando a opção de preço 0. O plano escolhido vai para
+      fn_criar_trial_campanha (CODIGO_OFERTA virou o plano selecionado).
+    - Vídeos trocados para mostrar os 3 pilares: Ativos (Nº 04),
+      Conciliação (Nº 03) e Resultados (Nº 05). As duas pílulas de alertas
+      saem da página (os arquivos continuam no repo).
+    - Espaço para o institucional 16:9 "Raiz Preview" (raiz-preview.mp4 +
+      raiz-preview.jpg): a seção só aparece se o arquivo existir no ar,
+      então pode ser publicado depois sem mexer no HTML.
+    - Seção "Em números" (10 tipos de bem, 120+ tipos de documento e
+      controle no catálogo, R.AI.Z com voz, renda e família), "Para quem"
+      (holding ou pessoa física, contador conectado) e "Conteúdos que você
+      vai receber" (reforma tributária, IPCA/IGP-M, análise da carteira).
+    - Ajuda para começar: além da chamada de 20 min, a pessoa pode mandar
+      áudio, relatório, planilha ou foto de uma amostra.
+
+  --- HISTÓRICO ANTERIOR ---
   VERSÃO: v1.0.0 · 2026-09-21
   URL: https://raizpatrimonio.com.br/amigos/?para=Joao
 
@@ -149,6 +171,37 @@
   .ajuda p{color:var(--muted);max-width:520px;margin:0 auto 22px}
   .btn-wpp{background:var(--sprout);color:#fff}
 
+  .preview{background:var(--pine-deep);padding:40px 0}
+  .preview .kicker{color:var(--gold)}
+  .preview h2{color:#fff}
+  .preview video{display:block;width:100%;aspect-ratio:16/9;border-radius:18px;background:#05261b;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+  .nums{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .num{background:var(--card);border-radius:18px;box-shadow:var(--sh);padding:20px 18px}
+  .num b{display:block;font-family:"Bricolage Grotesque";font-weight:800;font-size:34px;line-height:1;color:var(--pine);letter-spacing:-.02em;margin-bottom:8px}
+  .num span{display:block;font-weight:600;font-size:15px;margin-bottom:4px}
+  .num small{display:block;color:var(--muted);font-size:13.5px;line-height:1.45}
+  @media (max-width:860px){.nums{grid-template-columns:1fr 1fr}}
+  @media (max-width:480px){.nums{grid-template-columns:1fr}}
+  .para{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:18px}
+  .para div{background:var(--sprout-bg);border-radius:16px;padding:16px 18px;font-size:15px}
+  .para b{display:block;font-size:16px;margin-bottom:4px}
+  @media (max-width:760px){.para{grid-template-columns:1fr}}
+  .planos{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .plano{position:relative;background:var(--card);border-radius:20px;box-shadow:var(--sh);padding:22px 20px;border:2px solid transparent;cursor:pointer;text-align:left;font:inherit;color:inherit}
+  .plano.sel{border-color:var(--pine)}
+  .plano .tag{position:absolute;top:-11px;left:18px;background:var(--gold);color:#1b1407;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
+  .plano h3{font-size:24px;margin-bottom:6px}
+  .plano .de{color:var(--muted);text-decoration:line-through;font-size:16px}
+  .plano .gratis{display:block;font-family:"Bricolage Grotesque";font-weight:800;font-size:26px;color:var(--sprout);margin:2px 0 10px}
+  .plano ul{margin:0;padding-left:18px;color:var(--muted);font-size:14.5px}
+  .plano .marca{position:absolute;top:18px;right:18px;width:22px;height:22px;border-radius:50%;border:2px solid var(--line)}
+  .plano.sel .marca{background:var(--pine);border-color:var(--pine);box-shadow:inset 0 0 0 4px #fff}
+  @media (max-width:760px){.planos{grid-template-columns:1fr}}
+  .conteudos{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .conteudo{background:var(--card);border-radius:18px;box-shadow:var(--sh);padding:20px}
+  .conteudo h3{font-size:19px;margin:8px 0 6px}
+  .conteudo p{margin:0;color:var(--muted);font-size:15px}
+  @media (max-width:760px){.conteudos{grid-template-columns:1fr}}
   footer{background:var(--pine-deep);color:#a9b3ae;font-size:13px;padding:26px 0;text-align:center}
   footer a{color:#a9b3ae;margin:0 8px}
 </style>
@@ -166,7 +219,7 @@
     <p class="lead">Um app com assistente no WhatsApp para organizar imóveis, contratos, recebimentos e documentos num lugar só. Estou abrindo para poucos amigos testarem antes do lançamento, sem custo e sem compromisso.</p>
     <div class="ctas">
       <a class="btn btn-gold" href="#cadastro" data-cta="hero_testar">Quero testar</a>
-      <a class="btn btn-ghost" href="#videos" data-cta="hero_videos">Ver em 1 minuto</a>
+      <a class="btn btn-ghost" href="#videos" data-cta="hero_videos">Ver o app funcionando</a>
     </div>
     <div class="gline"></div>
   </div>
@@ -181,6 +234,16 @@
   </div>
 </div>
 
+<section id="preview" class="preview hidden">
+  <div class="wrap">
+    <div class="kicker" style="margin-bottom:10px">Visão geral em 2 minutos</div>
+    <h2 style="margin-bottom:22px">Conheça o Raiz</h2>
+    <video controls playsinline preload="none" poster="raiz-preview.jpg" data-video="raiz_preview">
+      <source src="raiz-preview.mp4" type="video/mp4">
+    </video>
+  </div>
+</section>
+
 <section id="videos">
   <div class="wrap">
     <div class="kicker sec-kicker">Veja em 1 minuto</div>
@@ -188,10 +251,10 @@
     <p class="sub">Telas reais do app, com uma empresa de demonstração. Toque para assistir com som.</p>
     <div class="videos">
       <div class="vid">
-        <video controls playsinline preload="none" poster="pilula-02-central-alertas.jpg" data-video="central_alertas">
-          <source src="pilula-02-central-alertas.mp4" type="video/mp4">
+        <video controls playsinline preload="none" poster="pilula-04-ativos.jpg" data-video="ativos">
+          <source src="pilula-04-ativos.mp4" type="video/mp4">
         </video>
-        <div class="cap"><b>Central de alertas</b><small>IPTU, seguro, reajuste e atraso, antes de virar problema · 60 s</small></div>
+        <div class="cap"><b>Seus ativos, num lugar só</b><small>Ficha de cada bem, controles, anexos e contratos · 1 min</small></div>
       </div>
       <div class="vid">
         <video controls playsinline preload="none" poster="pilula-03-conciliacao.jpg" data-video="conciliacao">
@@ -200,10 +263,10 @@
         <div class="cap"><b>Quem pagou mesmo?</b><small>Conciliação por extrato, comprovante no WhatsApp ou à mão · 1 min 36 s</small></div>
       </div>
       <div class="vid">
-        <video controls playsinline preload="none" poster="pilula-01-alerta.jpg" data-video="tratar_alerta">
-          <source src="pilula-01-alerta.mp4" type="video/mp4">
+        <video controls playsinline preload="none" poster="pilula-05-resultados.jpg" data-video="resultados">
+          <source src="pilula-05-resultados.mp4" type="video/mp4">
         </video>
-        <div class="cap"><b>Como tratar um alerta</b><small>Do aviso à solução em três toques · 30 s</small></div>
+        <div class="cap"><b>Resultados da carteira</b><small>Rentabilidade, risco, distribuição entre sócios e relatórios · 1 min</small></div>
       </div>
     </div>
   </div>
@@ -241,15 +304,66 @@
 
 <section style="padding-top:8px">
   <div class="wrap">
+    <div class="kicker sec-kicker">Em números</div>
+    <h2>Não é só <span>imóvel</span></h2>
+    <p class="sub">Os bens que geram renda e os de uso da família, com os documentos e prazos de cada um.</p>
+    <div class="nums">
+      <div class="num"><b>10</b><span>tipos de bem</span><small>Imóvel, terreno, veículo, blindado, embarcação, aeronave, obra de arte, coleção, animal e seguro de vida.</small></div>
+      <div class="num"><b>120+</b><span>documentos e controles</span><small>No catálogo que a IA usa para reconhecer e organizar: visto, passaporte, CNH, IPVA, troca de óleo e de bateria, apólice, matrícula.</small></div>
+      <div class="num"><b>Voz</b><span>R.AI.Z com IA</span><small>Mande um áudio no WhatsApp contando o que precisa. Ela entende e resolve ou encaminha.</small></div>
+      <div class="num"><b>2 em 1</b><span>renda e família</span><small>Aluguéis e resultado de um lado. Carro, casa de praia e documentos da família do outro.</small></div>
+    </div>
+    <div class="para">
+      <div><b>Holding patrimonial</b>Empresa, sócios e distribuição dos resultados entre eles.</div>
+      <div><b>Pessoa física</b>Quem administra os próprios bens no CPF, sem virar contador.</div>
+      <div><b>Com o seu contador</b>Fechamento do mês e pacote de documentos para a contabilidade, com os dados que você já tem no Raiz.</div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:8px">
+  <div class="wrap">
+    <div class="kicker sec-kicker">Escolha o plano</div>
+    <h2>Os 3 planos, <span>grátis para você</span></h2>
+    <p class="sub">Durante o teste, sem cartão. Você pode trocar de ideia depois.</p>
+    <div class="planos" id="planos" role="radiogroup">
+      <button type="button" class="plano" data-plano="essencial" role="radio" aria-checked="false"><span class="marca"></span>
+        <h3>Essencial</h3><span class="de" data-preco>R$ 69/mês</span><span class="gratis">Grátis por <span data-dias>60</span> dias</span>
+        <ul><li>Até 5 bens</li><li>Para começar a organizar</li></ul></button>
+      <button type="button" class="plano sel" data-plano="patrimonio" role="radio" aria-checked="true"><span class="tag">Recomendado</span><span class="marca"></span>
+        <h3>Patrimônio</h3><span class="de" data-preco>R$ 149/mês</span><span class="gratis">Grátis por <span data-dias>60</span> dias</span>
+        <ul><li>Até 20 bens</li><li>Conciliação com extrato</li><li>Distribuição entre sócios</li></ul></button>
+      <button type="button" class="plano" data-plano="plus" role="radio" aria-checked="false"><span class="marca"></span>
+        <h3>Plus</h3><span class="de" data-preco>R$ 279/mês</span><span class="gratis">Grátis por <span data-dias>60</span> dias</span>
+        <ul><li>Até 50 bens</li><li>Despesas patrimoniais</li><li>Relatórios avançados</li></ul></button>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:8px">
+  <div class="wrap">
     <div class="combinado">
       <div class="kicker" style="color:var(--gold);margin-bottom:10px">O combinado</div>
       <h2>Sem custo e <span>sem compromisso</span></h2>
       <ul>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Teste completo do plano Patrimônio</b> por <b id="dias-teste">14</b> dias, sem cartão.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>O plano que você escolher, grátis</b> por <b id="dias-teste">60</b> dias, sem cartão.</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Use com dados reais ou de teste.</b> Seus dados são seus: dá para exportar ou pedir exclusão.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Ajuda para começar:</b> se quiser, cadastramos juntos os primeiros bens numa chamada de 20 minutos.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Ajuda para começar:</b> mande um áudio, uma planilha, um relatório ou a foto de uma amostra dos seus bens que a gente prepara para você. Ou, se preferir, cadastramos juntos numa chamada de 20 minutos.</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Em troca, sua opinião:</b> uma conversa de 15 minutos no fim do teste, e sugestões a qualquer hora.</span></li>
       </ul>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:8px">
+  <div class="wrap">
+    <div class="kicker sec-kicker">Conteúdos que você vai receber</div>
+    <h2>Pílulas de <span>economia e patrimônio</span></h2>
+    <p class="sub">Além das novidades do app, conteúdos curtos no WhatsApp sobre o que mexe com o seu patrimônio.</p>
+    <div class="conteudos">
+      <div class="conteudo"><span class="ia">Reforma tributária</span><h3>O que muda para quem aluga</h3><p>Orientação em linguagem simples, com fontes oficiais, para conversar com o seu contador.</p></div>
+      <div class="conteudo"><span class="ia">IPCA e IGP-M</span><h3>Índices e o seu aluguel</h3><p>Como a evolução dos índices afeta reajustes e o valor dos seus imóveis.</p></div>
+      <div class="conteudo"><span class="ia">Sua carteira</span><h3>Uma análise do que você tem</h3><p>Rentabilidade, concentração de renda e vencimentos, olhando os seus próprios dados.</p></div>
     </div>
   </div>
 </section>
@@ -259,6 +373,7 @@
     <div class="form-card">
       <div class="kicker sec-kicker">Criar meu acesso</div>
       <h2 id="form-titulo">Começar o teste</h2>
+      <p id="plano-escolhido" style="margin:0 0 6px;font-weight:600;color:var(--sprout)">Plano Patrimônio · grátis por 60 dias</p>
       <p class="sub" style="margin-bottom:22px">Leva 1 minuto. Depois você entra direto no app.</p>
       <form id="form-amigos" novalidate>
         <div class="campo">
@@ -323,7 +438,7 @@
   // CONFIGURAÇÃO — única linha a trocar quando existir oferta própria para
   // os amigos (ex.: 'fundadores' publicada em comercial.plano_campanhas).
   // ==========================================================================
-  const CODIGO_OFERTA = 'patrimonio';
+  let CODIGO_OFERTA = 'patrimonio';   // v1.1.0 — muda com o plano escolhido na seção de planos
   const CAMPANHA = 'amigos';
   const WHATSAPP_NICOLA = '5511947461828';
 
@@ -386,15 +501,42 @@
   document.querySelectorAll('[data-cta]').forEach(el => el.addEventListener('click', () => track('cta_click', 'cta:' + el.dataset.cta)));
   document.querySelectorAll('video[data-video]').forEach(v => v.addEventListener('play', () => track('cta_click', 'video:' + v.dataset.video), { once: true }));
 
-  // Duração real do teste, lida da oferta publicada (fallback: 14).
+  // v1.1.0 — planos: preço riscado (menor opção paga) e dias de teste da oferta publicada
+  const NOME_PLANO = { essencial: 'Essencial', patrimonio: 'Patrimônio', plus: 'Plus' };
+  const diasPorPlano = { essencial: 60, patrimonio: 60, plus: 60 };
+  function atualizarPlanoEscolhido() {
+    document.getElementById('dias-teste').textContent = diasPorPlano[CODIGO_OFERTA];
+    document.getElementById('plano-escolhido').textContent = 'Plano ' + NOME_PLANO[CODIGO_OFERTA] + ' · grátis por ' + diasPorPlano[CODIGO_OFERTA] + ' dias';
+  }
+  document.querySelectorAll('#planos .plano').forEach(el => el.addEventListener('click', () => {
+    document.querySelectorAll('#planos .plano').forEach(x => { x.classList.remove('sel'); x.setAttribute('aria-checked', 'false'); });
+    el.classList.add('sel'); el.setAttribute('aria-checked', 'true');
+    CODIGO_OFERTA = el.dataset.plano;
+    atualizarPlanoEscolhido();
+    track('cta_click', 'plano:' + CODIGO_OFERTA);
+  }));
   (async function () {
     try {
       const { data, error } = await db.rpc('fn_ofertas_landing_ativas');
       if (error) throw error;
-      const oferta = (data || []).find(o => o.codigo_publico === CODIGO_OFERTA);
-      if (oferta && oferta.duracao_dias) document.getElementById('dias-teste').textContent = oferta.duracao_dias;
+      (data || []).forEach(o => {
+        const card = document.querySelector('#planos .plano[data-plano="' + o.codigo_publico + '"]');
+        if (!card) return;
+        if (o.duracao_dias) { diasPorPlano[o.codigo_publico] = o.duracao_dias; card.querySelector('[data-dias]').textContent = o.duracao_dias; }
+        const pagas = (o.opcoes_pagamento || []).filter(p => Number(p.preco) > 0);
+        if (pagas.length) {
+          const maior = pagas.reduce((a, b) => (b.preco > a.preco ? b : a));
+          card.querySelector('[data-preco]').textContent = 'R$ ' + Number(maior.preco).toFixed(0) + '/mês';
+        }
+      });
+      atualizarPlanoEscolhido();
     } catch (e) { console.warn('oferta:', e.message); }
   })();
+
+  // v1.1.0 — institucional 16:9: a seção só aparece se o arquivo já estiver publicado
+  fetch('raiz-preview.mp4', { method: 'HEAD' }).then(r => {
+    if (r.ok) document.getElementById('preview').classList.remove('hidden');
+  }).catch(() => {});
 
   // Faixa de imóveis
   let faixa = '';
