@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  RAIZ PATRIMÔNIO — Página de convite para amigos (amigos/index.html)
+  VERSÃO: v1.0.0 · 2026-09-21
+  URL: https://raizpatrimonio.com.br/amigos/?para=Joao
+
+  NOVIDADES v1.0.0 — criação (soft launch com amigos, demanda 41327fb3):
+    - Porta de entrada própria para quem recebe o convite pessoal do
+      Nicola: sem preço no topo, vídeos curtos no lugar de texto longo e
+      um cadastro só, com o combinado do teste explícito.
+    - ?para=<nome> personaliza a saudação e já preenche "Seu nome".
+      NÃO usa ?convite= de propósito: na landing principal ?convite= é o
+      convite de SÓCIO (cliente_id) e dispara fn_info_convite_trial.
+    - Cadastro idêntico ao da landing v4.1.0: auth.signUp →
+      fn_criar_trial_campanha → handoff com tokens no hash para o app.
+      A duração do teste vem de fn_ofertas_landing_ativas() pela oferta
+      em CODIGO_OFERTA ('patrimonio' hoje = 14 dias). Para dar outro prazo
+      aos amigos, publique uma oferta nova no Gestão e troque SÓ essa
+      constante; nada mais muda.
+    - Tracking no mesmo comercial.eventos_landing da landing, com
+      utm_source=convite-amigos e campanha_codigo='amigos'.
+    - noindex: página de convite, fora do sitemap e das buscas.
+    - Arquivos do mesmo diretório: raiz-logo.png, 3 vídeos 720p e 3
+      pôsteres (pilula-01/02/03).
+  ============================================================================
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convite para testar o Raiz Patrimônio</title>
+<meta name="description" content="Convite pessoal para testar o Raiz Patrimônio antes do lançamento, sem custo e sem compromisso.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Raiz Patrimônio">
+<meta property="og:title" content="Convite: teste o Raiz Patrimônio antes do lançamento">
+<meta property="og:description" content="Imóveis, contratos, recebimentos e documentos num lugar só, com o assistente R.AI.Z no WhatsApp. Sem custo e sem compromisso.">
+<meta property="og:image" content="https://raizpatrimonio.com.br/amigos/raiz-logo.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%231e3a32'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='38' font-weight='700' fill='%23c68a3b' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+  :root{
+    --ink:#17211e; --muted:#5f6b66; --paper:#faf9f5; --line:#e6e3da; --card:#fff;
+    --pine:#1e3a32; --pine-deep:#152a24; --sprout:#3f8163; --sprout-bg:#e8f5ed;
+    --brass:#c68a3b; --brass-deep:#a86f27; --brass-bg:#fbf1e2; --gold:#d6ac60;
+    --danger:#c1463a; --danger-bg:#fbebe9;
+    --sh:0 1px 2px rgba(23,33,30,.06),0 6px 20px rgba(23,33,30,.06);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Inter",system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif;line-height:1.05;margin:0;letter-spacing:-.02em}
+  a{color:inherit}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px}
+  .hidden{display:none!important}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:16px;text-decoration:none;padding:15px 26px;border-radius:999px;border:0;cursor:pointer;transition:transform .15s ease,background .15s ease}
+  .btn:active{transform:scale(.98)}
+  .btn-gold{background:var(--gold);color:#1b1407}
+  .btn-gold:hover{background:#e0b96d}
+  .btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35)}
+  .btn-pine{background:var(--pine);color:#fff;width:100%}
+  .btn-pine:hover{background:var(--pine-deep)}
+  .btn-pine:disabled{opacity:.6;cursor:wait}
+  .kicker{font-size:12.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase}
+  .ia{display:inline-flex;align-items:center;gap:5px;background:var(--brass-bg);color:var(--brass-deep);font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;vertical-align:middle}
+
+  /* ---------- topo ---------- */
+  .hero{position:relative;overflow:hidden;color:#fff;background:radial-gradient(ellipse 120% 80% at 50% 0%,#15694b 0%,#0b4431 45%,#05261b 100%)}
+  .hero .arc{position:absolute;border-radius:50%;border:1.5px solid rgba(214,172,96,.55);pointer-events:none}
+  .hero .wrap{position:relative;padding-top:40px;padding-bottom:64px;text-align:center}
+  .hero .brand{display:inline-flex;align-items:center;gap:10px;font-family:"Bricolage Grotesque";font-weight:800;font-size:18px;text-decoration:none;color:#fff;margin-bottom:44px}
+  .hero .brand img{width:34px;height:34px;border-radius:9px}
+  .hero .logo{width:112px;height:112px;border-radius:26px;box-shadow:0 18px 40px rgba(0,0,0,.35);margin:0 auto 26px;display:block}
+  .hero .kicker{color:var(--gold);margin-bottom:14px}
+  .hero h1{font-size:clamp(38px,8vw,60px);font-weight:800;max-width:720px;margin:0 auto}
+  .hero h1 em{font-style:normal;color:#a9d8bf}
+  .hero p.lead{font-size:18px;color:rgba(255,255,255,.82);max-width:560px;margin:20px auto 30px}
+  .hero .ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .hero .gline{width:64px;height:2px;background:var(--gold);margin:36px auto 0}
+
+  /* ---------- seções ---------- */
+  section{padding:64px 0}
+  .sec-kicker{color:var(--sprout);margin-bottom:10px}
+  section h2{font-size:clamp(30px,5.5vw,42px);font-weight:800;margin-bottom:14px}
+  section h2 span{color:var(--sprout)}
+  .sub{color:var(--muted);max-width:620px;margin:0 0 30px}
+
+  .carta{background:var(--card);border-radius:20px;box-shadow:var(--sh);padding:28px 26px;max-width:720px;margin:-38px auto 0;position:relative;z-index:2}
+  .carta p{margin:0 0 12px}
+  .carta .assina{display:flex;align-items:center;gap:12px;margin-top:18px;font-weight:600}
+  .carta .assina small{display:block;font-weight:400;color:var(--muted);font-size:14px}
+  .carta .av{width:44px;height:44px;border-radius:50%;background:var(--pine);color:#fff;display:grid;place-items:center;font-family:"Bricolage Grotesque";font-weight:800}
+
+  .videos{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .vid{background:var(--card);border-radius:18px;box-shadow:var(--sh);overflow:hidden}
+  .vid video{display:block;width:100%;aspect-ratio:9/16;background:#05261b;object-fit:cover}
+  .vid .cap{padding:14px 16px 16px}
+  .vid .cap b{display:block;font-size:16px}
+  .vid .cap small{color:var(--muted);font-size:14px}
+  @media (max-width:760px){
+    .videos{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;margin:0 -20px;padding-left:20px;padding-right:20px}
+    .vid{scroll-snap-align:start}
+  }
+
+  .feats{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .feat{background:var(--card);border-radius:18px;box-shadow:var(--sh);padding:22px}
+  .feat .ic{width:46px;height:46px;border-radius:14px;background:var(--sprout-bg);color:var(--sprout);display:grid;place-items:center;margin-bottom:12px}
+  .feat .ic svg{width:24px;height:24px}
+  .feat h3{font-size:21px;margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .feat p{margin:0;color:var(--muted);font-size:15.5px}
+  @media (max-width:760px){.feats{grid-template-columns:1fr}}
+
+  .combinado{background:var(--pine);color:#fff;border-radius:22px;padding:34px 28px}
+  .combinado h2{color:#fff}
+  .combinado h2 span{color:#a9d8bf}
+  .combinado ul{list-style:none;padding:0;margin:22px 0 0;display:grid;grid-template-columns:repeat(2,1fr);gap:14px 26px}
+  .combinado li{display:flex;gap:12px;align-items:flex-start;font-size:16px;color:rgba(255,255,255,.9)}
+  .combinado li svg{flex:none;width:22px;height:22px;color:var(--gold);margin-top:2px}
+  .combinado li b{color:#fff}
+  @media (max-width:760px){.combinado ul{grid-template-columns:1fr}}
+
+  /* ---------- formulário ---------- */
+  .form-card{background:var(--card);border-radius:22px;box-shadow:var(--sh);padding:30px 26px;max-width:560px;margin:0 auto}
+  .form-card h2{font-size:32px;margin-bottom:8px}
+  .campo{margin-bottom:16px}
+  .campo label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+  .campo input[type=text],.campo input[type=email],.campo input[type=tel],.campo input[type=password]{width:100%;font:inherit;font-size:16px;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+  .campo input:focus{outline:none;border-color:var(--sprout);box-shadow:0 0 0 3px rgba(63,129,99,.15)}
+  .campo .dica{font-size:13px;color:var(--muted);margin-top:5px}
+  .pills{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{font:inherit;font-size:15px;font-weight:600;padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:#fff;cursor:pointer;color:var(--ink)}
+  .pill.sel{background:var(--pine);border-color:var(--pine);color:#fff}
+  .pills.erro .pill{border-color:var(--danger)}
+  .check{display:flex;gap:10px;align-items:flex-start;background:var(--brass-bg);border-radius:12px;padding:12px 14px;font-size:15px;cursor:pointer}
+  .check input{margin-top:4px;width:18px;height:18px;accent-color:var(--pine)}
+  .status{font-size:15px;margin-top:12px;min-height:22px}
+  .status.erro{color:var(--danger)}
+  .status.ok{color:var(--sprout)}
+  .legal{font-size:13px;color:var(--muted);margin-top:14px;text-align:center}
+  .legal a{color:var(--muted)}
+
+  .ajuda{text-align:center}
+  .ajuda p{color:var(--muted);max-width:520px;margin:0 auto 22px}
+  .btn-wpp{background:var(--sprout);color:#fff}
+
+  footer{background:var(--pine-deep);color:#a9b3ae;font-size:13px;padding:26px 0;text-align:center}
+  footer a{color:#a9b3ae;margin:0 8px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="arc" style="width:520px;height:520px;left:-330px;top:-300px"></div>
+  <div class="arc" style="width:520px;height:520px;right:-330px;bottom:-340px"></div>
+  <div class="wrap">
+    <a class="brand" href="/">Raiz Patrimônio</a>
+    <img class="logo" src="raiz-logo.png" alt="Logo do Raiz Patrimônio" width="112" height="112">
+    <div class="kicker">Convite pessoal</div>
+    <h1 id="hero-titulo">Quero a sua opinião sobre o <em>Raiz</em>.</h1>
+    <p class="lead">Um app com assistente no WhatsApp para organizar imóveis, contratos, recebimentos e documentos num lugar só. Estou abrindo para poucos amigos testarem antes do lançamento, sem custo e sem compromisso.</p>
+    <div class="ctas">
+      <a class="btn btn-gold" href="#cadastro" data-cta="hero_testar">Quero testar</a>
+      <a class="btn btn-ghost" href="#videos" data-cta="hero_videos">Ver em 1 minuto</a>
+    </div>
+    <div class="gline"></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- Texto pessoal do Nicola: ajuste à vontade, é a parte que mais pesa num convite entre amigos. -->
+  <div class="carta">
+    <p><b>Por que estou te chamando:</b> passei os últimos meses construindo o Raiz para resolver um problema que vejo em muita família e em quem administra imóvel. Contrato numa pasta, recibo no WhatsApp, IPTU esquecido, planilha que só uma pessoa entende.</p>
+    <p>Antes de abrir para o público, quero que gente em quem eu confio use de verdade e me diga o que funciona e o que não funciona. Crítica sincera vale mais do que elogio.</p>
+    <div class="assina"><div class="av">N</div><div>Nicola<small>criador do Raiz Patrimônio</small></div></div>
+  </div>
+</div>
+
+<section id="videos">
+  <div class="wrap">
+    <div class="kicker sec-kicker">Veja em 1 minuto</div>
+    <h2>O Raiz <span>funcionando</span></h2>
+    <p class="sub">Telas reais do app, com uma empresa de demonstração. Toque para assistir com som.</p>
+    <div class="videos">
+      <div class="vid">
+        <video controls playsinline preload="none" poster="pilula-02-central-alertas.jpg" data-video="central_alertas">
+          <source src="pilula-02-central-alertas.mp4" type="video/mp4">
+        </video>
+        <div class="cap"><b>Central de alertas</b><small>IPTU, seguro, reajuste e atraso, antes de virar problema · 60 s</small></div>
+      </div>
+      <div class="vid">
+        <video controls playsinline preload="none" poster="pilula-03-conciliacao.jpg" data-video="conciliacao">
+          <source src="pilula-03-conciliacao.mp4" type="video/mp4">
+        </video>
+        <div class="cap"><b>Quem pagou mesmo?</b><small>Conciliação por extrato, comprovante no WhatsApp ou à mão · 1 min 36 s</small></div>
+      </div>
+      <div class="vid">
+        <video controls playsinline preload="none" poster="pilula-01-alerta.jpg" data-video="tratar_alerta">
+          <source src="pilula-01-alerta.mp4" type="video/mp4">
+        </video>
+        <div class="cap"><b>Como tratar um alerta</b><small>Do aviso à solução em três toques · 30 s</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:8px">
+  <div class="wrap">
+    <div class="kicker sec-kicker">O que você vai testar</div>
+    <h2>Tudo do patrimônio, <span>num painel só</span></h2>
+    <p class="sub">Imóveis são o começo. Carro, embarcação, obra de arte e seguro de vida entram no mesmo lugar.</p>
+    <div class="feats">
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></div>
+        <h3>Visão Geral</h3>
+        <p>Quanto entrou, o que atrasou e o que pede atenção, assim que você abre o app.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></div>
+        <h3>R.AI.Z no WhatsApp <span class="ia">✦ IA</span></h3>
+        <p>Pergunte as pendências, dê baixa num aluguel, gere recibo ou mande um documento. Por texto ou por áudio.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div>
+        <h3>Alertas que antecipam</h3>
+        <p>Vencimentos, reajustes, contratos terminando e documentos sem vínculo, separados por criticidade.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg></div>
+        <h3>Extratos e documentos lidos por IA <span class="ia">✦ IA</span></h3>
+        <p>A IA lê o extrato, o comprovante ou a apólice e sugere o lançamento. Você sempre confirma antes de gravar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:8px">
+  <div class="wrap">
+    <div class="combinado">
+      <div class="kicker" style="color:var(--gold);margin-bottom:10px">O combinado</div>
+      <h2>Sem custo e <span>sem compromisso</span></h2>
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Teste completo do plano Patrimônio</b> por <b id="dias-teste">14</b> dias, sem cartão.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Use com dados reais ou de teste.</b> Seus dados são seus: dá para exportar ou pedir exclusão.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Ajuda para começar:</b> se quiser, cadastramos juntos os primeiros bens numa chamada de 20 minutos.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Em troca, sua opinião:</b> uma conversa de 15 minutos no fim do teste, e sugestões a qualquer hora.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="cadastro">
+  <div class="wrap">
+    <div class="form-card">
+      <div class="kicker sec-kicker">Criar meu acesso</div>
+      <h2 id="form-titulo">Começar o teste</h2>
+      <p class="sub" style="margin-bottom:22px">Leva 1 minuto. Depois você entra direto no app.</p>
+      <form id="form-amigos" novalidate>
+        <div class="campo">
+          <label for="f-nome">Seu nome</label>
+          <input id="f-nome" type="text" autocomplete="name" required>
+        </div>
+        <div class="campo">
+          <label for="f-empresa">Nome da família ou da empresa</label>
+          <input id="f-empresa" type="text" required placeholder="Ex.: Família Silva">
+          <div class="dica">É como a sua carteira vai aparecer no app. Dá para mudar depois.</div>
+        </div>
+        <div class="campo">
+          <label for="f-email">E-mail</label>
+          <input id="f-email" type="email" autocomplete="email" required>
+        </div>
+        <div class="campo">
+          <label for="f-whats">WhatsApp</label>
+          <input id="f-whats" type="tel" autocomplete="tel" required placeholder="(11) 90000-0000">
+          <div class="dica">É por ele que você conversa com o R.AI.Z.</div>
+        </div>
+        <div class="campo">
+          <label for="f-senha">Crie uma senha</label>
+          <input id="f-senha" type="password" autocomplete="new-password" required minlength="6">
+          <div class="dica">No mínimo 6 caracteres.</div>
+        </div>
+        <div class="campo">
+          <label>Quantos imóveis você administra?</label>
+          <div class="pills" id="faixas" role="radiogroup">
+            <button type="button" class="pill" data-valor="0-5" role="radio" aria-checked="false">Até 5</button>
+            <button type="button" class="pill" data-valor="5-20" role="radio" aria-checked="false">De 5 a 20</button>
+            <button type="button" class="pill" data-valor="20+" role="radio" aria-checked="false">Mais de 20</button>
+          </div>
+        </div>
+        <div class="campo">
+          <label class="check"><input id="f-ajuda" type="checkbox"><span>Quero ajuda para trazer meus dados (planilhas, contratos, documentos)</span></label>
+        </div>
+        <button id="f-enviar" class="btn btn-pine" type="submit">Começar meu teste</button>
+        <div id="f-status" class="status" role="status" aria-live="polite"></div>
+        <p class="legal">Ao continuar, você concorda com os <a href="/termos-de-uso">Termos de Uso</a>, a <a href="/politica-de-privacidade">Política de Privacidade</a> e o <a href="/termo-beta">Termo de Beta</a>.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="ajuda" style="padding-top:0">
+  <div class="wrap">
+    <h2 style="font-size:28px">Dúvida ou algo estranho?</h2>
+    <p>Me chama direto. Todo retorno do teste vira ajuste no produto.</p>
+    <a id="wpp-link" class="btn btn-wpp" href="https://wa.me/5511947461828" data-cta="whatsapp_nicola">Falar comigo no WhatsApp</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    © <span id="ano">2026</span> Raiz Patrimônio ·
+    <a href="/">Site</a><a href="/termos-de-uso">Termos</a><a href="/politica-de-privacidade">Privacidade</a><a href="/termo-beta">Termo de Beta</a>
+  </div>
+</footer>
+
+<script>
+  // ==========================================================================
+  // CONFIGURAÇÃO — única linha a trocar quando existir oferta própria para
+  // os amigos (ex.: 'fundadores' publicada em comercial.plano_campanhas).
+  // ==========================================================================
+  const CODIGO_OFERTA = 'patrimonio';
+  const CAMPANHA = 'amigos';
+  const WHATSAPP_NICOLA = '5511947461828';
+
+  const SUPABASE_URL = "https://oduwpttbbemypiypjsux.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kdXdwdHRiYmVteXBpeXBqc3V4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyODEyOTcsImV4cCI6MjEwMDg1NzI5N30.9-cu1CV1wPbo5UH1G2eAsWqsvS54AWNuQZOlifc9a7w";
+  const APP_URL = "https://app.raizpatrimonio.com.br";
+
+  document.getElementById('ano').textContent = new Date().getFullYear();
+  const params = new URLSearchParams(window.location.search);
+
+  // ?para=Joao → saudação e nome preenchido. Só texto, nunca HTML.
+  function nomeConvidado() {
+    const bruto = (params.get('para') || '').replace(/[^\p{L}\s'-]/gu, '').trim().slice(0, 40);
+    if (!bruto) return '';
+    return bruto.split(/\s+/).map(p => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase()).join(' ');
+  }
+  const para = nomeConvidado();
+  if (para) {
+    const primeiro = para.split(' ')[0];
+    document.getElementById('hero-titulo').innerHTML = 'Oi, <em></em>! Quero a sua opinião sobre o Raiz.';
+    document.querySelector('#hero-titulo em').textContent = primeiro;
+    document.getElementById('f-nome').value = para;
+    document.getElementById('form-titulo').textContent = primeiro + ', é só criar seu acesso';
+  }
+  const textoWpp = 'Oi, Nicola! ' + (para ? 'Aqui é ' + para + '. ' : '') + 'Estou vendo o convite do Raiz e queria tirar uma dúvida.';
+  document.getElementById('wpp-link').href = 'https://wa.me/' + WHATSAPP_NICOLA + '?text=' + encodeURIComponent(textoWpp);
+
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  function sessaoId() {
+    try {
+      let id = sessionStorage.getItem('raiz_sessao_id');
+      if (!id) { id = crypto.randomUUID ? crypto.randomUUID() : 'sess-' + Date.now(); sessionStorage.setItem('raiz_sessao_id', id); }
+      return id;
+    } catch (e) { return null; }
+  }
+  const SESSAO = sessaoId();
+
+  // Mesmo registro da landing (comercial.eventos_landing). Nunca grava o
+  // nome do convidado: ?para= fica fora do tracking (LGPD, minimização).
+  function track(evento, pagina) {
+    try {
+      db.schema('comercial').from('eventos_landing').insert({
+        pagina: 'amigos:' + (pagina || 'home'),
+        referrer: document.referrer || null,
+        utm_source: params.get('utm_source') || 'convite-amigos',
+        utm_medium: params.get('utm_medium') || 'whatsapp',
+        utm_campaign: params.get('utm_campaign') || CAMPANHA,
+        convite: null,
+        user_agent: navigator.userAgent,
+        evento: evento,
+        campanha_codigo: CAMPANHA,
+        sessao_id: SESSAO
+      }).then(r => { if (r.error) console.warn('track:', r.error.message); });
+    } catch (e) { console.warn('track:', e.message); }
+  }
+  track('page_view');
+
+  document.querySelectorAll('[data-cta]').forEach(el => el.addEventListener('click', () => track('cta_click', 'cta:' + el.dataset.cta)));
+  document.querySelectorAll('video[data-video]').forEach(v => v.addEventListener('play', () => track('cta_click', 'video:' + v.dataset.video), { once: true }));
+
+  // Duração real do teste, lida da oferta publicada (fallback: 14).
+  (async function () {
+    try {
+      const { data, error } = await db.rpc('fn_ofertas_landing_ativas');
+      if (error) throw error;
+      const oferta = (data || []).find(o => o.codigo_publico === CODIGO_OFERTA);
+      if (oferta && oferta.duracao_dias) document.getElementById('dias-teste').textContent = oferta.duracao_dias;
+    } catch (e) { console.warn('oferta:', e.message); }
+  })();
+
+  // Faixa de imóveis
+  let faixa = '';
+  document.querySelectorAll('#faixas .pill').forEach(p => p.addEventListener('click', () => {
+    document.querySelectorAll('#faixas .pill').forEach(x => { x.classList.remove('sel'); x.setAttribute('aria-checked', 'false'); });
+    p.classList.add('sel'); p.setAttribute('aria-checked', 'true');
+    faixa = p.dataset.valor;
+    document.getElementById('faixas').classList.remove('erro');
+    if (faixa === '20+') document.getElementById('f-ajuda').closest('.check').style.outline = '2px solid var(--brass)';
+  }));
+
+  const form = document.getElementById('form-amigos');
+  const btn = document.getElementById('f-enviar');
+  const status = document.getElementById('f-status');
+  function msg(t, tipo) { status.textContent = t; status.className = 'status' + (tipo ? ' ' + tipo : ''); }
+
+  let iniciou = false;
+  form.addEventListener('focusin', () => { if (!iniciou) { iniciou = true; track('trial_form_start', 'form'); } });
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    if (!faixa) { msg('Escolha quantos imóveis você administra.', 'erro'); document.getElementById('faixas').classList.add('erro'); return; }
+
+    const nome = document.getElementById('f-nome').value.trim();
+    const empresa = document.getElementById('f-empresa').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const whatsapp = document.getElementById('f-whats').value.trim();
+    const senha = document.getElementById('f-senha').value;
+    const ajuda = document.getElementById('f-ajuda').checked;
+
+    btn.disabled = true; btn.textContent = 'Criando seu acesso...'; msg('', '');
+    try {
+      const { data: s, error: e1 } = await db.auth.signUp({ email, password: senha });
+      if (e1) throw e1;
+      const session = s.session;
+      if (!session) { msg('Conta criada! Confira seu e-mail para confirmar o acesso.', 'ok'); btn.disabled = false; btn.textContent = 'Começar meu teste'; return; }
+
+      const { error: e2 } = await db.rpc('fn_criar_trial_campanha', {
+        p_codigo_publico: CODIGO_OFERTA,
+        p_nome_empresa: empresa,
+        p_nome_usuario: nome,
+        p_whatsapp: whatsapp,
+        p_faixa_imoveis: faixa,
+        p_email: email,
+        p_interesse_importacao: ajuda
+      });
+      if (e2) throw e2;
+
+      track('trial_completo', 'trial_completo' + (ajuda ? ':ajuda' : ''));
+      msg('Tudo pronto! Abrindo o app...', 'ok');
+      window.location.href = APP_URL + '/#access_token=' + encodeURIComponent(session.access_token) +
+        '&refresh_token=' + encodeURIComponent(session.refresh_token) + '&type=trial_handoff';
+    } catch (err) {
+      const m = (err && err.message) ? err.message : 'erro desconhecido';
+      track('erro', 'erro:signup');
+      msg(m.includes('already registered') || m.includes('já está vinculado')
+        ? 'Este e-mail já tem uma conta. Entre pelo app ou use outro e-mail.'
+        : 'Não deu para criar seu acesso agora (' + m + '). Tente de novo ou me chame no WhatsApp.', 'erro');
+      btn.disabled = false; btn.textContent = 'Começar meu teste';
+    }
+  });
+</script>
+<script src="/cookie-banner.js"></script>
+</body>
+</html>
