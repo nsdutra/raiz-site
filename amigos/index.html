@@ -2,6 +2,20 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Página de convite para amigos (amigos/index.html)
+  VERSÃO: v1.2.0 · 2026-09-22
+
+  NOVIDADES v1.2.0 — ofertas próprias por origem (migration ofertas_por_origem_v1):
+    - A página pede só as ofertas da origem 'amigos'
+      (fn_ofertas_landing_ativas(p_origem => 'amigos')): amigos-essencial,
+      amigos-patrimonio e amigos-plus, 60 dias grátis. A landing principal
+      continua com as ofertas do site (7/14/30 dias).
+    - O cadastro manda o código da vitrine de amigos (ex.: amigos-patrimonio)
+      para fn_criar_trial_campanha; a licença fica ligada à campanha
+      "Amigos — …" e o cliente nasce com origem_codigo = 'amigos'.
+    - Para um parceiro ou grupo novo: cadastre a origem e duplique as
+      campanhas no Gestão; nesta página basta trocar ORIGEM.
+
+  --- HISTÓRICO ANTERIOR ---
   VERSÃO: v1.1.1 · 2026-09-21
 
   NOVIDADES v1.1.1:
@@ -446,11 +460,14 @@
 
 <script>
   // ==========================================================================
-  // CONFIGURAÇÃO — única linha a trocar quando existir oferta própria para
-  // os amigos (ex.: 'fundadores' publicada em comercial.plano_campanhas).
+  // CONFIGURAÇÃO — v1.2.0: a página mostra as ofertas da ORIGEM abaixo
+  // (comercial.origens + plano_campanhas.origem_codigo). Para reusar esta
+  // página com outro grupo/parceiro, troque só ORIGEM.
   // ==========================================================================
-  let CODIGO_OFERTA = 'patrimonio';   // v1.1.0 — muda com o plano escolhido na seção de planos
-  const CAMPANHA = 'amigos';
+  const ORIGEM = 'amigos';
+  let PLANO = 'patrimonio';                        // plano escolhido na seção de planos
+  const codigoPorPlano = { essencial: ORIGEM + '-essencial', patrimonio: ORIGEM + '-patrimonio', plus: ORIGEM + '-plus' };
+  const CAMPANHA = ORIGEM;
   const WHATSAPP_NICOLA = '5511947461828';
 
   const SUPABASE_URL = "https://oduwpttbbemypiypjsux.supabase.co";
@@ -516,24 +533,27 @@
   const NOME_PLANO = { essencial: 'Essencial', patrimonio: 'Patrimônio', plus: 'Plus' };
   const diasPorPlano = { essencial: 60, patrimonio: 60, plus: 60 };
   function atualizarPlanoEscolhido() {
-    document.getElementById('dias-teste').textContent = diasPorPlano[CODIGO_OFERTA];
-    document.getElementById('plano-escolhido').textContent = 'Plano ' + NOME_PLANO[CODIGO_OFERTA] + ' · grátis por ' + diasPorPlano[CODIGO_OFERTA] + ' dias';
+    document.getElementById('dias-teste').textContent = diasPorPlano[PLANO];
+    document.getElementById('plano-escolhido').textContent = 'Plano ' + NOME_PLANO[PLANO] + ' · grátis por ' + diasPorPlano[PLANO] + ' dias';
   }
   document.querySelectorAll('#planos .plano').forEach(el => el.addEventListener('click', () => {
     document.querySelectorAll('#planos .plano').forEach(x => { x.classList.remove('sel'); x.setAttribute('aria-checked', 'false'); });
     el.classList.add('sel'); el.setAttribute('aria-checked', 'true');
-    CODIGO_OFERTA = el.dataset.plano;
+    PLANO = el.dataset.plano;
     atualizarPlanoEscolhido();
-    track('cta_click', 'plano:' + CODIGO_OFERTA);
+    track('cta_click', 'plano:' + PLANO);
   }));
   (async function () {
     try {
-      const { data, error } = await db.rpc('fn_ofertas_landing_ativas');
+      const { data, error } = await db.rpc('fn_ofertas_landing_ativas', { p_origem: ORIGEM });
       if (error) throw error;
       (data || []).forEach(o => {
-        const card = document.querySelector('#planos .plano[data-plano="' + o.codigo_publico + '"]');
+        // v1.2.0 — vitrine da origem: 'amigos-patrimonio' → card 'patrimonio'
+        const plano = String(o.codigo_publico || '').replace(ORIGEM + '-', '');
+        const card = document.querySelector('#planos .plano[data-plano="' + plano + '"]');
         if (!card) return;
-        if (o.duracao_dias) { diasPorPlano[o.codigo_publico] = o.duracao_dias; card.querySelector('[data-dias]').textContent = o.duracao_dias; }
+        codigoPorPlano[plano] = o.codigo_publico;
+        if (o.duracao_dias) { diasPorPlano[plano] = o.duracao_dias; card.querySelector('[data-dias]').textContent = o.duracao_dias; }
         const pagas = (o.opcoes_pagamento || []).filter(p => Number(p.preco) > 0);
         if (pagas.length) {
           const maior = pagas.reduce((a, b) => (b.preco > a.preco ? b : a));
@@ -587,7 +607,7 @@
       if (!session) { msg('Conta criada! Confira seu e-mail para confirmar o acesso.', 'ok'); btn.disabled = false; btn.textContent = 'Começar meu teste'; return; }
 
       const { error: e2 } = await db.rpc('fn_criar_trial_campanha', {
-        p_codigo_publico: CODIGO_OFERTA,
+        p_codigo_publico: codigoPorPlano[PLANO],
         p_nome_empresa: empresa,
         p_nome_usuario: nome,
         p_whatsapp: whatsapp,
