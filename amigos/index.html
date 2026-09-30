@@ -2,6 +2,18 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Página de convite para amigos (amigos/index.html)
+  VERSÃO: v1.3.0 · 2026-09-30
+
+  NOVIDADES v1.3.0 (demanda 0e45ead9, a pedido do Nicola — parar de expor
+  o nome do convidado na URL): ?para=Nome sai, entra ?c=<token>. O token
+  é gerado no Gestão (Empresas ▸ Adoção ▸ Links de convite,
+  fn_convite_pessoal_criar) e resolvido aqui por fn_convite_pessoal_ler
+  (pública, sem auth — mesmo padrão de fn_info_convite_trial), que conta
+  o acesso e devolve só o nome. Sem token válido, a página segue
+  genérica (nunca falha visivelmente). Links antigos com ?para= param
+  de funcionar — é o combinado do Plano aprovado.
+
+  --- HISTÓRICO ANTERIOR ---
   VERSÃO: v1.2.0 · 2026-09-22
 
   NOVIDADES v1.2.0 — ofertas próprias por origem (migration ofertas_por_origem_v1):
@@ -50,13 +62,14 @@
 
   --- HISTÓRICO ANTERIOR ---
   VERSÃO: v1.0.0 · 2026-09-21
-  URL: https://raizpatrimonio.com.br/amigos/?para=Joao
+  URL: https://raizpatrimonio.com.br/amigos/?c=<token gerado no Gestão>
 
   NOVIDADES v1.0.0 — criação (soft launch com amigos, demanda 41327fb3):
     - Porta de entrada própria para quem recebe o convite pessoal do
       Nicola: sem preço no topo, vídeos curtos no lugar de texto longo e
       um cadastro só, com o combinado do teste explícito.
     - ?para=<nome> personaliza a saudação e já preenche "Seu nome".
+      (Substituído por ?c=<token> na v1.3.0 — ver histórico acima.)
       NÃO usa ?convite= de propósito: na landing principal ?convite= é o
       convite de SÓCIO (cliente_id) e dispara fn_info_convite_trial.
     - Cadastro idêntico ao da landing v4.1.0: auth.signUp →
@@ -477,25 +490,34 @@
   document.getElementById('ano').textContent = new Date().getFullYear();
   const params = new URLSearchParams(window.location.search);
 
-  // ?para=Joao → saudação e nome preenchido. Só texto, nunca HTML.
-  function nomeConvidado() {
-    const bruto = (params.get('para') || '').replace(/[^\p{L}\s'-]/gu, '').trim().slice(0, 40);
-    if (!bruto) return '';
-    return bruto.split(/\s+/).map(p => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase()).join(' ');
-  }
-  const para = nomeConvidado();
-  if (para) {
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // v1.3.0 — ?c=<token> (era ?para=Nome, expondo o nome na URL). O nome
+  // fica fora do client até chegar do banco: fn_convite_pessoal_ler
+  // (pública, sem auth) resolve o token, conta o acesso e devolve só o
+  // nome — nunca a lista de convites, nunca outro dado. Sem token ou
+  // token inválido/expirado, a página segue genérica.
+  let para = '';
+  function aplicarNomeConvidado(nome) {
+    para = (nome || '').slice(0, 40);
+    if (!para) return;
     const primeiro = para.split(' ')[0];
     document.getElementById('hero-titulo').innerHTML = 'Oi, <em></em>! Quero a sua opinião sobre o Raiz.';
     document.querySelector('#hero-titulo em').textContent = primeiro;
     document.getElementById('f-nome').value = para;
     document.getElementById('form-titulo').textContent = primeiro + ', é só criar seu acesso';
+    document.getElementById('wpp-link').href = 'https://wa.me/' + WHATSAPP_NICOLA + '?text=' + encodeURIComponent('Oi, Nicola! Aqui é ' + para + '. Estou vendo o convite do Raiz e queria tirar uma dúvida.');
   }
-  const textoWpp = 'Oi, Nicola! ' + (para ? 'Aqui é ' + para + '. ' : '') + 'Estou vendo o convite do Raiz e queria tirar uma dúvida.';
-  document.getElementById('wpp-link').href = 'https://wa.me/' + WHATSAPP_NICOLA + '?text=' + encodeURIComponent(textoWpp);
-
-  const { createClient } = supabase;
-  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  document.getElementById('wpp-link').href = 'https://wa.me/' + WHATSAPP_NICOLA + '?text=' + encodeURIComponent('Oi, Nicola! Estou vendo o convite do Raiz e queria tirar uma dúvida.');
+  const codigoConvite = (params.get('c') || '').replace(/[^a-z0-9]/gi, '').slice(0, 20);
+  if (codigoConvite) {
+    db.rpc('fn_convite_pessoal_ler', { p_token: codigoConvite }).then(function (r) {
+      if (r.error) { console.warn('convite:', r.error.message); return; }
+      const linha = Array.isArray(r.data) ? r.data[0] : r.data;
+      if (linha && linha.valido && linha.nome_convidado) aplicarNomeConvidado(linha.nome_convidado);
+    });
+  }
 
   function sessaoId() {
     try {
