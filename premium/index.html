@@ -2,7 +2,15 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Página Premium (premium/index.html)
-  VERSÃO: v1.0.0 · LINHAS: 393 · 2026-10-03
+  VERSÃO: v1.1.0 · LINHAS: 424 · 2026-10-03
+  NOVIDADES v1.1.0 — pedido do Nicola (03/10/2026, 22:26):
+    - Rodapé padrão (igual à landing e ao /amigos) com bloco "Parcerias".
+    - Números de WhatsApp saem da tela: viram link com ícone de mensagem.
+    - "Capacidade limitada" vira "vagas limitadas".
+    - Início refeito: o hero leva para "Como funciona" e "Testar agora"; os 4 passos
+      vêm logo depois do hero; o pedido de apresentação só depois deles.
+  --- v1.0.0 ---
+  VERSÃO-ANT: v1.0.0 · LINHAS-ANT: 393 · 2026-10-03
   BASE: nasce da PROTOTIPO_LANDING_PREMIUM_RAIZ v1.4.0 (03/10/2026), aprovada pelo Nicola.
   ROTA: https://raizpatrimonio.com.br/premium/  (repositório raiz-site, premium/index.html)
   NOVIDADES v1.0.0 — primeira publicação:
@@ -236,17 +244,17 @@ footer a{color:#e4ede8}footer .row{display:flex;gap:28px;flex-wrap:wrap;justify-
   <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" id="tg"><svg class="i"><use href="#menu"/></svg></button>
   <nav class="nav-links" id="nv">
     <a href="#para-quem">Para quem é</a><a href="#programa">O programa</a><a href="#alem">Além dos imóveis</a><a href="#inclui">O que inclui</a><a href="#faq">Dúvidas</a>
-    <a href="/">Planos para carteiras menores</a><a class="nav-cta" href="#agendar">Agendar apresentação</a>
+    <a href="/">Planos para carteiras menores</a><a class="nav-cta" href="#programa">Como funciona</a>
   </nav></div></header>
 <main id="topo">
 
 <section class="phero dark"><div class="wrap hero-grid">
   <div>
-    <div class="cap">Atendimento personalizado, com capacidade limitada</div>
+    <div class="cap">Atendimento personalizado · vagas limitadas</div>
     <h1>O patrimônio da sua família, com mais velocidade, praticidade e <em>a sua cara.</em></h1>
     <p class="lead" style="color:#c9d9d1">Para famílias que já têm uma equipe e querem acelerá-la com tecnologia moderna, e para as que ainda não têm equipe e já passaram do que dá para tocar sozinhas. Mostramos o Raiz, desenhamos com você o que a sua família precisa e acompanhamos de perto.</p>
-    <div class="cta-row"><a class="btn btn-brass" href="/#trial">Testar agora</a><a class="btn btn-ghost" style="border-color:#f2cd93;color:#f2cd93" href="#agendar">Agendar apresentação</a></div>
-    <p class="note" style="color:#9db5aa">Teste de 30 dias, sem cartão. Gostou? Agendamos uma apresentação e a proposta sai rápido.</p>
+    <div class="cta-row"><a class="btn btn-brass" href="#programa">Ver como funciona</a><a class="btn btn-ghost" style="border-color:#f2cd93;color:#f2cd93" href="/#trial">Testar agora</a></div>
+    <p class="note" style="color:#9db5aa">Teste de 30 dias, sem cartão. Depois: demonstração, proposta e implantação em até 30 dias.</p>
   </div>
   <div class="fam" aria-label="Exemplo ilustrativo de acesso por pessoa">
     <div class="p-head"><b>Quem vê o quê</b><span class="chip">EXEMPLO</span></div>
@@ -258,10 +266,23 @@ footer a{color:#e4ede8}footer .row{display:flex;gap:28px;flex-wrap:wrap;justify-
   </div>
 </div></section>
 
+<section class="sec" id="programa"><div class="wrap">
+  <div class="eyebrow">Como começa</div>
+  <h2>Quatro passos, do primeiro teste ao projeto entregue.</h2>
+  <p class="sub">Sem burocracia e sem processo seletivo: você testa, nós mostramos, desenhamos juntos o que a sua família precisa e entregamos. Dois prazos: 7 dias para marcar a demonstração e 30 para entregar.</p>
+  <div class="phases">
+    <div class="phase"><small>PASSO 1 · 30 DIAS</small><h3>Teste</h3><p>Você usa e testa o aplicativo por 30 dias, com os seus bens, sem cartão e sem precisar de aprovação.</p><div class="rec2"><b>Você recebe:</b> o aplicativo para conhecer na prática.</div></div>
+    <div class="phase"><small>PASSO 2 · ATÉ 7 DIAS PARA MARCAR</small><h3>Demonstração e escopo</h3><p>Gostou? Marcamos uma visita ou videochamada, mostramos o processo inteiro e levantamos com vocês o que pode ser personalizado: perfis, relatórios, alertas e o jeito de trabalhar da sua família.</p><div class="rec2"><b>Você recebe:</b> a visão completa e a lista do que pode ser personalizado.</div></div>
+    <div class="phase"><small>PASSO 3</small><h3>Proposta</h3><p>A proposta sai rápido, com escopo, prazo e valor combinados com vocês.</p><div class="rec2"><b>Você recebe:</b> uma proposta clara, sem surpresa.</div></div>
+    <div class="phase"><small>PASSO 4 · ATÉ 30 DIAS</small><h3>Implantação</h3><p>Aprovada a proposta, em até 30 dias a gestão patrimonial da sua família fica facilitada, com o Raiz do jeito que ela deseja e precisa.</p><div class="rec2"><b>Você recebe:</b> o Raiz com a cara da sua família, funcionando.</div></div>
+  </div>
+</div>
+</div></section>
+
 <section class="sec" id="para-quem"><div class="wrap">
   <div class="eyebrow">Para quem é</div>
   <h2>Duas situações, um só Premium.</h2>
-  <p class="sub">O Premium tem atendimento personalizado e capacidade limitada. Você testa primeiro e, se gostar, agenda uma apresentação. Ele serve a dois perfis de família.</p>
+  <p class="sub">O Premium tem atendimento personalizado e vagas limitadas. Você testa primeiro e, se gostar, agenda uma apresentação. Ele serve a dois perfis de família.</p>
   <div class="cmp">
     <div class="card yes"><span class="eyebrow">Com equipe</span><h3>Já tenho uma equipe cuidando do patrimônio</h3>
       <p>Gestor, controller, assistente ou escritório fazem a rotina hoje. O Raiz acelera o trabalho dessa equipe com modernidade, velocidade e praticidade, e quem acompanha os resultados da administração passa a enxergar tudo sem precisar pedir relatório.</p>
@@ -282,19 +303,6 @@ footer a{color:#e4ede8}footer .row{display:flex;gap:28px;flex-wrap:wrap;justify-
     <div class="pain"><b>Eu faço tudo e algo sempre escapa</b><span>Reajuste, seguro, revisão, taxa de embarcação e documento vencendo: com muitos bens, é impossível lembrar de tudo.</span></div>
     <div class="pain"><b>Tudo está na cabeça de uma pessoa</b><span>Se quem sabe onde está cada documento e cada vencimento sair ou adoecer, o patrimônio fica às cegas.</span></div>
   </div>
-</div></section>
-
-<section class="sec" id="programa"><div class="wrap">
-  <div class="eyebrow">Como começa</div>
-  <h2>Quatro passos, do primeiro teste ao projeto entregue.</h2>
-  <p class="sub">Sem burocracia e sem processo seletivo: você testa, nós mostramos, desenhamos juntos o que a sua família precisa e entregamos. Dois prazos: 7 dias para marcar a demonstração e 30 para entregar.</p>
-  <div class="phases">
-    <div class="phase"><small>PASSO 1 · 30 DIAS</small><h3>Teste</h3><p>Você usa e testa o aplicativo por 30 dias, com os seus bens, sem cartão e sem precisar de aprovação.</p><div class="rec2"><b>Você recebe:</b> o aplicativo para conhecer na prática.</div></div>
-    <div class="phase"><small>PASSO 2 · ATÉ 7 DIAS PARA MARCAR</small><h3>Demonstração e escopo</h3><p>Gostou? Marcamos uma visita ou videochamada, mostramos o processo inteiro e levantamos com vocês o que pode ser personalizado: perfis, relatórios, alertas e o jeito de trabalhar da sua família.</p><div class="rec2"><b>Você recebe:</b> a visão completa e a lista do que pode ser personalizado.</div></div>
-    <div class="phase"><small>PASSO 3</small><h3>Proposta</h3><p>A proposta sai rápido, com escopo, prazo e valor combinados com vocês.</p><div class="rec2"><b>Você recebe:</b> uma proposta clara, sem surpresa.</div></div>
-    <div class="phase"><small>PASSO 4 · ATÉ 30 DIAS</small><h3>Implantação</h3><p>Aprovada a proposta, em até 30 dias a gestão patrimonial da sua família fica facilitada, com o Raiz do jeito que ela deseja e precisa.</p><div class="rec2"><b>Você recebe:</b> o Raiz com a cara da sua família, funcionando.</div></div>
-  </div>
-</div>
 </div></section>
 
 <section class="sec" id="alem"><div class="wrap">
@@ -339,7 +347,7 @@ footer a{color:#e4ede8}footer .row{display:flex;gap:28px;flex-wrap:wrap;justify-
     <div class="eyebrow">Agendar apresentação</div>
     <h2 style="font-size:clamp(30px,4.4vw,44px);font-weight:800">Gostou do teste? Agende uma apresentação.</h2>
     <p class="sub">Deixe o seu contato. Marcamos uma visita ou videochamada, a proposta sai rápido e, em até 30 dias, a gestão patrimonial da sua família fica facilitada.</p>
-    <p class="note" style="color:#9db5aa">Prefere falar direto? WhatsApp comercial: <a href="https://wa.me/5511947461828" style="color:#f2cd93">(11) 94746-1828</a></p>
+    <p class="note" style="color:#9db5aa">Prefere falar direto? <a href="https://wa.me/5511947461828?text=Oi!%20Quero%20conhecer%20o%20Raiz%20Premium." target="_blank" rel="noopener" style="color:#f2cd93;font-weight:600;display:inline-flex;align-items:center;gap:6px;vertical-align:middle"><span style="width:18px;height:18px;display:inline-flex"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3.9 2.5c.1.2 1.6 2.5 4 3.5 1.5.6 2 .7 2.8.6.4-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.2z"/></svg></span>Falar no WhatsApp</a></p>
   </div>
   <form class="form" id="fm" novalidate style="color:var(--ink)">
     <label for="f1">Seu nome</label><input id="f1" autocomplete="name">
@@ -368,11 +376,33 @@ footer a{color:#e4ede8}footer .row{display:flex;gap:28px;flex-wrap:wrap;justify-
   </div>
 </div></section>
 </main>
-<footer><div class="wrap row">
-  <div><b style="color:#fff;font-family:'Bricolage Grotesque',sans-serif">Raiz Patrimônio</b><br>Soluções para gestão patrimonial.</div>
-  <div>Comercial: <a href="https://wa.me/5511947461828">(11) 94746-1828</a><br>Bot R.AI.Z: <a href="https://wa.me/5511978950609">(11) 97895-0609</a></div>
-  <div><a href="/">Planos para carteiras menores</a><br><a href="/termos-de-uso/">Termos de uso</a> · <a href="/politica-de-privacidade/">Privacidade</a></div>
-</div></footer>
+<style>
+/* RODAPÉ PADRÃO RAIZ v1.0 (03/10/2026) — mesmo bloco em /, /premium/ e /amigos/ */
+footer.rf{background:#17211e;color:#a9b3ae;padding:44px 0 26px;font:14px/1.6 "Inter",system-ui,sans-serif;text-align:left}
+footer.rf a{color:#a9b3ae;text-decoration:none;margin:0}footer.rf a:hover{color:#fff}
+footer.rf a.rf-logo{color:#fff}
+.rf-in{max-width:1120px;margin:0 auto;padding:0 24px}
+.rf-top{display:flex;flex-wrap:wrap;gap:28px 48px;justify-content:space-between;align-items:flex-start}
+.rf-logo{font-family:"Bricolage Grotesque",Georgia,serif;font-weight:700;font-size:21px;color:#fff;letter-spacing:-.01em}
+.rf-logo span{color:#c68a3b}
+.rf-col{max-width:460px}
+.rf-col b{color:#fff;display:block;font-size:15px;margin-bottom:4px}
+.rf-col p{margin:4px 0 0}
+.rf-canais{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+footer.rf a.rf-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:8px 15px;color:#fff;font-weight:600;font-size:13.5px}
+footer.rf a.rf-btn:hover{border-color:#c68a3b}
+.rf-btn svg{width:18px;height:18px;flex-shrink:0}
+.rf-leg{margin-top:26px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-wrap:wrap;gap:8px 18px;font-size:12.5px}
+</style>
+<footer class="rf">
+  <div class="rf-in">
+  <div class="rf-top">
+    <div class="rf-col"><a class="rf-logo" href="/">Raiz<span>Patrimônio</span></a><p>Soluções para gestão patrimonial.</p><b style="margin-top:14px">Fale conosco</b><div class="rf-canais"><a class="rf-btn" href="https://wa.me/5511947461828?text=Oi!%20Quero%20conhecer%20o%20Raiz%20Patrim%C3%B4nio." target="_blank" rel="noopener" aria-label="Falar no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3.9 2.5c.1.2 1.6 2.5 4 3.5 1.5.6 2 .7 2.8.6.4-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.2z"/></svg>WhatsApp</a><a class="rf-btn" href="mailto:contato@raizpatrimonio.com.br" aria-label="Enviar e-mail"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>E-mail</a></div></div>
+    <div class="rf-col"><b>Parcerias</b><p>Estamos abertos a parcerias com administradoras, family offices, escritórios contábeis e imobiliárias. Fale com a gente.</p><div class="rf-canais"><a class="rf-btn" href="https://wa.me/5511947461828?text=Oi!%20Quero%20conversar%20sobre%20parceria%20com%20o%20Raiz%20Patrim%C3%B4nio." target="_blank" rel="noopener" aria-label="Falar no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3.9 2.5c.1.2 1.6 2.5 4 3.5 1.5.6 2 .7 2.8.6.4-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.2z"/></svg>WhatsApp</a><a class="rf-btn" href="mailto:contato@raizpatrimonio.com.br" aria-label="Enviar e-mail"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>E-mail</a></div></div>
+  </div>
+  <div class="rf-leg"><span>© <span id="ano">2026</span> Raiz Patrimônio</span><a href="/termos-de-uso">Termos de Uso</a><a href="/politica-de-privacidade">Política de Privacidade</a><a href="/politica-de-privacidade#9-cookies-e-rastreamento-na-landing-page">Cookies</a><a href="/termo-beta">Termo de Beta</a></div>
+  </div>
+</footer>
 
 <script>
 (function(){
@@ -389,5 +419,6 @@ footer a{color:#e4ede8}footer .row{display:flex;gap:28px;flex-wrap:wrap;justify-
 
 })();
 </script>
+<script>try{document.getElementById("ano").textContent=new Date().getFullYear()}catch(e){}</script>
 </body>
 </html>
