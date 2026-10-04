@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  RAIZ PATRIMÔNIO — Página Premium (premium/index.html)
+  VERSÃO: v1.0.0 · LINHAS: 393 · 2026-10-03
+  BASE: nasce da PROTOTIPO_LANDING_PREMIUM_RAIZ v1.4.0 (03/10/2026), aprovada pelo Nicola.
+  ROTA: https://raizpatrimonio.com.br/premium/  (repositório raiz-site, premium/index.html)
+  NOVIDADES v1.0.0 — primeira publicação:
+    - Tudo é Premium: sem níveis. Dois perfis (com equipe / sem equipe).
+    - Quatro passos: Teste de 30 dias, Demonstração e escopo, Proposta e Implantação
+      (7 dias para marcar a demonstração; 30 dias para implantar).
+    - Marcas de decisão pendente do protótipo removidas: sem número de vagas, valores
+      "na proposta", garantia de uso de 30 dias com condições na proposta.
+    - "Testar agora" leva ao cadastro de teste da landing (/#trial).
+    - "Agendar apresentação" monta uma mensagem e abre o WhatsApp comercial; nenhum dado
+      é gravado em banco por esta página.
+  Sem banco, sem Edge Function, sem script de terceiros além das fontes do Google.
+  ============================================================================
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Raiz Premium — o patrimônio da sua família, com a sua cara</title>
+<meta name="description" content="Acelerador para equipes e para famílias com patrimônio acima de 50 bens: demonstração, personalização com a família e entrega em até 30 dias.">
+<link rel="canonical" href="https://raizpatrimonio.com.br/premium/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#17211e;--paper:#faf9f5;--pine:#1e3a32;--pine-deep:#152a24;--brass:#c68a3b;--brass-deep:#a86f27;
+  --sage:#6b857a;--line:#e6e3da;--card:#fff;--radius:16px;--ok:#2f7a55;--wine:#7d4b54;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.6 "Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif;line-height:1.08;margin:0;letter-spacing:-.02em}
+a{color:inherit}
+svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+.eyebrow{font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-deep)}
+.sec{padding:84px 0}
+.sec h2{font-size:clamp(30px,4.4vw,44px);font-weight:800;margin:10px 0 14px;max-width:20ch}
+.sec .sub{font-size:19px;color:#3c4a45;max-width:56ch;margin:0 0 40px}
+.btn{display:inline-block;font:600 16px "Inter";text-decoration:none;padding:14px 26px;border-radius:999px;border:0;cursor:pointer;transition:transform .15s,background .15s}
+.btn:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--brass);outline-offset:3px}
+.btn-primary{background:var(--pine);color:#fff}.btn-primary:hover{background:var(--pine-deep);transform:translateY(-1px)}
+.btn-ghost{border:1.5px solid var(--pine);color:var(--pine);background:transparent}.btn-ghost:hover{background:rgba(30,58,50,.06)}
+.btn-brass{background:var(--brass);color:#1b1305}.btn-brass:hover{background:#d4994a;transform:translateY(-1px)}
+/* NAV */
+header.nav{position:sticky;top:0;z-index:20;background:rgba(250,249,245,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:66px}
+.logo{font:800 19px "Bricolage Grotesque",system-ui,sans-serif;text-decoration:none}.logo span{color:var(--brass-deep);font-weight:600}
+.nav-links{display:flex;align-items:center;gap:22px;font-size:14.5px;font-weight:500}
+.nav-links a{text-decoration:none;color:#3c4a45}.nav-links a:hover{color:var(--pine)}
+.nav-cta{background:var(--pine);color:#fff!important;font-weight:600;padding:10px 18px;border-radius:999px}
+.nav-toggle{display:none;background:none;border:0;padding:6px;cursor:pointer;color:var(--ink)}
+@media(max-width:900px){
+  .nav-toggle{display:block}
+  .nav-links{display:none;position:absolute;top:66px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:var(--paper);border-bottom:1px solid var(--line);padding:4px 20px 14px}
+  .nav-links.open{display:flex}.nav-links a{padding:14px 0;border-bottom:1px solid var(--line)}.nav-links .nav-cta{text-align:center;margin-top:12px;border:0}
+}
+/* HERO */
+.hero{padding:70px 0 30px}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.hero h1{font-size:clamp(38px,6vw,62px);font-weight:800}.hero h1 em{font-style:normal;color:var(--brass)}
+.lead{font-size:20px;color:#3c4a45;margin:22px 0 30px;max-width:40ch}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap}
+.note{margin-top:16px;font-size:14px;color:var(--sage)}
+.badge{display:inline-flex;align-items:center;gap:9px;background:rgba(198,138,59,.14);color:var(--brass-deep);border:1px solid rgba(198,138,59,.36);padding:8px 15px;border-radius:999px;font-size:13.5px;font-weight:600;margin:0 0 22px}
+.badge i{width:9px;height:9px;border-radius:50%;background:var(--brass);animation:pulse 2.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(198,138,59,.5)}70%{box-shadow:0 0 0 9px rgba(198,138,59,0)}100%{box-shadow:0 0 0 0 rgba(198,138,59,0)}}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:36px}.hero{padding:44px 0 20px}.sec{padding:60px 0}}
+.painel{background:var(--pine);border-radius:22px;padding:24px;color:#eef3f0;box-shadow:0 24px 60px -28px rgba(21,42,36,.6)}
+.p-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.p-head b{font:700 15px "Bricolage Grotesque",system-ui,sans-serif}
+.chip{font-size:11px;background:rgba(198,138,59,.22);color:#f0c88a;padding:4px 10px;border-radius:999px;font-weight:600}
+.p-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat{background:rgba(255,255,255,.055);border-radius:12px;padding:14px 16px}
+.stat .n{font:800 26px/1 "Bricolage Grotesque",system-ui,sans-serif;color:#fff}.stat .l{font-size:12.5px;color:#a9c0b6;margin-top:6px}
+.stat.big{grid-column:1/-1;background:rgba(198,138,59,.14)}.stat.big .n{color:#f2cd93}
+.p-rows{margin-top:14px;border-top:1px solid rgba(255,255,255,.08);padding-top:6px}
+.p-row{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.p-row:last-child{border:0}.p-row span:last-child{color:#f0c88a;white-space:nowrap}
+/* NOVIDADES */
+.news{background:#fff;border-block:1px solid var(--line)}
+.grid{display:grid;gap:18px}
+.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:980px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.g3,.g4,.g2{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.card h3{font-size:20px;font-weight:700;margin:14px 0 8px}.card p{margin:0;color:#3c4a45;font-size:15.5px}
+.ic{width:44px;height:44px;border-radius:12px;background:rgba(30,58,50,.08);color:var(--pine);display:grid;place-items:center}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;letter-spacing:.04em;padding:3px 10px;border-radius:999px;margin-top:14px}
+.tag.ok{background:rgba(47,122,85,.12);color:var(--ok)}.tag.soon{background:rgba(198,138,59,.16);color:var(--brass-deep)}.tag.prem{background:rgba(125,75,84,.12);color:var(--wine)}
+/* SELETOR */
+.sel{background:var(--pine);color:#eef3f0;border-radius:24px;padding:40px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+@media(max-width:860px){.sel{grid-template-columns:1fr;padding:28px 22px}}
+.sel h2{color:#fff;max-width:16ch}.sel p{color:#b9cdc4;margin:0}
+.sel label{font-size:14px;color:#b9cdc4}
+.sel output{display:block;font:800 54px/1 "Bricolage Grotesque",system-ui,sans-serif;color:#f2cd93;margin:6px 0 10px}
+input[type=range]{width:100%;accent-color:var(--brass)}
+.rec{background:rgba(255,255,255,.07);border-radius:16px;padding:20px;margin-top:20px;min-height:128px}
+.rec b{font:700 22px "Bricolage Grotesque",system-ui,sans-serif;color:#fff;display:block}
+.rec span{font-size:15px;color:#b9cdc4}
+/* PLANOS */
+.plan{display:flex;flex-direction:column}
+.plan.hl{border:2px solid var(--pine);position:relative}
+.plan .ribbon{position:absolute;top:-13px;left:22px;background:var(--pine);color:#fff;font-size:12px;font-weight:600;padding:3px 12px;border-radius:999px}
+.price{font:800 40px/1 "Bricolage Grotesque",system-ui,sans-serif;margin:14px 0 4px}.price small{font:500 15px "Inter";color:var(--sage)}
+.plan ul{list-style:none;padding:0;margin:16px 0 22px;display:grid;gap:9px;font-size:15px;flex:1}
+.plan li{display:flex;gap:9px}.plan li::before{content:"✓";color:var(--ok);font-weight:700}
+.plan .fine{font-size:13.5px;color:var(--sage);margin:0 0 14px}
+.plan.on{box-shadow:0 0 0 3px var(--brass)}
+/* ACIMA DO PLUS */
+.above{background:linear-gradient(160deg,var(--pine-deep),var(--pine));color:#eef3f0;position:relative;overflow:hidden}
+.above h2{color:#fff;max-width:22ch}.above .sub{color:#b9cdc4}
+.above .eyebrow{color:#f0c88a}
+.offer{background:rgba(198,138,59,.13);border:1px solid rgba(198,138,59,.45);border-radius:22px;padding:32px;display:grid;grid-template-columns:1.1fr .9fr;gap:32px;margin-bottom:56px}
+@media(max-width:860px){.offer{grid-template-columns:1fr;padding:24px 20px}}
+.offer h3{font-size:28px;color:#fff;font-weight:800}
+.offer ul{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:12px}
+.offer li{display:flex;gap:12px;font-size:16px;color:#e4ede8}.offer li svg{color:#f0c88a;margin-top:2px}
+.ticket{background:#fff;color:var(--ink);border-radius:18px;padding:26px;align-self:start}
+.ticket .eyebrow{color:var(--brass-deep)}
+.ticket .big{font:800 30px/1.1 "Bricolage Grotesque",system-ui,sans-serif;margin:10px 0 8px}
+.ticket p{font-size:14.5px;color:#3c4a45;margin:0 0 18px}
+.cocr-h{font:800 clamp(26px,3.6vw,36px) "Bricolage Grotesque",system-ui,sans-serif;color:#fff;margin:0 0 10px;letter-spacing:-.02em}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:30px 0 40px;counter-reset:s}
+@media(max-width:980px){.steps{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.steps{grid-template-columns:1fr}}
+.step{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:22px;counter-increment:s}
+.step::before{content:counter(s);display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--brass);color:#1b1305;font-weight:700;margin-bottom:14px}
+.step h3{font-size:19px;color:#fff;margin-bottom:8px}.step p{margin:0;font-size:14.5px;color:#b9cdc4}
+.sob{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:860px){.sob{grid-template-columns:1fr}}
+.sob div{border-left:3px solid var(--brass);padding:4px 0 4px 16px;font-size:15.5px;color:#e4ede8}.sob b{display:block;color:#fff;margin-bottom:2px}
+/* PÚBLICO */
+.who .card h3{margin-top:10px}.who .k{font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--brass-deep)}
+/* RAIZ */
+.chat{background:#e9efe9;border-radius:22px;padding:22px;max-width:420px;margin-left:auto}
+.bub{padding:11px 14px;border-radius:14px;font-size:14.5px;max-width:86%;margin:0 0 10px;line-height:1.45}
+.bub.u{background:#d9f0d0;margin-left:auto;border-bottom-right-radius:4px}.bub.b{background:#fff;border-bottom-left-radius:4px}
+.bub small{display:block;color:var(--sage);font-size:11.5px;margin-top:4px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}@media(max-width:860px){.two{grid-template-columns:1fr;gap:32px}.chat{margin:0}}
+.chk{list-style:none;padding:0;margin:20px 0 28px;display:grid;gap:10px}.chk li{display:flex;gap:10px}.chk li::before{content:"✓";color:var(--ok);font-weight:700}
+/* FAQ + FORM */
+details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:10px}
+summary{font-weight:600;cursor:pointer}details p{margin:10px 0 0;color:#3c4a45;font-size:15.5px}
+.form{background:#fff;border:1px solid var(--line);border-radius:22px;padding:32px;max-width:640px}
+.form label{display:block;font-size:14px;font-weight:600;margin:14px 0 6px}
+.form input,.form select{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;font:16px "Inter";background:#fff}
+.tabs{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.tabs button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font:600 14px "Inter";cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--pine);color:#fff;border-color:var(--pine)}
+.okmsg{display:none;margin-top:16px;background:rgba(47,122,85,.1);color:var(--ok);padding:12px 14px;border-radius:12px;font-size:15px}
+footer{background:var(--pine-deep);color:#b9cdc4;padding:44px 0;font-size:14.5px}
+footer a{color:#e4ede8}footer .row{display:flex;gap:28px;flex-wrap:wrap;justify-content:space-between}
+
+/* v2 */
+.plan ul{align-content:start}
+.pains{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:980px){.pains{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.pains{grid-template-columns:1fr}}
+.pain{border-left:3px solid var(--wine);padding:4px 0 4px 16px}.pain b{display:block;font:700 18px "Bricolage Grotesque",system-ui,sans-serif;margin-bottom:4px}.pain span{font-size:15px;color:#3c4a45}
+.stackrows{display:grid;gap:0;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:#fff}
+.srow{display:grid;grid-template-columns:1fr 1.2fr;gap:24px;padding:20px 24px;border-bottom:1px solid var(--line);align-items:center}
+.srow:last-child{border:0}.srow .from{color:var(--sage);font-size:15px}.srow .to{display:flex;gap:12px;align-items:flex-start}
+.srow .to svg{color:var(--ok);margin-top:3px}.srow .to b{display:block;font-size:17px}.srow .to span{font-size:14.5px;color:#3c4a45}
+@media(max-width:700px){.srow{grid-template-columns:1fr;gap:8px}}
+.vids{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}@media(max-width:760px){.vids{grid-template-columns:1fr}}
+.vid{background:var(--pine);color:#fff;border-radius:16px;aspect-ratio:16/10;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative}
+.vid::before{content:"";position:absolute;left:50%;top:42%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3)}
+.vid::after{content:"";position:absolute;left:50%;top:42%;margin:-9px 0 0 -5px;border-left:16px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent}
+.vid small{color:#f0c88a;font-weight:600;letter-spacing:.08em}.vid b{font-size:16px}
+.guar{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;background:#fff;border:1.5px solid var(--pine);border-radius:20px;padding:28px}
+.guar .seal{width:72px;height:72px;border-radius:50%;background:var(--pine);color:#f2cd93;display:grid;place-items:center}.guar .seal svg{width:34px;height:34px}
+.guar h3{font-size:24px;margin-bottom:6px}.guar p{margin:0 0 6px;color:#3c4a45}
+@media(max-width:600px){.guar{grid-template-columns:1fr}}
+.urg{display:inline-flex;gap:8px;align-items:center;font-size:14px;font-weight:600;color:var(--wine);background:rgba(125,75,84,.1);padding:7px 14px;border-radius:999px}
+.plan .magic{font-size:13.5px;color:var(--brass-deep);font-weight:600;margin:6px 0 0}
+.plan .bonus{background:rgba(198,138,59,.12);border:1px dashed var(--brass);border-radius:10px;padding:9px 12px;font-size:13.5px;margin:0 0 14px}
+.bridge{margin-top:26px;text-align:center;font-size:15.5px;color:#3c4a45}.bridge a{font-weight:600;color:var(--pine)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.chips span{font-size:12.5px;background:rgba(30,58,50,.07);color:var(--pine);padding:3px 10px;border-radius:999px}
+.fam4{grid-template-columns:repeat(4,1fr)}@media(max-width:980px){.fam4{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.fam4{grid-template-columns:1fr}}
+.recur{margin-top:26px;background:#fff;border:1px solid var(--line);border-left:4px solid var(--brass);border-radius:12px;padding:16px 20px;font-size:16px;color:#3c4a45}
+/* premium */
+.dark{background:linear-gradient(165deg,var(--pine-deep),var(--pine));color:#eef3f0}
+.dark h1,.dark h2,.dark h3{color:#fff}.dark .sub,.dark p{color:#b9cdc4}.dark .eyebrow{color:#f0c88a}
+.phero{padding:84px 0 70px}.phero h1{font-size:clamp(38px,5.6vw,64px);font-weight:800;max-width:17ch}.phero h1 em{font-style:normal;color:#f2cd93}
+.cap{display:inline-flex;gap:9px;align-items:center;border:1px solid rgba(240,200,138,.5);color:#f2cd93;padding:8px 15px;border-radius:999px;font-size:13.5px;font-weight:600;margin-bottom:22px}
+.fam{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:22px}
+.fam .p-head b{color:#fff}.person{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:14.5px;color:#e4ede8}
+.person:last-child{border:0}.person em{font-style:normal;font-size:12px;color:#f0c88a;background:rgba(198,138,59,.18);padding:3px 10px;border-radius:999px;white-space:nowrap}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:760px){.cmp{grid-template-columns:1fr}}
+.cmp .yes{border-color:var(--ok)}.cmp ul{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px;font-size:15.5px}
+.cmp .yes li::before{content:"✓ ";color:var(--ok);font-weight:700}.cmp .no li::before{content:"– ";color:var(--sage);font-weight:700}
+.phases{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}@media(max-width:980px){.phases{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.phases{grid-template-columns:1fr}}
+.phase{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;border-top:4px solid var(--brass)}
+.phase small{font-weight:600;letter-spacing:.1em;color:var(--brass-deep);font-size:12px}.phase h3{font-size:20px;margin:8px 0}.phase p{margin:0 0 10px;font-size:15px;color:#3c4a45}
+.phase .rec2{font-size:13.5px;border-top:1px dashed var(--line);padding-top:10px;color:var(--ink)}
+.ladder{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:760px){.ladder{grid-template-columns:1fr}}
+.ladder .card h3{margin-top:6px}.ladder .lv{font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--brass-deep)}
+.ladder ul{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:9px;font-size:15px}.ladder li::before{content:"✓ ";color:var(--ok);font-weight:700}
+.incl{display:grid;gap:0;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.incl div{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:18px 22px;border-bottom:1px solid var(--line);align-items:start}.incl div:last-child{border:0}
+.incl b{display:block;font-size:17px}.incl span{font-size:14.5px;color:#3c4a45}.incl .ic{width:40px;height:40px}
+.invest{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:760px){.invest{grid-template-columns:1fr}}
+.invest .card{text-align:center}.invest .big{font:800 28px/1.1 "Bricolage Grotesque",system-ui,sans-serif;margin:10px 0}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10M10 20v-6h4v6"/></symbol>
+  <symbol id="doc" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6"/></symbol>
+  <symbol id="coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.2c-.6-.8-1.5-1.2-2.5-1.2-1.4 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1.1 2-2.5 2c-1 0-1.9-.4-2.5-1.2M12 6v2M12 16v2"/></symbol>
+  <symbol id="bell" viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0112 0v6l2 2H4zM10 21h4"/></symbol>
+  <symbol id="chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+  <symbol id="car" viewBox="0 0 24 24"><path d="M3 15l2-6h14l2 6v4h-3v-2H6v2H3zM6 15h12"/><circle cx="7.5" cy="15" r=".6"/><circle cx="16.5" cy="15" r=".6"/></symbol>
+  <symbol id="tax" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6"/></symbol>
+  <symbol id="chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16M8 16v-5M12 16V8M16 16v-8"/></symbol>
+  <symbol id="users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5M16 5a3 3 0 010 6M18 14.8c1.9.6 3 2.2 3 5.2"/></symbol>
+  <symbol id="split" viewBox="0 0 24 24"><path d="M4 12h6l4-6h6M10 12l4 6h6"/></symbol>
+  <symbol id="cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+  <symbol id="lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></symbol>
+  <symbol id="star" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></symbol>
+  <symbol id="hand" viewBox="0 0 24 24"><path d="M3 12l4-3 4 1 3-2 4 3-6 6-3-1-2 1zM3 12v4l5 4M21 11v4l-5 5"/></symbol>
+  <symbol id="box" viewBox="0 0 24 24"><path d="M3 7l9-4 9 4v10l-9 4-9-4zM3 7l9 4 9-4M12 11v10"/></symbol>
+  <symbol id="mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></symbol>
+  <symbol id="menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+</svg>
+
+<header class="nav"><div class="wrap nav-in">
+  <a class="logo" href="#topo">Raiz <span>Premium</span></a>
+  <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" id="tg"><svg class="i"><use href="#menu"/></svg></button>
+  <nav class="nav-links" id="nv">
+    <a href="#para-quem">Para quem é</a><a href="#programa">O programa</a><a href="#alem">Além dos imóveis</a><a href="#inclui">O que inclui</a><a href="#faq">Dúvidas</a>
+    <a href="/">Planos para carteiras menores</a><a class="nav-cta" href="#agendar">Agendar apresentação</a>
+  </nav></div></header>
+<main id="topo">
+
+<section class="phero dark"><div class="wrap hero-grid">
+  <div>
+    <div class="cap">Atendimento personalizado, com capacidade limitada</div>
+    <h1>O patrimônio da sua família, com mais velocidade, praticidade e <em>a sua cara.</em></h1>
+    <p class="lead" style="color:#c9d9d1">Para famílias que já têm uma equipe e querem acelerá-la com tecnologia moderna, e para as que ainda não têm equipe e já passaram do que dá para tocar sozinhas. Mostramos o Raiz, desenhamos com você o que a sua família precisa e acompanhamos de perto.</p>
+    <div class="cta-row"><a class="btn btn-brass" href="/#trial">Testar agora</a><a class="btn btn-ghost" style="border-color:#f2cd93;color:#f2cd93" href="#agendar">Agendar apresentação</a></div>
+    <p class="note" style="color:#9db5aa">Teste de 30 dias, sem cartão. Gostou? Agendamos uma apresentação e a proposta sai rápido.</p>
+  </div>
+  <div class="fam" aria-label="Exemplo ilustrativo de acesso por pessoa">
+    <div class="p-head"><b>Quem vê o quê</b><span class="chip">EXEMPLO</span></div>
+    <div class="person"><span>Ana · titular</span><em>carteira inteira</em></div>
+    <div class="person"><span>Bruno · herdeiro</span><em>só a parte dele</em></div>
+    <div class="person"><span>Clara · herdeira</span><em>a dela + empresa</em></div>
+    <div class="person"><span>Equipe financeira</span><em>opera a rotina</em></div>
+    <div class="person"><span>Escritório contábil</span><em>pacote do mês</em></div>
+  </div>
+</div></section>
+
+<section class="sec" id="para-quem"><div class="wrap">
+  <div class="eyebrow">Para quem é</div>
+  <h2>Duas situações, um só Premium.</h2>
+  <p class="sub">O Premium tem atendimento personalizado e capacidade limitada. Você testa primeiro e, se gostar, agenda uma apresentação. Ele serve a dois perfis de família.</p>
+  <div class="cmp">
+    <div class="card yes"><span class="eyebrow">Com equipe</span><h3>Já tenho uma equipe cuidando do patrimônio</h3>
+      <p>Gestor, controller, assistente ou escritório fazem a rotina hoje. O Raiz acelera o trabalho dessa equipe com modernidade, velocidade e praticidade, e quem acompanha os resultados da administração passa a enxergar tudo sem precisar pedir relatório.</p>
+      <ul><li>mais velocidade na conferência, na cobrança e nos relatórios</li><li>perfis por papel: a equipe opera, a família acompanha</li><li>documentos lidos por IA, alertas por responsável e histórico de cada alteração</li><li>relatórios prontos por sócio ou herdeiro</li></ul></div>
+    <div class="card yes"><span class="eyebrow">Sem equipe</span><h3>Ainda não tenho equipe, mas o patrimônio é grande demais</h3>
+      <p>Hoje você mesmo faz tudo e, pelo tamanho da carteira, alguma coisa sempre escapa. O Raiz entra como a sua primeira equipe: organizamos, cadastramos e avisamos o que precisa ser feito e quando.</p>
+      <ul><li>implantação feita por nós, com documentação em campo</li><li>alertas de reajuste, imposto, seguro, manutenção e documento</li><li>suporte direto pelo WhatsApp</li><li>quando você contratar uma equipe, ela encontra tudo pronto</li></ul></div>
+  </div>
+  <p class="bridge" style="text-align:left">Não é o seu caso? Se você administra poucos bens sozinho e quer começar hoje, sem conversa, <a href="/">veja os planos Essencial, Patrimônio e Plus</a>.</p>
+</div></section>
+
+<section class="sec news"><div class="wrap">
+  <div class="eyebrow">O que acontece sem governança</div>
+  <h2>Patrimônio grande falha pelos cantos.</h2>
+  <div class="pains" style="margin-top:34px">
+    <div class="pain"><b>A rotina pede mais velocidade</b><span>Conferir extrato, cobrar, preparar nota e montar relatório ainda passam por muita etapa manual. Com ferramenta moderna, o mesmo time chega mais longe.</span></div>
+    <div class="pain"><b>Quem acompanha depende de relatório pedido</b><span>Sócios e herdeiros só enxergam o patrimônio quando alguém monta um relatório, e cada um monta de um jeito.</span></div>
+    <div class="pain"><b>Eu faço tudo e algo sempre escapa</b><span>Reajuste, seguro, revisão, taxa de embarcação e documento vencendo: com muitos bens, é impossível lembrar de tudo.</span></div>
+    <div class="pain"><b>Tudo está na cabeça de uma pessoa</b><span>Se quem sabe onde está cada documento e cada vencimento sair ou adoecer, o patrimônio fica às cegas.</span></div>
+  </div>
+</div></section>
+
+<section class="sec" id="programa"><div class="wrap">
+  <div class="eyebrow">Como começa</div>
+  <h2>Quatro passos, do primeiro teste ao projeto entregue.</h2>
+  <p class="sub">Sem burocracia e sem processo seletivo: você testa, nós mostramos, desenhamos juntos o que a sua família precisa e entregamos. Dois prazos: 7 dias para marcar a demonstração e 30 para entregar.</p>
+  <div class="phases">
+    <div class="phase"><small>PASSO 1 · 30 DIAS</small><h3>Teste</h3><p>Você usa e testa o aplicativo por 30 dias, com os seus bens, sem cartão e sem precisar de aprovação.</p><div class="rec2"><b>Você recebe:</b> o aplicativo para conhecer na prática.</div></div>
+    <div class="phase"><small>PASSO 2 · ATÉ 7 DIAS PARA MARCAR</small><h3>Demonstração e escopo</h3><p>Gostou? Marcamos uma visita ou videochamada, mostramos o processo inteiro e levantamos com vocês o que pode ser personalizado: perfis, relatórios, alertas e o jeito de trabalhar da sua família.</p><div class="rec2"><b>Você recebe:</b> a visão completa e a lista do que pode ser personalizado.</div></div>
+    <div class="phase"><small>PASSO 3</small><h3>Proposta</h3><p>A proposta sai rápido, com escopo, prazo e valor combinados com vocês.</p><div class="rec2"><b>Você recebe:</b> uma proposta clara, sem surpresa.</div></div>
+    <div class="phase"><small>PASSO 4 · ATÉ 30 DIAS</small><h3>Implantação</h3><p>Aprovada a proposta, em até 30 dias a gestão patrimonial da sua família fica facilitada, com o Raiz do jeito que ela deseja e precisa.</p><div class="rec2"><b>Você recebe:</b> o Raiz com a cara da sua família, funcionando.</div></div>
+  </div>
+</div>
+</div></section>
+
+<section class="sec" id="alem"><div class="wrap">
+  <div class="eyebrow">Além dos imóveis</div>
+  <h2>O controle de tudo o que a família tem.</h2>
+  <p class="sub">Patrimônio grande tem carro, embarcação, casa de veraneio, obras de arte, apólices e documentos. Cada um tem data, e o Raiz avisa antes.</p>
+  <div class="grid g4 fam4">
+    <article class="card"><h3 style="margin-top:0">Veículos e embarcações</h3><p>Revisões, seguro, IPVA, licenciamento, TUF, marina e inscrição.</p></article>
+    <article class="card"><h3 style="margin-top:0">Casa de veraneio</h3><p>Manutenção programada antes da temporada e extintores.</p></article>
+    <article class="card"><h3 style="margin-top:0">Obras de arte e coleções</h3><p>Conservação periódica, avaliação, inventário e seguro.</p></article>
+    <article class="card"><h3 style="margin-top:0">Seguros e documentos</h3><p>Apólices, CNH, passaporte, visto e documentos de cada bem.</p></article>
+  </div>
+  <p class="recur">Para a equipe, é a agenda de tudo o que precisa ser feito. Para quem acompanha, é a garantia de que nada está vencendo sem ninguém ver.</p>
+</div></section>
+
+<section class="sec" id="inclui"><div class="wrap">
+  <div class="eyebrow">O que inclui</div>
+  <h2>Tudo o que a sua família precisa, num programa só.</h2>
+  <p class="sub" style="margin-bottom:34px">Tudo combinado na proposta, de acordo com o tamanho da carteira.</p>
+  <div class="incl">
+    <div><span class="ic"><svg class="i"><use href="#hand"/></svg></span><p style="margin:0"><b>Diagnóstico patrimonial</b><span>Conversa estruturada e mapa de bens, pessoas e estruturas.</span></p></div>
+    <div><span class="ic"><svg class="i"><use href="#users"/></svg></span><p style="margin:0"><b>Acesso por pessoa</b><span>Cada membro vê todas as contas, só a dele ou a dele mais as da empresa.</span></p></div>
+    <div><span class="ic"><svg class="i"><use href="#box"/></svg></span><p style="margin:0"><b>Carteira cadastrada por nós</b><span>Planilhas, PDFs, fotos e histórico de recebimentos, com escopo combinado.</span></p></div>
+    <div><span class="ic"><svg class="i"><use href="#chart"/></svg></span><p style="margin:0"><b>Relatórios por herdeiro e comparativos</b><span>Evolução contra o período anterior e reajustes contra a própria história da carteira.</span></p></div>
+    <div><span class="ic"><svg class="i"><use href="#car"/></svg></span><p style="margin:0"><b>Controle de tudo o que a família tem</b><span>Manutenção, seguros, impostos e documentos de veículos, embarcações, casa de veraneio e obras de arte.</span></p></div>
+    <div><span class="ic"><svg class="i"><use href="#coin"/></svg></span><p style="margin:0"><b>Contas, rateio e gerência</b><span>Várias contas por pessoa e empresa, fluxo de caixa e cartão item a item. Em liberação gradual.</span></p></div>
+    <div><span class="ic"><svg class="i"><use href="#tax"/></svg></span><p style="margin:0"><b>Fiscal e pacote do contador</b><span>Check-up da Reforma Tributária, notas da competência e fechamento compartilhado.</span></p></div>
+    <div><span class="ic"><svg class="i"><use href="#chat"/></svg></span><p style="margin:0"><b>Suporte direto</b><span>Atendimento pelo WhatsApp, além do R.AI.Z para o dia a dia.</span></p></div>
+    <div><span class="ic"><svg class="i"><use href="#star"/></svg></span><p style="margin:0"><b>Você ajuda a decidir o que vem a seguir</b><span>O que a sua família pedir entra na fila de melhorias, com retorno sobre prazo.</span></p></div>
+  </div>
+</div></section>
+
+<section class="sec news"><div class="wrap">
+  <div class="invest">
+    <div class="card"><div class="eyebrow">Investimento</div><div class="big">Valores na proposta.</div><p>Valores confirmados na conversa, conforme o tamanho da carteira e o escopo combinado.</p></div>
+    <div class="card" style="border:2px solid var(--pine)"><div class="eyebrow">Garantia</div><div class="big">Garantia de uso de 30 dias.</div><p>Condições na proposta.</p></div>
+  </div>
+</div></section>
+
+<section class="sec dark" id="agendar"><div class="wrap two" style="align-items:start">
+  <div>
+    <div class="eyebrow">Agendar apresentação</div>
+    <h2 style="font-size:clamp(30px,4.4vw,44px);font-weight:800">Gostou do teste? Agende uma apresentação.</h2>
+    <p class="sub">Deixe o seu contato. Marcamos uma visita ou videochamada, a proposta sai rápido e, em até 30 dias, a gestão patrimonial da sua família fica facilitada.</p>
+    <p class="note" style="color:#9db5aa">Prefere falar direto? WhatsApp comercial: <a href="https://wa.me/5511947461828" style="color:#f2cd93">(11) 94746-1828</a></p>
+  </div>
+  <form class="form" id="fm" novalidate style="color:var(--ink)">
+    <label for="f1">Seu nome</label><input id="f1" autocomplete="name">
+    <label for="f2">WhatsApp</label><input id="f2" inputmode="tel" autocomplete="tel" placeholder="(11) 90000-0000">
+    <label for="f3">E-mail</label><input id="f3" type="email" autocomplete="email">
+    <label for="f8">Hoje, quem cuida do patrimônio? <span style="font-weight:400">(opcional)</span></label>
+    <select id="f8"><option>Prefiro contar na apresentação</option><option>Uma equipe ou escritório</option><option>Eu e a família, sem equipe</option><option>Um pouco dos dois</option></select>
+    <label for="f9">Como prefere a apresentação?</label>
+    <select id="f9"><option>Visita presencial</option><option>Videochamada</option></select>
+    <p style="margin:18px 0 0"><button class="btn btn-primary" type="submit">Agendar apresentação</button></p>
+    <div class="okmsg" id="ok" role="status"></div>
+    <p class="note" style="font-size:12.5px">Ao enviar, abrimos o seu WhatsApp com a mensagem pronta para o nosso time comercial. Nada é gravado nesta página.</p>
+  </form>
+</div></section>
+
+<section class="sec" id="faq"><div class="wrap two" style="align-items:start">
+  <div><div class="eyebrow">Dúvidas</div><h2>O que as famílias perguntam antes.</h2></div>
+  <div>
+    <details><summary>O Premium é só um plano maior?</summary><p>Não. O plano traz mais capacidade e recursos; o programa traz a implantação feita com a sua família e o suporte direto pelo WhatsApp.</p></details>
+    <details><summary>Já tenho equipe. O Raiz entra no lugar dela?</summary><p>Não. O Raiz é um acelerador da equipe: traz modernidade, velocidade e praticidade para quem administra e visibilidade para quem acompanha os resultados. A equipe continua no comando, cada pessoa com o seu perfil.</p></details>
+    <details><summary>Não tenho equipe. Preciso contratar antes de começar?</summary><p>Não. Nós organizamos a sua carteira e ajudamos nos primeiros fechamentos. Se mais tarde você contratar alguém, a pessoa encontra tudo cadastrado e documentado.</p></details>
+    <details><summary>Quanto tempo leva?</summary><p>O teste dura 30 dias. Depois, a demonstração é marcada em até 7 dias e, aprovada a proposta, a implantação leva até 30 dias. Os detalhes são alinhados na demonstração.</p></details>
+    <details><summary>Cada herdeiro enxerga só o que é dele?</summary><p>Sim. O acesso é configurado por pessoa: carteira inteira, só a parte dela ou a dela mais a da empresa.</p></details>
+    <details><summary>Posso começar menor e crescer?</summary><p>Pode. Os planos Essencial, Patrimônio e Plus continuam disponíveis, e a evolução para o Premium acontece sem perder o histórico.</p></details>
+    <details><summary>Meu escritório atende várias famílias. Serve?</summary><p>Sim. Family offices e administradoras trabalham com um ambiente por cliente e um modelo de parceria próprio.</p></details>
+  </div>
+</div></section>
+</main>
+<footer><div class="wrap row">
+  <div><b style="color:#fff;font-family:'Bricolage Grotesque',sans-serif">Raiz Patrimônio</b><br>Soluções para gestão patrimonial.</div>
+  <div>Comercial: <a href="https://wa.me/5511947461828">(11) 94746-1828</a><br>Bot R.AI.Z: <a href="https://wa.me/5511978950609">(11) 97895-0609</a></div>
+  <div><a href="/">Planos para carteiras menores</a><br><a href="/termos-de-uso/">Termos de uso</a> · <a href="/politica-de-privacidade/">Privacidade</a></div>
+</div></footer>
+
+<script>
+(function(){
+  var tg=document.getElementById('tg'),nv=document.getElementById('nv');
+  tg.addEventListener('click',function(){var o=nv.classList.toggle('open');tg.setAttribute('aria-expanded',o)});
+  nv.addEventListener('click',function(e){if(e.target.tagName==='A'){nv.classList.remove('open');tg.setAttribute('aria-expanded','false')}});
+
+  document.getElementById('fm').addEventListener('submit',function(e){e.preventDefault();
+    var v=function(id){var el=document.getElementById(id);return el?el.value.trim():''};
+    var t='Oi! Quero agendar uma apresentação do Raiz Premium.'+'\nNome: '+v('f1')+'\nWhatsApp: '+v('f2')+'\nE-mail: '+v('f3')+'\nQuem cuida do patrimônio hoje: '+v('f8')+'\nPrefiro: '+v('f9');
+    var ok=document.getElementById('ok');ok.textContent='Abrindo o WhatsApp com a sua mensagem pronta.';ok.style.display='block';
+    window.open('https://wa.me/5511947461828?text='+encodeURIComponent(t),'_blank','noopener');
+  });
+
+})();
+</script>
+</body>
+</html>

@@ -2,6 +2,20 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Landing Page (index.html)
+  VERSÃO: v4.2.0 · LINHAS: 1537 · 2026-10-03
+  NOVIDADES v4.2.0 — decisões do Nicola (03/10/2026), proposta de ofertas v1.6.0:
+    - Nova seção #cadastro: "Envie os documentos. A inteligência artificial faz o
+      cadastro." (3 passos; guardar o arquivo no cofre é opcional).
+    - Nova seção #familiar: "Além dos imóveis" (veículos, jet ski e embarcações de
+      lazer, casa de veraneio, obras de arte, seguros, documentos), sem bens de
+      valor muito alto na faixa dos 3 planos. O card "Outros ativos" de #novidades
+      deixou de citar aeronaves e veículos blindados (achado tratado no mesmo escopo).
+    - Garantia do Achado, ao lado da garantia de 30 dias (devolução se, em 30 dias
+      da primeira contratação paga, o Raiz não mostrar algo que o cliente não tinha visto).
+    - Link para a nova página /premium/ sob os planos; nav ganha "Cadastro com IA".
+  Nenhuma mudança de cadastro de teste, convite de sócio, planos dinâmicos ou tracking.
+
+  --- HISTÓRICO ANTERIOR (v4.1.1) ---
   VERSÃO: v4.1.1 · 2026-09-21
   NOVIDADES v4.1.1 — correção de exibição dos planos (achado em 21/09/2026,
   depois de o Nicola incluir a opção "Trial gratuito" (preço 0) nas ofertas
@@ -549,6 +563,7 @@
     <div class="nav-right">
       <nav class="nav-links" id="nav-links">
         <a href="#mapa">O que faz</a>
+        <a href="#cadastro">Cadastro com IA</a>
         <a href="#raiz-whatsapp">R.AI.Z</a>
         <a href="#precos">Preço</a>
         <a href="#importacao">Importação</a>
@@ -779,6 +794,38 @@
   </div>
 </section>
 
+<!-- CADASTRO INICIAL FACILITADO — v4.2.0 -->
+<section id="cadastro">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">Cadastro inicial facilitado</span><h2>Envie os documentos. A inteligência artificial faz o cadastro.</h2><p>O começo é a parte que mais assusta. Aqui ele é o mais leve possível: você manda o contrato, o seguro, o documento do carro, e o Raiz lê e prepara o cadastro.</p></div>
+    <div class="steps">
+      <div class="step reveal"><div class="num">1</div><h3>Você envia</h3><p>Foto, PDF ou arquivo, pelo app ou pelo WhatsApp. Sem preencher formulário.</p></div>
+      <div class="step reveal"><div class="num">2</div><h3>A IA interpreta</h3><p>Identifica o tipo de documento, datas, valores e contatos, e sugere a qual bem ele pertence.</p></div>
+      <div class="step reveal"><div class="num">3</div><h3>Você confere e salva</h3><p>Uma tela só mostra o que foi lido. Corrija o que quiser e confirme: o cadastro e os alertas de vencimento já nascem prontos.</p></div>
+    </div>
+    <p class="mini-note" style="text-align:center;margin-top:18px"><strong>Guardar o arquivo no cofre é opcional.</strong> Você escolhe se mantém o documento ou só os dados que a IA leu. Se preferir, mande a planilha e a <a href="#importacao" style="color:var(--brass-deep);font-weight:600">Importação Assistida</a> cadastra para você.</p>
+  </div>
+</section>
+
+<!-- ALÉM DOS IMÓVEIS — v4.2.0 -->
+<section id="familiar">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">Além dos imóveis</span><h2>O controle de tudo o que a família tem.</h2><p>Revisão do carro vencida, seguro do jet ski, casa de veraneio sem manutenção antes do fim do ano, passaporte vencendo. O Raiz guarda cada data e avisa antes.</p></div>
+    <div class="news-grid">
+      <div class="news-card reveal"><h3>🚗 Veículos</h3><p>Revisões, troca de óleo e pneus, bateria, IPVA, licenciamento e seguro, cada um com a sua data.</p></div>
+      <div class="news-card reveal"><h3>🚤 Jet ski e embarcações de lazer</h3><p>Seguro náutico, taxa de marina, TUF, inscrição da embarcação, manutenção de casco e motor, equipamentos de segurança e habilitações.</p></div>
+      <div class="news-card reveal"><h3>🏖️ Casa de veraneio e imóveis da família</h3><p>Programe a manutenção antes da temporada: ar-condicionado, caixa d'água, piscina, gás, elétrica, hidráulica e extintores.</p></div>
+    </div>
+    <div class="news-grid" style="margin-top:18px">
+      <div class="news-card reveal"><h3>🖼️ Quadros, obras de arte e coleções</h3><p>Conservação periódica, avaliação, inventário e seguro de bens de valor, com o documento ligado ao bem.</p></div>
+      <div class="news-card reveal"><h3>🛡️ Seguros e apólices</h3><p>Vencimento de cada apólice, da vida e da viagem ao seguro patrimonial, antes de virar cobertura perdida.</p></div>
+      <div class="news-card reveal"><h3>📄 Documentos e vencimentos</h3><p>CNH, passaporte, visto, habilitações e documentos dos bens, com aviso antes de vencer.</p></div>
+    </div>
+    <p class="mini-note" style="text-align:center;margin-top:18px"><strong>Cadastre uma vez, o Raiz lembra todo ano.</strong> Cada controle tem data, antecedência do aviso e repetição, e o alerta chega no app e no WhatsApp. Tudo isso entra no limite de bens do seu plano.</p>
+  </div>
+</section>
+
+
 
 <!-- O RAIZ POR DENTRO — reescrita v4.0.0 (antes "Novidades", anunciava como roadmap
      algo que já está em produção; agora separa "já disponível hoje" de "próximos passos"
@@ -788,7 +835,7 @@
     <div class="sec-head reveal"><span class="eyebrow">O Raiz por dentro</span><h2>Cuida do imóvel. E do resto do patrimônio também.</h2><p>Sua carteira de imóveis continua sendo a base do plano. Mas o mesmo painel já guarda outros bens da família — com documentos, alertas e financeiro completo, sem precisar de outro sistema.</p></div>
     <div class="news-grid">
       <div class="news-card reveal"><span class="ja-disponivel">Já disponível hoje</span><h3>📂 Cofre de Documentos</h3><p>Matrícula, escritura, contrato, comprovante — cada documento já entra vinculado ao imóvel ou ativo certo, com categorias prontas e busca.</p></div>
-      <div class="news-card reveal"><span class="ja-disponivel">Já disponível hoje</span><h3>🚗 Outros ativos</h3><p>Veículos, veículos blindados, aeronaves, embarcações, obras de arte, coleções e seguro de vida já podem ser cadastrados, com controle de vencimento próprio.</p></div>
+      <div class="news-card reveal"><span class="ja-disponivel">Já disponível hoje</span><h3>🚗 Outros ativos</h3><p>Veículos, jet ski e embarcações de lazer, obras de arte, coleções e seguros já podem ser cadastrados, com controle de vencimento próprio. Veja a seção "Além dos imóveis".</p></div>
       <div class="news-card reveal"><span class="ja-disponivel">Já disponível hoje</span><h3>🧮 Financeiro completo</h3><p>Recebimentos e despesas/saídas no mesmo painel, com distribuição entre sócios e conciliação bancária.</p></div>
     </div>
     <div class="news-grid" style="margin-top:18px">
@@ -825,7 +872,7 @@
         <a class="btn btn-ghost" href="#trial" onclick="selecionarPlano('plus')">Testar Plus</a>
       </div>
     </div>
-    <p class="mini-note" style="text-align:center;margin-top:18px">Acima de 50 itens, carteiras maiores têm proposta personalizada — fale conosco. * R.AI.Z, recursos de IA/WhatsApp e controle de ativos possuem franquias de uso proporcionais ao plano; pacotes adicionais podem ser contratados conforme necessidade.</p>
+    <p class="mini-note" style="text-align:center;margin-top:18px">Acima de 50 itens, carteiras maiores têm proposta personalizada: <a href="/premium/" style="color:var(--brass-deep);font-weight:600" onclick="trackEvento('cta_click','cta_click:conhecer_premium')">conheça o Raiz Premium</a>. * R.AI.Z, recursos de IA/WhatsApp e controle de ativos possuem franquias de uso proporcionais ao plano; pacotes adicionais podem ser contratados conforme necessidade.</p>
   </div>
 </section>
 
@@ -914,6 +961,8 @@
     <span class="eyebrow" style="color:#f0c88a">Garantia</span>
     <h2 style="margin-top:10px;color:#fff;font-size:28px">30 dias de garantia após a primeira contratação paga.</h2>
     <p style="margin-top:12px">Se o Raiz não fizer sentido para a sua gestão, solicite o cancelamento dentro do prazo da garantia, conforme os termos publicados.</p>
+    <h3 style="margin-top:26px;color:#fff;font-size:22px">Garantia do Achado</h3>
+    <p style="margin-top:8px">Se em 30 dias o Raiz não mostrar um reajuste, vencimento ou pendência que você ainda não tinha visto, devolvemos o valor. Condições nos termos.</p>
     <a href="https://wa.me/5511947461828?text=Oi!%20Quero%20entender%20os%20termos%20da%20garantia%20do%20Raiz%20Patrim%C3%B4nio." target="_blank" rel="noopener" class="btn" style="border:1px solid #8fa89e;color:#fff;margin-top:14px;display:inline-block" onclick="trackEvento('cta_click','cta_click:garantia_termos')">Falar sobre os termos da garantia</a>
   </div>
 </section>
