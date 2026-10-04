@@ -2,7 +2,13 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Landing Page (index.html)
-  VERSÃO: v4.2.0 · LINHAS: 1537 · 2026-10-03
+  VERSÃO: v4.2.1 · LINHAS: 1543 · 2026-10-03
+  NOVIDADES v4.2.1 — complemento do v4.2.0: aeronaves e veículos blindados saem de todo
+    o texto visível e dos metadados (hero, og:description, JSON-LD, #mapa, #o-que-faz e FAQ),
+    porque a landing dos 3 planos mira patrimônio de R$ 1 a 10 milhões. Só texto.
+
+  --- HISTÓRICO ANTERIOR (v4.2.0) ---
+  VERSÃO: v4.2.0 · 2026-10-03
   NOVIDADES v4.2.0 — decisões do Nicola (03/10/2026), proposta de ofertas v1.6.0:
     - Nova seção #cadastro: "Envie os documentos. A inteligência artificial faz o
       cadastro." (3 passos; guardar o arquivo no cofre é opcional).
@@ -222,7 +228,7 @@
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Raiz Patrimônio">
 <meta property="og:title" content="Raiz Patrimônio — seu patrimônio organizado, não só os imóveis">
-<meta property="og:description" content="Imóveis, veículos, aeronaves, embarcações, obras de arte, contratos e recebimentos num painel só. Documentado, com alertas e com o R.AI.Z no WhatsApp.">
+<meta property="og:description" content="Imóveis, veículos, embarcações de lazer, obras de arte, contratos e recebimentos num painel só. Documentado, com alertas e com o R.AI.Z no WhatsApp.">
 <meta property="og:url" content="https://raizpatrimonio.com.br/">
 
 <meta name="twitter:card" content="summary">
@@ -236,7 +242,7 @@
   "name": "Raiz Patrimônio",
   "applicationCategory": "BusinessApplication",
   "operatingSystem": "Web",
-  "description": "Gestão de imóveis e patrimônio (veículos, aeronaves, embarcações, obras de arte, coleções), contratos e recebimentos para famílias, administradoras de imóveis e holdings familiares.",
+  "description": "Gestão de imóveis e patrimônio (veículos, embarcações de lazer, obras de arte, coleções), contratos e recebimentos para famílias, administradoras de imóveis e holdings familiares.",
   "url": "https://raizpatrimonio.com.br/",
   "offers": {
     "@type": "Offer",
@@ -583,7 +589,7 @@
     <div>
       <span class="eyebrow">Gestão de patrimônio no app e no WhatsApp</span>
       <h1>Seu patrimônio inteiro, <em>num painel só</em>.</h1>
-      <p class="lead">Imóveis, contratos, recebimentos, despesas, veículos, aeronaves, embarcações e obras de arte — cada bem da família documentado, com alertas e o R.AI.Z no WhatsApp para resolver sem abrir o app.</p>
+      <p class="lead">Imóveis, contratos, recebimentos, despesas, veículos, embarcações de lazer e obras de arte — cada bem da família documentado, com alertas e o R.AI.Z no WhatsApp para resolver sem abrir o app.</p>
       <div class="launch-badge"><span class="pulse"></span> Teste grátis · sem cartão de crédito</div>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#precos" onclick="trackEvento('cta_click','cta_click:hero_ver_planos')">Ver planos e testar grátis</a>
@@ -656,7 +662,7 @@
       <div class="mapa-no acento reveal">
         <div class="ic">🚗</div>
         <h4>Outros ativos</h4>
-        <p>Veículos, veículos blindados, aeronaves, embarcações, obras de arte, coleções e seguro de vida — no mesmo painel, mesmo limite do plano.</p>
+        <p>Veículos, embarcações de lazer, obras de arte, coleções e seguros — no mesmo painel, mesmo limite do plano.</p>
       </div>
       <div class="mapa-no reveal">
         <div class="ic">🔔</div>
@@ -703,7 +709,7 @@
       <div class="feat reveal"><div class="ic">🧮</div><h3>Despesas e saídas</h3><p>Lança despesas do patrimônio (manutenção, taxas, fornecedores) e acompanha o fluxo por ativo, não só por imóvel.</p></div>
       <div class="feat reveal"><div class="ic">🏦</div><h3>Conciliação bancária</h3><p>Importa o extrato e casa cada entrada com o aluguel certo, sem conferir linha por linha.</p></div>
       <div class="feat reveal"><div class="ic">🧾</div><h3>Recibos em PDF</h3><p>Recibo pronto para enviar ao inquilino em segundos, direto do celular.</p></div>
-      <div class="feat reveal"><div class="ic">🚗</div><h3>Outros ativos do patrimônio</h3><p>Veículos, aeronaves, embarcações, obras de arte, coleções e seguro de vida — com controle de vencimento próprio.</p></div>
+      <div class="feat reveal"><div class="ic">🚗</div><h3>Outros ativos do patrimônio</h3><p>Veículos, embarcações de lazer, obras de arte, coleções e seguros — com controle de vencimento próprio.</p></div>
       <div class="feat reveal"><div class="ic">🔔</div><h3>Central de Alertas</h3><p>Reajuste, contrato vencendo, seguro e tributo perto do vencimento — numa tela dedicada, antes de virar problema.</p></div>
       <div class="feat reveal"><div class="ic">👥</div><h3>Divisão entre sócios</h3><p>Mostra o que cabe a cada dono e registra as retiradas, com extrato por pessoa.</p></div>
       <div class="feat reveal"><div class="ic">🤖</div><h3>R.AI.Z no WhatsApp</h3><p>Consulte pendências, busque imóvel ou contrato, gere recibos, analise documentos por IA e acesse a Vitrine pelo assistente patrimonial.</p></div>
@@ -1089,8 +1095,8 @@
     </div>
     <details><summary>Preciso ter conhecimento técnico?</summary><p>Não. Se optar pelo modelo com configuração, a gente deixa tudo pronto. Se preferir instalar sozinho, é intuitivo e rápido — alguns cliques apenas.</p></details>
     <details><summary>Quais são os dois modelos de instalação?</summary><p>Modelo 1 — A gente configura tudo para você (imóveis, sócios, integração com seus dados). Modelo 2 — Você instala pelo seu celular, e nós temos um guia simples passo a passo. Ambos funcionam perfeitamente — escolha o que se encaixa melhor no seu ritmo.</p></details>
-    <details><summary>Serve para quantos imóveis?</summary><p>É pensado para carteiras de pequeno e médio porte — até 50 itens, no plano Plus. Esse limite é compartilhado com outros bens do patrimônio cadastrados (veículo, obra de arte, aeronave etc.) — não é um teto separado por tipo. Acima disso, carteiras maiores têm proposta personalizada (fale conosco).</p></details>
-    <details><summary>Dá pra cadastrar outros bens, além de imóveis?</summary><p>Sim. O mesmo painel já cadastra veículos, veículos blindados, aeronaves, embarcações, obras de arte, coleções e seguro de vida/proteção pessoal — cada um com seus próprios documentos e controle de vencimento, dentro do limite do seu plano.</p></details>
+    <details><summary>Serve para quantos imóveis?</summary><p>É pensado para carteiras de pequeno e médio porte — até 50 itens, no plano Plus. Esse limite é compartilhado com outros bens do patrimônio cadastrados (veículo, jet ski, obra de arte etc.) — não é um teto separado por tipo. Acima disso, carteiras maiores têm proposta personalizada (fale conosco).</p></details>
+    <details><summary>Dá pra cadastrar outros bens, além de imóveis?</summary><p>Sim. O mesmo painel já cadastra veículos, embarcações de lazer, obras de arte, coleções e seguro de vida/proteção pessoal — cada um com seus próprios documentos e controle de vencimento, dentro do limite do seu plano.</p></details>
     <details><summary>O que eu consigo fazer pelo WhatsApp?</summary><p>O R.AI.Z já apoia consultas de pendências, busca de imóvel/contrato, comprovantes, recibos, análise de documentos por IA e Vitrine. O app continua sendo a visão completa e o histórico da operação. Novas jornadas, como onboarding e alertas contextuais, estão em evolução.</p></details>
     <details><summary>Meus dados ficam seguros?</summary><p>Sim. Suas informações ficam armazenadas em infraestrutura Supabase (banco de dados profissional), com acesso restrito apenas às pessoas que você autorizar. Cada cliente tem seu próprio ambiente, isolado e seguro. Você continua dono dos seus dados — pode exportar e fazer backup quando quiser. Como o sistema lida com contratos e dados de inquilinos, o tratamento segue os princípios da LGPD.</p></details>
     <details><summary>Quanto custa?</summary><p>Três planos: Essencial (R$ 69/mês, até 5 itens), Patrimônio (R$ 149/mês, R$ 89/mês nos 3 primeiros meses, até 20 itens — recomendado) e Plus (R$ 279/mês, até 50 itens). Carteiras acima de 50 têm proposta personalizada. A Importação Assistida é opcional, com valores de referência: R$ 199 (planilhas e PDF), R$ 499 (documentos e fotos) ou sob cotação (histórico de recebimentos/pagamentos) — orçamento final sempre confirmado depois de avaliarmos sua base.</p></details>
