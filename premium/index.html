@@ -2,7 +2,15 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Página Premium (premium/index.html)
-  VERSÃO: v1.2.0 · LINHAS: 449 · 2026-10-03
+  VERSÃO: v1.3.0 · LINHAS: 522 · 2026-10-04
+  NOVIDADES v1.3.0 — pedido do Nicola (03/10/2026, 23:52): o teste do Premium criava teste
+    dos 3 planos da landing. Agora a página tem cadastro próprio (#teste), igual ao do /amigos:
+    auth.signUp → fn_criar_trial_campanha('premium') → entra no app. A oferta "premium"
+    (origem premium, plano Premium, 30 dias) foi criada no banco nesta entrega.
+    Botões "Começar meu teste" apontam para #teste. Tracking em comercial.eventos_landing
+    com página "premium:*". Nenhum dado pessoal no tracking.
+  --- v1.2.0 ---
+  VERSÃO-ANT: v1.2.0 · LINHAS-ANT: 449 · 2026-10-03
   NOVIDADES v1.2.0 — pedido do Nicola (03/10/2026, 23:24):
     - "Quem vê o quê" sem nomes; "sócio hereditário" vira "sócio hereditário" em toda a página.
     - Vídeo institucional (provisório, o mesmo do /amigos) logo depois dos 4 passos.
@@ -225,6 +233,7 @@ footer a{color:#e4ede8}footer .row{display:flex;gap:28px;flex-wrap:wrap;justify-
 .invest{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:760px){.invest{grid-template-columns:1fr}}
 .invest .card{text-align:center}.invest .big{font:800 28px/1.1 "Bricolage Grotesque",system-ui,sans-serif;margin:10px 0}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -252,7 +261,7 @@ footer a{color:#e4ede8}footer .row{display:flex;gap:28px;flex-wrap:wrap;justify-
   <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" id="tg"><svg class="i"><use href="#menu"/></svg></button>
   <nav class="nav-links" id="nv">
     <a href="#para-quem">Para quem é</a><a href="#programa">O programa</a><a href="#alem">Além dos imóveis</a><a href="#inclui">O que inclui</a><a href="#faq">Dúvidas</a>
-    <a href="/">Planos para carteiras menores</a><a class="nav-cta" href="#programa">Como funciona</a>
+    <a href="/">Planos para carteiras menores</a><a href="#programa">Como funciona</a><a class="nav-cta" href="#teste">Testar Premium</a>
   </nav></div></header>
 <main id="topo">
 
@@ -261,7 +270,7 @@ footer a{color:#e4ede8}footer .row{display:flex;gap:28px;flex-wrap:wrap;justify-
     <div class="cap">Atendimento personalizado · vagas limitadas</div>
     <h1>O patrimônio da sua família, com mais velocidade, praticidade e <em>a sua cara.</em></h1>
     <p class="lead" style="color:#c9d9d1">Para famílias que já têm uma equipe e querem acelerá-la com tecnologia moderna, e para as que ainda não têm equipe e já passaram do que dá para tocar sozinhas. Mostramos o Raiz, desenhamos com você o que a sua família precisa e acompanhamos de perto.</p>
-    <div class="cta-row"><a class="btn btn-brass" href="#programa">Ver como funciona</a><a class="btn btn-ghost" style="border-color:#f2cd93;color:#f2cd93" href="/#trial">Testar agora</a></div>
+    <div class="cta-row"><a class="btn btn-brass" href="#programa">Ver como funciona</a><a class="btn btn-ghost" style="border-color:#f2cd93;color:#f2cd93" href="#teste">Testar agora</a></div>
     <p class="note" style="color:#9db5aa">Teste de 30 dias, sem cartão. Depois: demonstração, proposta e implantação em até 30 dias.</p>
   </div>
   <div class="fam" aria-label="Exemplo ilustrativo de acesso por pessoa">
@@ -288,7 +297,7 @@ footer a{color:#e4ede8}footer .row{display:flex;gap:28px;flex-wrap:wrap;justify-
 </div></section>
 
 <section class="sec" id="video" style="padding-top:0"><div class="wrap">
-  <div style="display:flex;flex-wrap:wrap;gap:12px;margin:0 0 40px"><a class="btn btn-primary" href="/#trial">Começar meu teste de 30 dias</a><a class="btn" style="border:1.5px solid var(--pine);color:var(--pine)" href="#agendar">Agendar apresentação</a></div>
+  <div style="display:flex;flex-wrap:wrap;gap:12px;margin:0 0 40px"><a class="btn btn-primary" href="#teste">Começar meu teste de 30 dias</a><a class="btn" style="border:1.5px solid var(--pine);color:var(--pine)" href="#agendar">Agendar apresentação</a></div>
   <div class="eyebrow">Conheça o Raiz</div>
   <h2>O Raiz em poucos minutos.</h2>
   <video controls playsinline preload="none" poster="/amigos/raiz-preview.jpg" style="width:100%;max-width:880px;border-radius:18px;margin-top:22px;background:#152a24;aspect-ratio:16/9">
@@ -359,12 +368,32 @@ footer a{color:#e4ede8}footer .row{display:flex;gap:28px;flex-wrap:wrap;justify-
   </div>
 </div></section>
 
+<section class="sec" id="teste"><div class="wrap two" style="align-items:start">
+  <div>
+    <div class="eyebrow">Teste Premium</div>
+    <h2 style="font-size:clamp(30px,4.4vw,44px);font-weight:800">Comece o seu teste Premium de 30 dias.</h2>
+    <p class="sub">Sem cartão e sem precisar de aprovação. Crie o acesso e entre direto no app, já no plano Premium. Gostou? Agende a demonstração quando quiser.</p>
+  </div>
+  <form class="form" id="ft" novalidate>
+    <label for="t-nome">Seu nome</label><input id="t-nome" autocomplete="name" required>
+    <label for="t-empresa">Nome da família ou da empresa</label><input id="t-empresa" required placeholder="Ex.: Família Silva">
+    <label for="t-email">E-mail</label><input id="t-email" type="email" autocomplete="email" required>
+    <label for="t-whats">WhatsApp</label><input id="t-whats" type="tel" inputmode="tel" autocomplete="tel" required placeholder="(11) 90000-0000">
+    <label for="t-senha">Crie uma senha <span style="font-weight:400">(mínimo 6 caracteres)</span></label><input id="t-senha" type="password" autocomplete="new-password" required minlength="6">
+    <label for="t-faixa">Quantos bens a família tem?</label><select id="t-faixa" required><option value="">Escolha</option><option value="20-50">Até 50</option><option value="50-100">De 50 a 100</option><option value="100+">Mais de 100</option></select>
+    <label style="display:flex;gap:10px;align-items:flex-start;font-weight:500;margin-top:16px"><input id="t-ajuda" type="checkbox" style="width:18px;height:18px;margin-top:3px;flex-shrink:0">Quero ajuda para trazer os dados (planilhas, contratos, documentos)</label>
+    <p style="margin:18px 0 0"><button id="t-enviar" class="btn btn-primary" type="submit">Começar meu teste Premium</button></p>
+    <div id="t-status" role="status" aria-live="polite" style="font-size:15px;margin-top:12px;min-height:22px"></div>
+    <p class="note" style="font-size:12.5px">Ao continuar, você concorda com os <a href="/termos-de-uso">Termos de Uso</a>, a <a href="/politica-de-privacidade">Política de Privacidade</a> e o <a href="/termo-beta">Termo de Beta</a>.</p>
+  </form>
+</div></section>
+
 <section class="sec dark" id="agendar"><div class="wrap two" style="align-items:start">
   <div>
     <div class="eyebrow">Agendar apresentação</div>
     <h2 style="font-size:clamp(30px,4.4vw,44px);font-weight:800">Gostou do teste? Agende uma apresentação.</h2>
     <p class="sub">Deixe o seu contato. Marcamos uma visita ou videochamada, a proposta sai rápido e, em até 30 dias, a gestão patrimonial da sua família fica facilitada.</p>
-    <div style="margin:22px 0;padding:18px 20px;border:1px solid rgba(242,205,147,.35);border-radius:16px"><b style="color:#fff">Prefere testar antes?</b><p style="margin:6px 0 12px;color:#c9d9d1">Comece o teste de 30 dias, sem cartão, e agende a apresentação quando quiser.</p><a class="btn btn-brass" href="/#trial">Começar meu teste</a></div>
+    <div style="margin:22px 0;padding:18px 20px;border:1px solid rgba(242,205,147,.35);border-radius:16px"><b style="color:#fff">Prefere testar antes?</b><p style="margin:6px 0 12px;color:#c9d9d1">Comece o teste de 30 dias, sem cartão, e agende a apresentação quando quiser.</p><a class="btn btn-brass" href="#teste">Começar meu teste</a></div>
     <p class="note" style="color:#9db5aa">Prefere falar direto? <a href="https://wa.me/5511947461828?text=Oi!%20Quero%20conhecer%20o%20Raiz%20Premium." target="_blank" rel="noopener" style="color:#f2cd93;font-weight:600;display:inline-flex;align-items:center;gap:6px;vertical-align:middle"><span style="width:18px;height:18px;display:inline-flex"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3.9 2.5c.1.2 1.6 2.5 4 3.5 1.5.6 2 .7 2.8.6.4-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.2z"/></svg></span>Falar no WhatsApp</a></p>
   </div>
   <form class="form" id="fm" novalidate style="color:var(--ink)">
@@ -445,5 +474,49 @@ footer.rf a.rf-btn:hover{border-color:#c68a3b}
 })();
 </script>
 <script>try{document.getElementById("ano").textContent=new Date().getFullYear()}catch(e){}</script>
+
+<script>
+// v1.3.0 — teste Premium: mesmo fluxo do /amigos (auth.signUp → fn_criar_trial_campanha → handoff)
+(function(){
+  if (!window.supabase) return;
+  var ORIGEM='premium', CODIGO='premium', APP_URL='https://app.raizpatrimonio.com.br';
+  var db=window.supabase.createClient('https://oduwpttbbemypiypjsux.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kdXdwdHRiYmVteXBpeXBqc3V4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyODEyOTcsImV4cCI6MjEwMDg1NzI5N30.9-cu1CV1wPbo5UH1G2eAsWqsvS54AWNuQZOlifc9a7w');
+  var params=new URLSearchParams(location.search);
+  var SESSAO=(function(){try{var id=sessionStorage.getItem('raiz_sessao_id');if(!id){id=crypto.randomUUID?crypto.randomUUID():'sess-'+Date.now();sessionStorage.setItem('raiz_sessao_id',id);}return id;}catch(e){return null;}})();
+  function track(evento,pagina){try{db.schema('comercial').from('eventos_landing').insert({pagina:'premium:'+(pagina||'home'),referrer:document.referrer||null,
+    utm_source:params.get('utm_source')||'site',utm_medium:params.get('utm_medium')||'organico',utm_campaign:params.get('utm_campaign')||ORIGEM,convite:null,
+    user_agent:navigator.userAgent,evento:evento,campanha_codigo:ORIGEM,sessao_id:SESSAO}).then(function(r){if(r.error)console.warn('track:',r.error.message);});}catch(e){}}
+  track('page_view');
+  document.querySelectorAll('a[href="#teste"]').forEach(function(a){a.addEventListener('click',function(){track('cta_click','cta:teste');});});
+  document.querySelectorAll('a[href="#agendar"]').forEach(function(a){a.addEventListener('click',function(){track('cta_click','cta:agendar');});});
+  var form=document.getElementById('ft'),btn=document.getElementById('t-enviar'),st=document.getElementById('t-status');
+  function msg(t,tipo){st.textContent=t;st.style.color=tipo==='erro'?'#9b2c2c':(tipo==='ok'?'#2f7a55':'inherit');}
+  var iniciou=false;form.addEventListener('focusin',function(){if(!iniciou){iniciou=true;track('trial_form_start','form');}});
+  form.addEventListener('submit',async function(e){
+    e.preventDefault();
+    if(!form.checkValidity()){form.reportValidity();return;}
+    var v=function(id){return document.getElementById(id).value.trim();};
+    var ajuda=document.getElementById('t-ajuda').checked;
+    btn.disabled=true;btn.textContent='Criando seu acesso...';msg('','');
+    try{
+      var r1=await db.auth.signUp({email:v('t-email'),password:document.getElementById('t-senha').value});
+      if(r1.error)throw r1.error;
+      var session=r1.data&&r1.data.session;
+      if(!session){msg('Conta criada! Confira seu e-mail para confirmar o acesso.','ok');btn.disabled=false;btn.textContent='Começar meu teste Premium';return;}
+      var r2=await db.rpc('fn_criar_trial_campanha',{p_codigo_publico:CODIGO,p_nome_empresa:v('t-empresa'),p_nome_usuario:v('t-nome'),
+        p_whatsapp:v('t-whats'),p_faixa_imoveis:v('t-faixa'),p_email:v('t-email'),p_interesse_importacao:ajuda});
+      if(r2.error)throw r2.error;
+      track('trial_completo','trial_completo'+(ajuda?':ajuda':''));
+      msg('Tudo pronto! Abrindo o app...','ok');
+      location.href=APP_URL+'/#access_token='+encodeURIComponent(session.access_token)+'&refresh_token='+encodeURIComponent(session.refresh_token)+'&type=trial_handoff';
+    }catch(err){
+      var m=(err&&err.message)?err.message:'erro desconhecido';track('erro','erro:signup');
+      msg(m.indexOf('already registered')>=0||m.indexOf('já está vinculado')>=0?'Este e-mail já tem uma conta. Entre pelo app ou use outro e-mail.'
+        :'Não deu para criar seu acesso agora ('+m+'). Tente de novo ou fale com a gente no WhatsApp.','erro');
+      btn.disabled=false;btn.textContent='Começar meu teste Premium';
+    }
+  });
+})();
+</script>
 </body>
 </html>
