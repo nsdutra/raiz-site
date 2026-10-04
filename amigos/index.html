@@ -2,7 +2,14 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Página de convite para amigos (amigos/index.html)
-  VERSÃO: v1.3.1 · LINHAS: 684 · 2026-10-03
+  VERSÃO: v1.4.0 · LINHAS: 711 · 2026-10-03
+  NOVIDADES v1.4.0 — pedido do Nicola (03/10/2026, 23:24): bloco "Se preferir, podemos
+    marcar uma apresentação" na seção de ajuda, com dia preferido e horário de 1 hora.
+    Abre o WhatsApp com a mensagem pronta (a confirmar), com o nome do convidado quando o
+    link tem convite. Nada é gravado. Convite (?c=), ofertas, cadastro e tracking intocados.
+
+  --- v1.3.1 ---
+  VERSÃO-ANT: v1.3.1 · LINHAS-ANT: 684 · 2026-10-03
   NOVIDADES v1.3.1 — pedido do Nicola (03/10/2026, 22:26): só o rodapé, trocado pelo rodapé
     padrão do site (o mesmo de / e /premium/), sem o bloco de parcerias. Convite (?c=),
     ofertas da origem amigos, cadastro e tracking intocados.
@@ -467,6 +474,14 @@
     <h2 style="font-size:28px">Dúvida ou algo estranho?</h2>
     <p>Me chama direto. Todo retorno do teste vira ajuste no produto.</p>
     <a id="wpp-link" class="btn btn-wpp" href="https://wa.me/5511947461828" data-cta="whatsapp_nicola">Falar comigo no WhatsApp</a>
+
+    <div id="apresentacao" style="max-width:520px;margin:34px auto 0;text-align:left;border:1px solid var(--line);border-radius:18px;padding:22px;background:#fff">
+      <b style="display:block;font-size:18px;margin-bottom:4px">Se preferir, podemos marcar uma apresentação.</b>
+      <p style="margin:0 0 14px;color:var(--muted);max-width:none">Escolha o dia e o horário que prefere. Eu confirmo pelo WhatsApp.</p>
+      <div class="campo"><label for="ap-dia">Dia preferido</label><input id="ap-dia" type="date" style="width:100%;font:inherit;font-size:16px;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)"></div>
+      <div class="campo"><label for="ap-hora">Horário (1 hora)</label><select id="ap-hora" style="width:100%;font:inherit;font-size:16px;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)"><option value="">Escolha um horário</option><option value="8">08h às 09h</option><option value="9">09h às 10h</option><option value="10">10h às 11h</option><option value="11">11h às 12h</option><option value="12">12h às 13h</option><option value="13">13h às 14h</option><option value="14">14h às 15h</option><option value="15">15h às 16h</option><option value="16">16h às 17h</option><option value="17">17h às 18h</option><option value="18">18h às 19h</option><option value="19">19h às 20h</option></select></div>
+      <a id="ap-link" class="btn btn-wpp" href="https://wa.me/5511947461828" data-cta="agendar_apresentacao" target="_blank" rel="noopener">Pedir apresentação no WhatsApp</a>
+    </div>
   </div>
 </section>
 
@@ -536,6 +551,18 @@ footer.rf a.rf-btn:hover{border-color:#c68a3b}
     document.getElementById('wpp-link').href = 'https://wa.me/' + WHATSAPP_NICOLA + '?text=' + encodeURIComponent('Oi, Nicola! Aqui é ' + para + '. Estou vendo o convite do Raiz e queria tirar uma dúvida.');
   }
   document.getElementById('wpp-link').href = 'https://wa.me/' + WHATSAPP_NICOLA + '?text=' + encodeURIComponent('Oi, Nicola! Estou vendo o convite do Raiz e queria tirar uma dúvida.');
+  // v1.4.0 — pedido de apresentação com dia e horário (a confirmar), pelo WhatsApp
+  function raizDiaHora(idData,idHora){var d=(document.getElementById(idData)||{}).value||'',h=(document.getElementById(idHora)||{}).value||'';
+    if(!d&&!h)return 'Dia e horário: a combinar';var t='Dia e horário que prefiro: ';if(d){var p=d.split('-');t+=p[2]+'/'+p[1];}
+    if(h){var n=parseInt(h,10);t+=(d?', ':'')+'das '+String(n).padStart(2,'0')+'h às '+String(n+1).padStart(2,'0')+'h';}return t+' (a confirmar)';}
+  function raizMinHoje(id){var el=document.getElementById(id);if(!el)return;var z=new Date();z.setMinutes(z.getMinutes()-z.getTimezoneOffset());el.min=z.toISOString().slice(0,10);}
+  raizMinHoje('ap-dia');
+  document.getElementById('ap-link').addEventListener('click', function (e) {
+    e.preventDefault();
+    var quem = para ? ('Oi, Nicola! Aqui é ' + para + '.') : 'Oi, Nicola!';
+    var t = quem + ' Vi o convite do Raiz e queria marcar uma apresentação.\n' + raizDiaHora('ap-dia', 'ap-hora');
+    window.open('https://wa.me/' + WHATSAPP_NICOLA + '?text=' + encodeURIComponent(t), '_blank', 'noopener');
+  });
   const codigoConvite = (params.get('c') || '').replace(/[^a-z0-9]/gi, '').slice(0, 20);
   if (codigoConvite) {
     db.rpc('fn_convite_pessoal_ler', { p_token: codigoConvite }).then(function (r) {
