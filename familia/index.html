@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  RAIZ FAMÍLIA — Landing da frente Família (familia/index.html)
+  VERSÃO: v1.0.0 · LINHAS: 595 · 2026-10-11
+  ROTA: https://raizpatrimonio.com.br/familia/  (repositório raiz-site, familia/index.html)
+  BASE: PROTOTIPO_LANDING_FAMILIA_RAIZ v1.2.0 (raiz\docs), aprovado pelo Nicola em 11/10/2026 ("colocar no ar a de
+        família"), demanda 680ee9f8, sessão 20261011-1120-marca-ramos.
+  NOVIDADES v1.0.0 — primeira publicação:
+    - Assinatura "Raiz Família" (DIRETRIZES_MARCA_RAIZ MAR-02): símbolo no topo e no rodapé, favicon, theme-color.
+    - Planos: Essencial 5 cadastros R$ 69, Essencial Ampliado 10 R$ 99, Plus 20 R$ 279 por mês; teste de 60 dias
+      sem cartão. Ofertas de origem "familia" no banco (familia-essencial, familia-ampliado, familia-plus).
+    - Cadastro na própria página (#cadastro), mesmo fluxo do /premium: auth.signUp → fn_criar_trial_campanha →
+      entra no app. Tracking em comercial.eventos_landing com página "familia:*", sem dado pessoal.
+    - O que o app ainda não faz fica com o selo "em breve" (decisão do Nicola 11/10): importar calendário escolar
+      e fatura, convites de compromisso, plano da semana, calendário da família, avisos com botão de ação,
+      resumo para quem ajuda em casa, conferência e divisão de contas, saúde reservada por pessoa e avisos na
+      agenda do celular. Entrega de cada um: demanda e92f5520 — ao ficar pronto, o selo sai na mesma entrega.
+    - Sai a faixa de protótipo e o noindex; entra no sitemap.
+  CORES: as do ramo Família no app (DESIGN_SYSTEM §1.1): #4f3b5c / #7e6596; latão só para IA.
+  ============================================================================
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Raiz Família — a rotina da casa e da família, sem precisar anotar tudo</title>
+<meta name="description" content="Casa, crianças, contas, veículos, viagens, saúde e documentos num lugar só. Importe o calendário da escola e a fatura do cartão e receba toda semana o plano do que importa.">
+<link rel="canonical" href="https://raizpatrimonio.com.br/familia/">
+<meta name="robots" content="index, follow">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 120 120%22%3E%3Crect width=%22120%22 height=%22120%22 rx=%2226%22 fill=%22%231e3a32%22/%3E%3Cg transform=%22translate%2814 6%29 scale%28.82%29%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%227%22 stroke-linecap=%22round%22%3E%3Cpath d=%22M60 64 C60 50 26 52 26 30%22/%3E%3Cpath d=%22M60 64 C60 50 44 38 44 16%22/%3E%3Cpath d=%22M60 64 C60 50 60 32 60 10%22/%3E%3Cpath d=%22M60 64 C60 50 76 38 76 16%22/%3E%3Cpath d=%22M60 64 C60 50 94 52 94 30%22/%3E%3Cpath d=%22M60 64 V92%22/%3E%3Cpath d=%22M60 80 C52 86 44 88 36 98%22/%3E%3Cpath d=%22M60 80 C68 86 76 88 84 98%22/%3E%3Ccircle cx=%2226%22 cy=%2230%22 r=%228%22 fill=%22%237e6596%22 stroke=%22none%22/%3E%3Ccircle cx=%2244%22 cy=%2216%22 r=%228%22 fill=%22%233c4f9a%22 stroke=%22none%22/%3E%3Ccircle cx=%2260%22 cy=%2210%22 r=%228%22 fill=%22%233f8163%22 stroke=%22none%22/%3E%3Ccircle cx=%2276%22 cy=%2216%22 r=%228%22 fill=%22%237a8f3c%22 stroke=%22none%22/%3E%3Ccircle cx=%2294%22 cy=%2230%22 r=%228%22 fill=%22%23966040%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="https://app.raizpatrimonio.com.br/icon-maskable-192.png">
+<meta name="theme-color" content="#1e3a32">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Raiz Patrimônio">
+<meta property="og:title" content="Raiz Família — a rotina da casa e da família num lugar só">
+<meta property="og:description" content="Casa, crianças, contas, carros, viagens, saúde, pets e documentos, com avisos no app e no WhatsApp. Teste grátis por 60 dias, sem cartão.">
+<meta property="og:url" content="https://raizpatrimonio.com.br/familia/">
+<meta property="og:image" content="https://app.raizpatrimonio.com.br/icon-512.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fam:#4f3b5c;--fam-deep:#3d2d48;--fam-acc:#7e6596;--fam-tint:#f1ecf5;--fam-tint2:#e6ddee;
+  --ink:#17211e;--muted:#6f7a76;--paper:#f4f3ee;--card:#fff;--line:#e6e3da;--sage:#6b857a;
+  --brass:#c68a3b;--brass-bg:#fbf1e2;--success:#2f8b57;--warning:#7d4b54;--warning-bg:#f3e7e9;
+  --r:16px;--sh:0 1px 2px rgba(23,33,30,.06),0 4px 14px rgba(23,33,30,.05)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.6 "Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif;line-height:1.1;margin:0;letter-spacing:-.02em}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.proto{background:#17211e;color:#e4d8ee;font-size:13.5px;text-align:center;padding:8px 16px}
+.proto b{color:#fff}
+.breve{display:inline-block;vertical-align:middle;font:600 12px/1 "Inter",sans-serif;letter-spacing:.01em;color:var(--fam);background:#fff;border:1px solid var(--fam-acc);border-radius:999px;padding:4px 9px;margin-left:8px;white-space:nowrap}
+.dark .breve,.semana-h .breve{color:#fff;background:transparent;border-color:rgba(255,255,255,.6)}
+.logo{display:inline-flex;align-items:center;gap:8px}.logo .rz-simb{flex:none}
+.rf-logo{display:inline-flex;align-items:center;gap:8px}.rf-logo .rz-simb{flex:none}
+/* cadastro do teste */
+.form{background:var(--card);border-radius:20px;box-shadow:var(--sh);border:1px solid var(--line);padding:24px}
+.form label{display:block;font-weight:600;font-size:14.5px;margin:12px 0 6px}
+.form input:not([type=checkbox]),.form select{width:100%;min-height:48px;border:1px solid var(--line);border-radius:12px;padding:0 14px;font:16px "Inter",sans-serif;background:#fff;color:var(--ink)}
+.form input:focus,.form select:focus{outline:2px solid var(--fam-acc);outline-offset:1px}
+.form .btn{width:100%}
+svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+/* cabeçalho */
+.nav{position:sticky;top:0;z-index:40;background:rgba(244,243,238,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.logo{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:21px;text-decoration:none;color:var(--ink)}
+.logo span{color:var(--fam-acc)}
+.nav-links{display:flex;gap:22px;align-items:center;font-size:15px}
+.nav-links a{text-decoration:none;color:var(--muted)}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{background:var(--fam);color:#fff!important;padding:10px 18px;border-radius:999px;font-weight:600}
+.nav-toggle{display:none;background:none;border:0;width:44px;height:44px;color:var(--ink)}
+@media (max-width:860px){
+  .nav-toggle{display:inline-flex;align-items:center;justify-content:center}
+  .nav-links{display:none;position:absolute;left:0;right:0;top:68px;background:var(--paper);flex-direction:column;align-items:stretch;padding:12px 24px 18px;border-bottom:1px solid var(--line);gap:4px}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:12px 0}
+  .nav-cta{text-align:center}
+}
+/* botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 24px;border-radius:999px;font:600 16px "Inter";text-decoration:none;border:0;cursor:pointer}
+.btn-fam{background:var(--fam);color:#fff}
+.btn-light{background:#fff;color:var(--fam)}
+.btn-ghost{background:transparent;border:1.5px solid currentColor}
+/* seções */
+.sec{padding:84px 0}
+.eyebrow{font-size:13px;font-weight:600;color:var(--fam-acc);letter-spacing:.02em;margin-bottom:10px}
+.sec h2{font-size:clamp(30px,4.2vw,46px);font-weight:800;max-width:780px}
+.sub{color:var(--muted);font-size:18px;max-width:700px;margin:16px 0 0}
+.tint{background:var(--fam-tint)}
+.dark{background:var(--fam);color:#fff}
+.dark .eyebrow{color:#d7c6e6}
+.dark .sub{color:#d9cfe2}
+/* hero */
+.hero{padding:64px 0 76px;background:linear-gradient(180deg,var(--fam-tint) 0%,var(--paper) 100%)}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(38px,5.6vw,64px);font-weight:800}
+.hero h1 em{font-style:normal;color:var(--fam-acc)}
+.lead{font-size:20px;color:#3e4744;margin:20px 0 28px;max-width:600px}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.note{font-size:14px;color:var(--muted);margin-top:16px}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr;gap:36px}}
+/* cartão do plano da semana */
+.semana{background:var(--card);border-radius:22px;box-shadow:0 18px 50px rgba(79,59,92,.18);overflow:hidden;border:1px solid var(--fam-tint2)}
+.semana-h{background:var(--fam);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.semana-h b{font-family:"Bricolage Grotesque",sans-serif;font-size:18px}
+.semana-h small{color:#d9cfe2;font-size:13px}
+.ia{display:inline-flex;align-items:center;gap:6px;background:var(--brass-bg);color:#8a5a1d;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px}
+.dia{display:grid;grid-template-columns:54px 1fr;gap:12px;padding:12px 20px;border-top:1px solid var(--line);align-items:start}
+.dia:first-of-type{border-top:0}
+.dia .d{font-weight:700;color:var(--fam);font-size:14px;line-height:1.3}
+.dia .d small{display:block;font-weight:500;color:var(--muted)}
+.dia p{margin:0;font-size:15px}
+.dia p span:not(.tag){display:block;color:var(--muted);font-size:13px}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--fam-tint);color:var(--fam);margin-right:6px}
+.tag.w{background:var(--warning-bg);color:var(--warning)}
+/* dores */
+.pains{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:36px}
+.pain{background:var(--card);border-radius:var(--r);padding:22px;border:1px solid var(--line)}
+.pain b{display:block;font-size:17px;margin-bottom:6px}
+.pain span{color:var(--muted);font-size:15.5px}
+@media (max-width:720px){.pains{grid-template-columns:1fr}}
+/* grade do que cuida */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:38px}
+.card{background:var(--card);border-radius:var(--r);padding:22px;box-shadow:var(--sh);border:1px solid var(--line)}
+.card .ic{width:46px;height:46px;border-radius:14px;background:var(--fam-tint);color:var(--fam);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.card h3{font-size:19px;margin-bottom:8px}
+.card p{margin:0;color:var(--muted);font-size:15px}
+@media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+/* toque para agir */
+.acoes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:38px}
+.alerta{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:12px}
+.alerta .top{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--muted)}
+.alerta .top i{width:10px;height:10px;border-radius:50%;background:var(--warning);display:inline-block}
+.alerta h3{font-size:18px}
+.alerta p{margin:0;color:var(--muted);font-size:15px}
+.acao{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;padding:0 16px;border-radius:12px;background:var(--fam-tint);color:var(--fam);font-weight:600;font-size:15px;text-decoration:none}
+.acao.um{background:var(--fam);color:#fff}
+.acao::after{content:"›";font-size:20px;line-height:1}
+@media (max-width:900px){.acoes{grid-template-columns:1fr}}
+.toque{display:inline-block;margin-top:4px;font-size:13px;font-weight:600;color:var(--fam-acc)}.dia p span.toque{color:var(--fam-acc);font-weight:600}
+/* planos */
+.planos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:38px}
+.plano{background:var(--card);border-radius:20px;border:1px solid var(--line);padding:24px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--sh)}
+.plano.dest{border:2px solid var(--fam-acc);box-shadow:0 18px 50px rgba(79,59,92,.14)}
+.plano h3{font-size:22px}
+.plano .qtd{font-family:"Bricolage Grotesque",sans-serif;font-size:40px;font-weight:800;color:var(--fam);line-height:1}
+.plano .qtd small{font:600 15px "Inter";color:var(--muted)}
+.plano .ex{background:var(--fam-tint);border-radius:12px;padding:12px 14px;font-size:14.5px;color:#3e4744}
+.plano .ex b{display:block;color:var(--fam);font-size:13px;margin-bottom:2px}
+.plano .val{font-size:15px;color:var(--muted)}
+.plano .val b{font-family:"Bricolage Grotesque",sans-serif;font-size:26px;color:var(--ink)}
+.plano .btn{margin-top:auto}
+.selo{align-self:flex-start;background:var(--fam);color:#fff;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px}
+@media (max-width:900px){.planos{grid-template-columns:1fr}}
+/* calendário */
+.cal-wrap{display:grid;grid-template-columns:1.25fr .75fr;gap:20px;margin-top:38px;align-items:start}
+@media (max-width:900px){.cal-wrap{grid-template-columns:1fr}}
+.cal{background:var(--card);border-radius:20px;border:1px solid var(--line);box-shadow:var(--sh);padding:18px}
+.cal-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.cal-h b{font-family:"Bricolage Grotesque",sans-serif;font-size:19px}
+.seg{display:inline-flex;background:var(--fam-tint);border-radius:999px;padding:3px;font-size:13px;font-weight:600}
+.seg span{padding:6px 12px;border-radius:999px;color:var(--fam)}
+.seg span.on{background:var(--fam);color:#fff}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cal-g .wd{font-size:12px;color:var(--muted);font-weight:600;padding:4px 0}
+.cal-g .dd{min-height:52px;border-radius:10px;padding:5px 2px;font-size:14px;color:var(--ink);background:var(--paper)}
+.cal-g .dd.out{background:transparent}
+.cal-g .dd.hoje{outline:2px solid var(--fam-acc)}
+.cal-g .dd.sel{background:var(--fam);color:#fff}
+.pts{display:flex;gap:3px;justify-content:center;margin-top:6px;flex-wrap:wrap}
+.pts i{width:7px;height:7px;border-radius:50%;display:block}
+.leg2{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:14px;font-size:13px;color:var(--muted)}
+.leg2 span{display:inline-flex;align-items:center;gap:6px}
+.leg2 i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.c-casa{background:#7e6596}.c-cri{background:#3d6b8c}.c-con{background:#7d4b54}.c-sau{background:#2f8b57}.c-pet{background:#a0745a}.c-doc{background:#6b857a}
+.diaab{background:var(--card);border-radius:20px;border:1px solid var(--line);box-shadow:var(--sh);padding:18px}
+.diaab h3{font-size:18px;margin-bottom:10px}
+.it{border-top:1px solid var(--line);padding:12px 0}
+.it:first-of-type{border-top:0}
+.it b{display:flex;align-items:center;gap:8px;font-size:15px}
+.it b i{width:9px;height:9px;border-radius:50%;display:inline-block;flex-shrink:0}
+.it span{display:block;color:var(--muted);font-size:13.5px;margin:2px 0 8px 17px}
+.it a{margin-left:17px;font-size:14px;font-weight:600;color:var(--fam-acc);text-decoration:none}
+/* raiz ia */
+.ia-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:38px}
+@media (max-width:900px){.ia-grid{grid-template-columns:1fr}}
+.ia-card{background:var(--card);border-radius:20px;border:1px solid var(--line);box-shadow:var(--sh);padding:24px}
+.ia-card h3{font-size:22px;margin:10px 0 8px}
+.ia-card>p{color:var(--muted);margin:0 0 14px}
+.selo-ia{display:inline-flex;align-items:center;gap:6px;background:var(--brass-bg);color:#8a5a1d;font-size:13px;font-weight:600;padding:5px 12px;border-radius:999px}
+.chat{background:#e9e4dc;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px;font-size:14.5px}
+.msg{max-width:85%;padding:10px 12px;border-radius:12px;line-height:1.45;box-shadow:0 1px 1px rgba(0,0,0,.06)}
+.msg-eu{align-self:flex-end;background:#dcebe0;border-radius:12px 4px 12px 12px}
+.msg-ia{align-self:flex-start;background:#fff;border-radius:4px 12px 12px 12px}
+.msg small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+/* passos */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:38px}
+.step{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:var(--r);padding:24px}
+.step .n{width:36px;height:36px;border-radius:50%;background:#fff;color:var(--fam);font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.step h3{font-size:21px;margin-bottom:8px}
+.step p{margin:0;color:#e3d9ec;font-size:15.5px}
+.step ul{margin:12px 0 0;padding-left:18px;color:#e3d9ec;font-size:15px}
+@media (max-width:860px){.steps{grid-template-columns:1fr}}
+/* duas colunas */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+@media (max-width:900px){.two{grid-template-columns:1fr;gap:30px}}
+.list{list-style:none;padding:0;margin:22px 0 0}
+.list li{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:16px}
+.list li:first-child{border-top:0}
+.list li svg{color:var(--fam-acc);margin-top:2px}
+/* mensagem para quem ajuda */
+.zap{background:#e9e4dc;border-radius:22px;padding:20px;max-width:440px;margin-left:auto}
+.zap-h{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:14px;color:#3e4744;font-weight:600}
+.zap-h i{width:34px;height:34px;border-radius:50%;background:var(--fam-acc);display:inline-block}
+.bolha{background:#fff;border-radius:4px 16px 16px 16px;padding:14px 16px;font-size:15px;line-height:1.55;box-shadow:0 1px 1px rgba(0,0,0,.06)}
+.bolha b{display:block;margin-bottom:4px}
+.bolha small{display:block;text-align:right;color:var(--muted);font-size:12px;margin-top:6px}
+/* economia */
+.conta{background:var(--card);border-radius:22px;box-shadow:var(--sh);border:1px solid var(--line);padding:22px}
+.conta h3{font-size:19px;margin-bottom:4px}
+.conta .sub2{color:var(--muted);font-size:14px;margin:0 0 16px}
+.barra{height:14px;border-radius:999px;background:var(--fam-tint2);overflow:hidden;display:flex}
+.barra i{display:block;height:100%}
+.leg{display:flex;justify-content:space-between;font-size:14px;margin:8px 0 18px;color:#3e4744}
+.leg b{font-weight:600}
+.dica{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line);font-size:15px}
+.dica .pt{width:10px;height:10px;border-radius:50%;margin-top:7px;flex-shrink:0}
+/* privacidade */
+.priv{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}
+@media (max-width:860px){.priv{grid-template-columns:1fr}}
+/* oferta */
+.oferta{background:var(--card);border-radius:24px;border:2px solid var(--fam-acc);padding:34px;display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center;box-shadow:0 18px 50px rgba(79,59,92,.12)}
+.oferta h2{font-size:clamp(28px,3.6vw,40px)}
+.inclui{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:8px;font-size:16px}
+.inclui li{display:flex;gap:10px}
+.inclui li::before{content:"✓";color:var(--success);font-weight:700}
+.preco{background:var(--fam-tint);border-radius:18px;padding:24px;text-align:center}
+.preco .big{font-family:"Bricolage Grotesque",sans-serif;font-size:34px;font-weight:800;color:var(--fam)}
+@media (max-width:860px){.oferta{grid-template-columns:1fr;padding:24px}}
+/* faq */
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600;font-size:17px}
+details p{color:var(--muted);margin:10px 0 0}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="split" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M12 12h9"/></symbol>
+  <symbol id="bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+  <symbol id="kids" viewBox="0 0 24 24"><circle cx="8" cy="7" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3 2.5-5.5 5-5.5s5 2.5 5 5.5M13.5 20c0-2.5 1.6-4.5 3.5-4.5S20.5 17.5 20.5 20"/></symbol>
+  <symbol id="car" viewBox="0 0 24 24"><path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v3H3z"/><circle cx="7.5" cy="16" r="1.5"/><circle cx="16.5" cy="16" r="1.5"/></symbol>
+  <symbol id="plane" viewBox="0 0 24 24"><path d="M10 14 3 11l1.5-1.5 7 1L16 6a2 2 0 0 1 3 3l-4.5 4.5 1 7L14 22l-3-7-4 4v3l-1.5-1-1-3-3-1L3 15.5h3z"/></symbol>
+  <symbol id="heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9-9a4.6 4.6 0 0 1 9-3 4.6 4.6 0 0 1 9 3c-2 4.6-9 9-9 9z"/><path d="M8 11h2l1-2 2 4 1-2h2"/></symbol>
+  <symbol id="doc" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="2.5"/><path d="M8 17c.8-2 2.2-3 4-3s3.2 1 4 3"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4 10-10"/></symbol>
+  <symbol id="lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 3-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2.2.6 3.5 2.6 3.5 6"/></symbol>
+  <symbol id="bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="paw" viewBox="0 0 24 24"><circle cx="6" cy="10" r="2"/><circle cx="10" cy="6" r="2"/><circle cx="14" cy="6" r="2"/><circle cx="18" cy="10" r="2"/><path d="M12 12c-3 0-6 3.5-6 6 0 1.6 1.4 2.5 3 2 1.2-.4 2-.8 3-.8s1.8.4 3 .8c1.6.5 3-.4 3-2 0-2.5-3-6-6-6z"/></symbol>
+  <symbol id="menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+</svg>
+
+
+<header class="nav"><div class="wrap nav-in">
+  <a class="logo" href="#topo"><svg class="rz-simb" viewBox="16 2 88 112" width="22" height="28" fill="none" stroke="#1e3a32" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 64 C60 50 26 52 26 30"/><path d="M60 64 C60 50 44 38 44 16"/><path d="M60 64 C60 50 60 32 60 10"/><path d="M60 64 C60 50 76 38 76 16"/><path d="M60 64 C60 50 94 52 94 30"/><path d="M60 64 V92"/><path d="M60 80 C52 86 44 88 36 98"/><path d="M60 80 C68 86 76 88 84 98"/><path d="M60 92 C56 98 54 102 52 110"/><path d="M60 92 C64 98 66 102 68 110"/><circle cx="26" cy="30" r="6.5" fill="#7e6596" stroke="none"/><circle cx="44" cy="16" r="6.5" fill="#3c4f9a" stroke="none"/><circle cx="60" cy="10" r="6.5" fill="#3f8163" stroke="none"/><circle cx="76" cy="16" r="6.5" fill="#7a8f3c" stroke="none"/><circle cx="94" cy="30" r="6.5" fill="#966040" stroke="none"/></svg>Raiz <span>Família</span></a>
+  <button class="nav-toggle" id="tg" aria-label="Abrir menu" aria-expanded="false"><svg class="i"><use href="#menu"/></svg></button>
+  <nav class="nav-links" id="nv">
+    <a href="#cuida">O que cuida</a><a href="#como">Como funciona</a><a href="#calendario">Calendário</a><a href="#raiz-ia">Raiz IA</a><a href="#teste">Planos</a><a href="#duvidas">Dúvidas</a>
+    <a class="nav-cta" href="#cadastro">Testar grátis</a>
+  </nav>
+</div></header>
+
+<main id="topo">
+<section class="hero"><div class="wrap hero-grid">
+  <div>
+    <div class="eyebrow">Raiz Família</div>
+    <h1>A rotina da casa e da família, <em>sem precisar anotar tudo.</em></h1>
+    <p class="lead">Casa, crianças, contas, carros, viagens, saúde e documentos num lugar só. Envie o calendário da escola e a fatura do cartão, e receba toda semana o plano do que importa.</p>
+    <div class="cta-row"><a class="btn btn-fam" href="#cadastro">Quero testar grátis</a><a class="btn btn-ghost" style="color:var(--fam)" href="#como">Ver como funciona</a></div>
+    <p class="note">60 dias grátis, sem cartão de crédito. Funciona no app e no WhatsApp. O que está marcado "em breve" chega antes do lançamento.</p>
+  </div>
+  <div class="semana" aria-label="Exemplo de plano da semana">
+    <div class="semana-h"><div><b>Plano da semana</b><br><small>13 a 19 de outubro · exemplo</small></div><span class="ia">✦ feito pela IA</span><span class="breve">em breve</span></div>
+    <div class="dia"><div class="d">Seg<small>13</small></div><p>Natação da caçula, 17h<span>Levar touca e toalha · quem leva: responsável 2</span></p></div>
+    <div class="dia"><div class="d">Ter<small>14</small></div><p>Dentista do mais velho, 9h30<span>Já está no calendário dos dois responsáveis</span><span class="toque">Ver endereço e contato ›</span></p></div>
+    <div class="dia"><div class="d">Qua<small>15</small></div><p><span class="tag w">Atenção</span>Passaporte vence em 60 dias<span>Agende a renovação antes da viagem de janeiro</span><span class="toque">Agendar a renovação ›</span></p></div>
+    <div class="dia"><div class="d">Qui<small>16</small></div><p>Faxina completa e troca do filtro de água<span>Resumo já enviado para quem ajuda em casa</span></p></div>
+    <div class="dia"><div class="d">Sex<small>17</small></div><p>Aniversário de colega da escola, 15h<span>Presente até quinta · confirmar presença</span></p></div>
+    <div class="dia"><div class="d">Sáb<small>18</small></div><p><span class="tag">Casa de praia</span>Revisão do ar-condicionado antes da temporada<span class="toque">Chamar o técnico no WhatsApp ›</span></p></div>
+    <div class="dia"><div class="d">Dom<small>19</small></div><p><span class="tag">Pet</span>Vacina anual do cachorro vence na semana que vem<span class="toque">Agendar no veterinário ›</span></p></div>
+  </div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  <div class="eyebrow">Por que existe</div>
+  <h2>Quem cuida da casa carrega uma agenda que ninguém vê.</h2>
+  <p class="sub">São dezenas de datas, contas e combinados que moram na cabeça de uma ou duas pessoas. O Raiz Família tira isso da cabeça e põe num lugar só, para todo mundo que divide a rotina.</p>
+  <div class="pains">
+    <div class="pain"><b>A escola manda tudo, e nada fica num lugar só</b><span>Calendário, reunião, prova, passeio e festa chegam em PDF, bilhete e grupo de mensagem.</span></div>
+    <div class="pain"><b>As contas chegam e ninguém confere</b><span>Cartão, luz, água, gás e telefone sobem aos poucos, e a cobrança errada passa sem ninguém ver.</span></div>
+    <div class="pain"><b>Dividir as despesas vira conversa difícil</b><span>Quem pagou o quê, quanto cabe a cada responsável e o que ficou para acertar no fim do mês.</span></div>
+    <div class="pain"><b>A informação mora no WhatsApp</b><span>O técnico do ar, o corretor do seguro, o veterinário e a escola estão em conversas e contatos que você precisa lembrar quem é, e onde está cada combinado.</span></div>
+    <div class="pain"><b>Documento vence quando você mais precisa</b><span>Passaporte, visto e carteira de motorista lembram de vencer bem perto da viagem.</span></div>
+    <div class="pain"><b>O pet também tem agenda</b><span>Vacina, vermífugo, banho e a visita ao veterinário passam do prazo sem ninguém perceber.</span></div>
+  </div>
+</div></section>
+
+<section class="sec tint" id="cuida"><div class="wrap">
+  <div class="eyebrow">O que o Raiz Família cuida</div>
+  <h2>Tudo o que a família precisa lembrar, num lugar só.</h2>
+  <div class="grid">
+    <article class="card"><div class="ic"><svg class="i"><use href="#home"/></svg></div><h3>Casa e casa de veraneio</h3><p>Calendário de limpeza e manutenção: filtro, ar-condicionado, piscina, jardim, dedetização e extintores, com aviso antes da temporada.</p></article>
+    <article class="card"><div class="ic"><svg class="i"><use href="#split"/></svg></div><h3>Despesas e divisão<span class="breve">em breve</span></h3><p>Cada despesa com quem pagou e para quem foi, e a divisão entre os responsáveis da casa fechada no fim do mês.</p></article>
+    <article class="card"><div class="ic"><svg class="i"><use href="#bolt"/></svg></div><h3>Contas da casa<span class="breve">em breve</span></h3><p>Cartão, luz, água, gás e telefone conferidos todo mês, com aviso de cobrança fora do padrão e de onde dá para economizar.</p></article>
+    <article class="card"><div class="ic"><svg class="i"><use href="#kids"/></svg></div><h3>Crianças</h3><p>Escola, provas e reuniões, médicos e dentista, esportes, aulas e aniversários dos colegas, com quem leva e quem busca.</p></article>
+    <article class="card"><div class="ic"><svg class="i"><use href="#car"/></svg></div><h3>Veículos</h3><p>Revisões, troca de óleo e pneus, IPVA, licenciamento e seguro de cada carro, cada um com a sua data.</p></article>
+    <article class="card"><div class="ic"><svg class="i"><use href="#plane"/></svg></div><h3>Viagens</h3><p>Lembretes antes de viajar: documentos, vacinas, reservas, seguro-viagem e quem cuida da casa e dos pets.</p></article>
+    <article class="card"><div class="ic"><svg class="i"><use href="#heart"/></svg></div><h3>Saúde</h3><p>Consultas, exames, vacinas e remédios de cada pessoa da família, com o lembrete na hora certa.</p></article>
+    <article class="card"><div class="ic"><svg class="i"><use href="#paw"/></svg></div><h3>Pets</h3><p>Vacinas, vermífugo e visitas periódicas ao veterinário, com o contato da clínica a um toque.</p></article>
+    <article class="card"><div class="ic"><svg class="i"><use href="#doc"/></svg></div><h3>Documentos</h3><p>Passaporte, visto, carteira de motorista, RG e documentos dos bens, com aviso bem antes de vencer.</p></article>
+  </div>
+</div></section>
+
+<section class="sec dark" id="como"><div class="wrap">
+  <div class="eyebrow">Como funciona</div>
+  <h2>Você envia, o Raiz organiza, a família recebe o plano.</h2>
+  <p class="sub">Sem formulário para preencher. A inteligência artificial lê o que você manda e monta a agenda da casa.</p>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><h3>Envie o que você já tem</h3><p>Pelo app ou pelo WhatsApp, em foto, PDF ou arquivo.</p><ul><li>documentos e carteirinhas</li><li>calendário escolar<span class="breve">em breve</span></li><li>fatura do cartão e contas da casa<span class="breve">em breve</span></li></ul></div>
+    <div class="step"><div class="n">2</div><h3>Combine com quem divide a rotina<span class="breve">em breve</span></h3><p>Envie convites de compromisso para os outros responsáveis. Cada um confirma e o evento entra na agenda que já usa no celular.</p></div>
+    <div class="step"><div class="n">3</div><h3>Receba o plano da semana<span class="breve">em breve</span></h3><p>Toda semana, o que importa de verdade: compromissos, contas que vencem, documentos e tarefas da casa, com quem faz cada coisa.</p></div>
+  </div>
+</div></section>
+
+<section class="sec tint" id="calendario"><div class="wrap">
+  <div class="eyebrow">Calendário</div>
+  <h2>Todos os avisos da família num calendário.<span class="breve">em breve</span></h2>
+  <p class="sub">Escola, contas, casa, saúde, pets e documentos no mesmo mês, cada assunto com a sua cor. Toque no dia e veja o que vence, com o botão do que fazer. Prefere lista? O mesmo calendário vira a lista do dia ou da semana.</p>
+  <div class="cal-wrap">
+    <div class="cal" aria-label="Exemplo de calendário de outubro">
+      <div class="cal-h"><b>Outubro de 2026</b><div class="seg"><span>Dia</span><span>Semana</span><span class="on">Mês</span></div></div>
+      <div class="cal-g"><div class="wd">D</div><div class="wd">S</div><div class="wd">T</div><div class="wd">Q</div><div class="wd">Q</div><div class="wd">S</div><div class="wd">S</div><div class="dd out"></div><div class="dd out"></div><div class="dd out"></div><div class="dd out"></div><div class="dd">1<div class="pts"></div></div><div class="dd">2<div class="pts"><i class="c-cri"></i></div></div><div class="dd">3<div class="pts"></div></div><div class="dd">4<div class="pts"></div></div><div class="dd">5<div class="pts"><i class="c-con"></i><i class="c-casa"></i></div></div><div class="dd">6<div class="pts"></div></div><div class="dd">7<div class="pts"><i class="c-sau"></i></div></div><div class="dd">8<div class="pts"></div></div><div class="dd">9<div class="pts"><i class="c-cri"></i><i class="c-cri"></i></div></div><div class="dd">10<div class="pts"><i class="c-con"></i></div></div><div class="dd hoje">11<div class="pts"></div></div><div class="dd">12<div class="pts"></div></div><div class="dd">13<div class="pts"><i class="c-cri"></i></div></div><div class="dd">14<div class="pts"><i class="c-sau"></i></div></div><div class="dd">15<div class="pts"><i class="c-doc"></i><i class="c-con"></i></div></div><div class="dd">16<div class="pts"><i class="c-casa"></i></div></div><div class="dd">17<div class="pts"><i class="c-cri"></i></div></div><div class="dd sel">18<div class="pts"><i class="c-casa"></i></div></div><div class="dd">19<div class="pts"><i class="c-pet"></i></div></div><div class="dd">20<div class="pts"></div></div><div class="dd">21<div class="pts"><i class="c-con"></i></div></div><div class="dd">22<div class="pts"></div></div><div class="dd">23<div class="pts"><i class="c-cri"></i><i class="c-sau"></i></div></div><div class="dd">24<div class="pts"></div></div><div class="dd">25<div class="pts"></div></div><div class="dd">26<div class="pts"><i class="c-casa"></i></div></div><div class="dd">27<div class="pts"></div></div><div class="dd">28<div class="pts"><i class="c-con"></i><i class="c-doc"></i></div></div><div class="dd">29<div class="pts"></div></div><div class="dd">30<div class="pts"><i class="c-cri"></i><i class="c-pet"></i></div></div><div class="dd">31<div class="pts"></div></div></div>
+      <div class="leg2"><span><i class="c-casa"></i>Casa</span><span><i class="c-cri"></i>Crianças</span><span><i class="c-con"></i>Contas</span><span><i class="c-sau"></i>Saúde</span><span><i class="c-pet"></i>Pets</span><span><i class="c-doc"></i>Documentos e carros</span></div>
+    </div>
+    <div class="diaab" aria-label="Exemplo do dia aberto">
+      <h3>Sábado, 18 de outubro</h3>
+      <div class="it"><b><i class="c-casa"></i>Revisão do ar da casa de praia</b><span>Antes da temporada · técnico de sempre</span><a href="#">Chamar o técnico no WhatsApp ›</a></div>
+      <div class="it"><b><i class="c-casa"></i>Limpeza da caixa d'água</b><span>A cada 6 meses · última em abril</span><a href="#">Ver quem fez da última vez ›</a></div>
+      <div class="it"><b><i class="c-con"></i>Conta de gás vence na segunda</b><span>Valor 12% acima do mês passado</span><a href="#">Conferir a conta ›</a></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="acao"><div class="wrap">
+  <div class="eyebrow">Do aviso à ação</div>
+  <h2>O aviso já vem com o próximo passo.<span class="breve">em breve</span></h2>
+  <p class="sub">Não é só lembrar. Cada alerta traz o botão do que fazer: falar com quem resolve, ver o que foi feito da última vez ou marcar o horário. Um toque, e o contato certo abre no WhatsApp com a mensagem pronta.</p>
+  <div class="acoes">
+    <article class="alerta"><div class="top"><i></i>Casa de praia · em 15 dias</div><h3>Manutenção do ar-condicionado</h3><p>Antes da temporada. Da última vez, em novembro, o técnico limpou os filtros e trocou um capacitor.</p>
+      <a class="acao um" href="#">Chamar o técnico no WhatsApp</a><a class="acao" href="#">Ver o que foi feito no ano passado</a></article>
+    <article class="alerta"><div class="top"><i></i>Seguro do carro · vence em 30 dias</div><h3>Renovação da apólice</h3><p>Veja o resumo do ano passado: cobertura, franquia, valor pago e sinistros, antes de falar com o corretor.</p>
+      <a class="acao um" href="#">Ver o resumo da apólice de 2025</a><a class="acao" href="#">Pedir a renovação ao corretor</a></article>
+    <article class="alerta"><div class="top"><i></i>Pet · vence em 10 dias</div><h3>Vacina anual e visita ao veterinário</h3><p>A última foi em novembro do ano passado. O cartão de vacinas está guardado no Raiz.</p>
+      <a class="acao um" href="#">Agendar no veterinário</a><a class="acao" href="#">Ver o cartão de vacinas</a></article>
+  </div>
+</div></section>
+
+<section class="sec tint" id="raiz-ia"><div class="wrap">
+  <div class="eyebrow">Raiz IA</div>
+  <h2>Uma assistente que facilita a rotina, no app e no WhatsApp.</h2>
+  <p class="sub">A Raiz IA lê o que você manda, organiza no lugar certo e avisa na hora certa. Você não precisa abrir o app para saber o que importa.</p>
+  <div class="ia-grid">
+    <article class="ia-card"><span class="selo-ia">✦ Raiz IA no app</span><h3>O facilitador do dia a dia</h3><p>Envie uma foto, um PDF ou a fatura e a Raiz IA preenche o cadastro, cria os avisos e liga cada coisa à pessoa, ao pet, ao carro ou à casa certa. Pergunte em português e ela responde com os seus dados.</p>
+      <ul class="list" style="margin-top:0">
+        <li><svg class="i"><use href="#check"/></svg>Lê apólices e documentos; calendário escolar e fatura<span class="breve">em breve</span></li>
+        <li><svg class="i"><use href="#check"/></svg>Monta o plano da semana e o resumo para quem ajuda em casa<span class="breve">em breve</span></li>
+        <li><svg class="i"><use href="#check"/></svg>Aponta conta fora do padrão e onde dá para economizar<span class="breve">em breve</span></li>
+      </ul></article>
+    <article class="ia-card"><span class="selo-ia">✦ Raiz IA no WhatsApp</span><h3>Recebe e te deixa informado</h3><p>Mande para o número da Raiz IA o que chegar: boleto, bilhete da escola, receita do veterinário. Ela guarda, cria o aviso e te chama quando for a hora.</p>
+      <div class="chat" aria-label="Exemplo de conversa">
+        <div class="msg msg-eu">📎 calendario_escolar_2026.pdf<small>21:14</small></div>
+        <div class="msg msg-ia">Pronto! Encontrei 14 datas: 3 provas, 2 reuniões, a festa junina e as férias. Já estão no calendário da família e entram no plano da semana.<small>21:14</small></div>
+        <div class="msg msg-ia"><b>Bom dia! Esta semana:</b> dentista do mais velho na terça, conta de gás 12% acima do normal e vacina do cachorro no domingo. Quer que eu chame a clínica?<small>segunda, 07:30</small></div>
+        <div class="msg msg-eu">Sim, por favor<small>07:41</small></div>
+      </div></article>
+  </div>
+</div></section>
+
+<section class="sec"><div class="wrap two">
+  <div>
+    <div class="eyebrow">Para quem ajuda em casa</div>
+    <h2>Um resumo claro para a funcionária do lar.<span class="breve">em breve</span></h2>
+    <p class="sub">O Raiz transforma a semana em uma mensagem simples, com o que precisa ser feito em cada dia. Você confere e envia pelo WhatsApp.</p>
+    <ul class="list">
+      <li><svg class="i"><use href="#check"/></svg>Tarefas do dia, sem misturar com a agenda da família</li>
+      <li><svg class="i"><use href="#check"/></svg>Horários de saída e chegada das crianças</li>
+      <li><svg class="i"><use href="#check"/></svg>Manutenções e visitas de prestadores marcadas</li>
+    </ul>
+  </div>
+  <div class="zap" aria-label="Exemplo de mensagem">
+    <div class="zap-h"><i></i>Mensagem pronta para enviar</div>
+    <div class="bolha"><b>Bom dia! A semana em casa:</b>
+      Seg · roupa de cama e organizar o quarto das crianças<br>
+      Ter · o mais velho sai às 9h para o dentista<br>
+      Qui · faxina completa; o técnico troca o filtro às 14h<br>
+      Sex · a caçula vai a um aniversário às 15h, separar o presente<br>
+      Qualquer dúvida, me chame.
+      <small>enviada por você · 07:30</small></div>
+  </div>
+</div></section>
+
+<section class="sec tint" id="economia"><div class="wrap two">
+  <div>
+    <div class="eyebrow">Economia e divisão</div>
+    <h2>As contas da casa conferidas, e a divisão sem discussão.<span class="breve">em breve</span></h2>
+    <p class="sub">Envie a fatura e as contas. O Raiz separa cada despesa, mostra o que fugiu do normal, sugere onde economizar e fecha quanto cabe a cada responsável.</p>
+    <ul class="list">
+      <li><svg class="i"><use href="#check"/></svg>Aviso de conta acima da média e de cobrança repetida</li>
+      <li><svg class="i"><use href="#check"/></svg>Assinaturas esquecidas no cartão</li>
+      <li><svg class="i"><use href="#check"/></svg>Divisão pelo combinado da casa: meio a meio, por renda ou por despesa</li>
+    </ul>
+  </div>
+  <div class="conta" aria-label="Exemplo de resumo do mês">
+    <h3>Despesas da casa · outubro</h3>
+    <p class="sub2">exemplo · divisão combinada de 60% e 40%</p>
+    <div class="barra"><i style="width:60%;background:var(--fam)"></i><i style="width:40%;background:var(--fam-acc)"></i></div>
+    <div class="leg"><span><b>Responsável 1</b> · 60%</span><span><b>Responsável 2</b> · 40%</span></div>
+    <div class="dica"><span class="pt" style="background:var(--warning)"></span><span><b>Conta de luz 23% acima da média.</b> O consumo subiu desde a troca do ar-condicionado.</span></div>
+    <div class="dica"><span class="pt" style="background:var(--warning)"></span><span><b>Dois serviços de streaming no cartão.</b> Um deles não é usado há 3 meses.</span></div>
+    <div class="dica"><span class="pt" style="background:var(--success)"></span><span><b>Acerto do mês pronto.</b> Falta um responsável transferir a diferença para o outro.</span></div>
+  </div>
+</div></section>
+
+<section class="sec" id="privacidade"><div class="wrap">
+  <div class="eyebrow">Privacidade</div>
+  <h2>Cada pessoa vê o que é dela.</h2>
+  <p class="sub">A família inteira usa o mesmo Raiz, mas não precisa ver tudo de todo mundo.</p>
+  <div class="priv">
+    <article class="card"><div class="ic"><svg class="i"><use href="#users"/></svg></div><h3>Acesso por pessoa</h3><p>Responsáveis, filhos mais velhos e quem ajuda em casa entram com o acesso certo para cada um.</p></article>
+    <article class="card"><div class="ic"><svg class="i"><use href="#lock"/></svg></div><h3>Saúde é reservada<span class="breve">em breve</span></h3><p>Consultas, exames e remédios ficam visíveis só para a própria pessoa e para quem ela autorizar.</p></article>
+    <article class="card"><div class="ic"><svg class="i"><use href="#bell"/></svg></div><h3>Você escolhe os avisos</h3><p>Cada pessoa decide o que recebe e por onde: no app ou no WhatsApp. Na agenda do celular, em breve.</p></article>
+  </div>
+</div></section>
+
+<section class="sec tint" id="teste"><div class="wrap">
+  <div class="eyebrow">Planos</div>
+  <h2>Escolha pelo tamanho da sua família.</h2>
+  <p class="sub">Cada pessoa, pet, carro ou casa que o Raiz acompanha conta como um cadastro. Teste grátis por 60 dias, sem cartão.</p>
+  <div class="planos">
+    <article class="plano"><h3>Essencial</h3><div class="qtd">5 <small>cadastros</small></div>
+      <div class="ex"><b>Por exemplo</b>2 adultos, 1 criança, 1 carro e 1 casa</div>
+      <div class="val"><b>R$ 69</b>/mês</div>
+      <a class="btn btn-ghost" style="color:var(--fam)" href="#cadastro" data-oferta="familia-essencial">Testar o Essencial</a></article>
+    <article class="plano dest"><span class="selo">Recomendado</span><h3>Essencial Ampliado</h3><div class="qtd">10 <small>cadastros</small></div>
+      <div class="ex"><b>Por exemplo</b>2 adultos, 2 crianças, 2 carros, 1 casa e 1 pet, e ainda sobram 2 para a casa de praia ou os avós</div>
+      <div class="val"><b>R$ 99</b>/mês</div>
+      <a class="btn btn-fam" href="#cadastro" data-oferta="familia-ampliado">Testar o Essencial Ampliado</a></article>
+    <article class="plano"><h3>Plus</h3><div class="qtd">20 <small>cadastros</small></div>
+      <div class="ex"><b>Por exemplo</b>três gerações: 4 adultos, 2 avós, 4 crianças, 4 carros, 3 casas, 2 pets e 1 lancha</div>
+      <div class="val"><b>R$ 279</b>/mês</div>
+      <a class="btn btn-ghost" style="color:var(--fam)" href="#cadastro" data-oferta="familia-plus">Testar o Plus</a></article>
+  </div>
+  <p class="note" style="text-align:center">Todos os planos incluem os avisos da família, a leitura de documentos por IA e a Raiz IA no app e no WhatsApp. O que está marcado "em breve" entra em todos os planos quando chegar.</p>
+</div></section>
+
+<section class="sec" id="cadastro"><div class="wrap two" style="align-items:start">
+  <div>
+    <div class="eyebrow">Teste grátis</div>
+    <h2>Comece hoje, sem cartão.</h2>
+    <p class="sub">60 dias para usar com a família, sem cobrança e sem compromisso. Crie o acesso e entre direto no app.</p>
+  </div>
+  <form class="form" id="ft" novalidate>
+    <label for="t-plano">Plano</label>
+    <select id="t-plano"><option value="familia-essencial">Essencial · 5 cadastros · R$ 69</option><option value="familia-ampliado" selected>Ampliado · 10 cadastros · R$ 99</option><option value="familia-plus">Plus · 20 cadastros · R$ 279</option></select>
+    <p class="note" style="margin-top:6px;font-size:13px">Valor por mês, só depois dos 60 dias grátis.</p>
+    <label for="t-nome">Seu nome</label><input id="t-nome" autocomplete="name" required>
+    <label for="t-empresa">Nome da família</label><input id="t-empresa" required placeholder="Ex.: Família Silva">
+    <label for="t-email">E-mail</label><input id="t-email" type="email" autocomplete="email" required>
+    <label for="t-whats">WhatsApp</label><input id="t-whats" type="tel" inputmode="tel" autocomplete="tel" required placeholder="(11) 90000-0000">
+    <label for="t-senha">Crie uma senha <span style="font-weight:400">(mínimo 6 caracteres)</span></label><input id="t-senha" type="password" autocomplete="new-password" required minlength="6">
+    <p style="margin:18px 0 0"><button id="t-enviar" class="btn btn-fam" type="submit">Começar meu teste grátis</button></p>
+    <div id="t-status" role="status" aria-live="polite" style="font-size:15px;margin-top:12px;min-height:22px"></div>
+    <p class="note" style="font-size:12.5px">Ao continuar, você concorda com os <a href="/termos-de-uso">Termos de Uso</a>, a <a href="/politica-de-privacidade">Política de Privacidade</a> e o <a href="/termo-beta">Termo de Beta</a>.</p>
+  </form>
+</div></section>
+
+<section class="sec" id="duvidas"><div class="wrap two" style="align-items:start">
+  <div><div class="eyebrow">Dúvidas</div><h2>O que as famílias perguntam antes.</h2></div>
+  <div>
+    <details><summary>Preciso digitar tudo?</summary><p>Não. Envie os documentos em foto ou PDF, pelo app ou pelo WhatsApp: a inteligência artificial lê, preenche o cadastro e cria os avisos. Você só confere. A leitura do calendário da escola e da fatura do cartão chega em breve.</p></details>
+    <details><summary>Funciona com a agenda que já uso no celular?</summary><p>Em breve. Os compromissos vão poder ser enviados como convite e entrar na agenda de cada responsável. Hoje os avisos chegam no app e no WhatsApp.</p></details>
+    <details><summary>Quem mais da família pode usar?</summary><p>Todos que dividem a rotina: responsáveis, filhos mais velhos e quem ajuda em casa, cada um com o seu acesso.</p></details>
+    <details><summary>O que conta como cadastro?</summary><p>Cada pessoa, pet, carro ou casa que o Raiz acompanha. Uma família com 2 adultos, 2 crianças, 2 carros, 1 casa e 1 pet usa 8 cadastros, e cabe no Essencial Ampliado.</p></details>
+    <details><summary>E a casa de praia ou de campo?</summary><p>Ela entra como mais uma casa, com a sua própria manutenção, contas e avisos antes da temporada.</p></details>
+    <details><summary>Meus dados ficam seguros?</summary><p>Sim. Cada pessoa entra com o próprio acesso e o tratamento segue a LGPD. A reserva dos dados de saúde por pessoa chega antes de o registro de saúde ser liberado.</p></details>
+    <details><summary>Já uso o Raiz Patrimônio. Preciso de outra conta?</summary><p>Não. O Raiz Família é um ramo do mesmo app: seus imóveis e bens continuam lá, e a rotina da família entra ao lado.</p></details>
+  </div>
+</div></section>
+</main>
+
+<style>
+/* RODAPÉ PADRÃO RAIZ v1.0 (03/10/2026) — mesmo bloco em /, /premium/ e /amigos/ */
+footer.rf{background:#17211e;color:#a9b3ae;padding:44px 0 26px;font:14px/1.6 "Inter",system-ui,sans-serif;text-align:left}
+footer.rf a{color:#a9b3ae;text-decoration:none;margin:0}footer.rf a:hover{color:#fff}
+footer.rf a.rf-logo{color:#fff}
+.rf-in{max-width:1120px;margin:0 auto;padding:0 24px}
+.rf-top{display:flex;flex-wrap:wrap;gap:28px 48px;justify-content:space-between;align-items:flex-start}
+.rf-logo{font-family:"Bricolage Grotesque",Georgia,serif;font-weight:700;font-size:21px;color:#fff;letter-spacing:-.01em}
+.rf-logo span{color:#c68a3b}
+.rf-col{max-width:460px}
+.rf-col b{color:#fff;display:block;font-size:15px;margin-bottom:4px}
+.rf-col p{margin:4px 0 0}
+.rf-canais{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+footer.rf a.rf-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:8px 15px;color:#fff;font-weight:600;font-size:13.5px}
+footer.rf a.rf-btn:hover{border-color:#c68a3b}
+.rf-btn svg{width:18px;height:18px;flex-shrink:0}
+.rf-leg{margin-top:26px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-wrap:wrap;gap:8px 18px;font-size:12.5px}
+</style>
+<footer class="rf">
+  <div class="rf-in">
+  <div class="rf-top">
+    <div class="rf-col"><a class="rf-logo" href="/"><svg class="rz-simb" viewBox="16 2 88 112" width="22" height="28" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 64 C60 50 26 52 26 30"/><path d="M60 64 C60 50 44 38 44 16"/><path d="M60 64 C60 50 60 32 60 10"/><path d="M60 64 C60 50 76 38 76 16"/><path d="M60 64 C60 50 94 52 94 30"/><path d="M60 64 V92"/><path d="M60 80 C52 86 44 88 36 98"/><path d="M60 80 C68 86 76 88 84 98"/><path d="M60 92 C56 98 54 102 52 110"/><path d="M60 92 C64 98 66 102 68 110"/><circle cx="26" cy="30" r="6.5" fill="#7e6596" stroke="none"/><circle cx="44" cy="16" r="6.5" fill="#3c4f9a" stroke="none"/><circle cx="60" cy="10" r="6.5" fill="#3f8163" stroke="none"/><circle cx="76" cy="16" r="6.5" fill="#7a8f3c" stroke="none"/><circle cx="94" cy="30" r="6.5" fill="#966040" stroke="none"/></svg>Raiz<span>Patrimônio</span></a><p>Soluções para gestão patrimonial.</p><b style="margin-top:14px">Fale conosco</b><div class="rf-canais"><a class="rf-btn" href="https://wa.me/5511947461828?text=Oi!%20Quero%20conhecer%20o%20Raiz%20Fam%C3%ADlia." target="_blank" rel="noopener" aria-label="Falar no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3.9 2.5c.1.2 1.6 2.5 4 3.5 1.5.6 2 .7 2.8.6.4-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.2z"/></svg>WhatsApp</a><a class="rf-btn" href="mailto:contato@raizpatrimonio.com.br" aria-label="Enviar e-mail"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>E-mail</a></div></div>
+    <div class="rf-col"><b>Parcerias</b><p>Estamos abertos a parcerias com administradoras, family offices, escritórios contábeis e imobiliárias. Fale com a gente.</p><div class="rf-canais"><a class="rf-btn" href="https://wa.me/5511947461828?text=Oi!%20Quero%20conversar%20sobre%20parceria%20com%20o%20Raiz%20Patrim%C3%B4nio." target="_blank" rel="noopener" aria-label="Falar no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3.9 2.5c.1.2 1.6 2.5 4 3.5 1.5.6 2 .7 2.8.6.4-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.2z"/></svg>WhatsApp</a><a class="rf-btn" href="mailto:contato@raizpatrimonio.com.br" aria-label="Enviar e-mail"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>E-mail</a></div></div>
+  </div>
+  <div class="rf-leg"><span>© <span id="ano">2026</span> Raiz Patrimônio</span><a href="/termos-de-uso">Termos de Uso</a><a href="/politica-de-privacidade">Política de Privacidade</a><a href="/politica-de-privacidade#9-cookies-e-rastreamento-na-landing-page">Cookies</a><a href="/termo-beta">Termo de Beta</a></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tg=document.getElementById('tg'),nv=document.getElementById('nv');
+  tg.addEventListener('click',function(){var o=nv.classList.toggle('open');tg.setAttribute('aria-expanded',o)});
+  nv.addEventListener('click',function(e){if(e.target.tagName==='A'){nv.classList.remove('open');tg.setAttribute('aria-expanded','false')}});
+  try{document.getElementById('ano').textContent=new Date().getFullYear()}catch(e){}
+})();
+</script>
+<script>
+// Cadastro do teste: auth.signUp → fn_criar_trial_campanha(oferta de origem "familia") → entra no app (mesmo fluxo do /premium)
+(function(){
+  var sel=document.getElementById('t-plano');
+  document.querySelectorAll('a[data-oferta]').forEach(function(a){a.addEventListener('click',function(){sel.value=a.dataset.oferta;});});
+  if (!window.supabase) return;
+  var ORIGEM='familia', APP_URL='https://app.raizpatrimonio.com.br';
+  var db=window.supabase.createClient('https://oduwpttbbemypiypjsux.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kdXdwdHRiYmVteXBpeXBqc3V4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyODEyOTcsImV4cCI6MjEwMDg1NzI5N30.9-cu1CV1wPbo5UH1G2eAsWqsvS54AWNuQZOlifc9a7w');
+  var params=new URLSearchParams(location.search);
+  var SESSAO=(function(){try{var id=sessionStorage.getItem('raiz_sessao_id');if(!id){id=crypto.randomUUID?crypto.randomUUID():'sess-'+Date.now();sessionStorage.setItem('raiz_sessao_id',id);}return id;}catch(e){return null;}})();
+  function track(evento,pagina){try{db.schema('comercial').from('eventos_landing').insert({pagina:'familia:'+(pagina||'home'),referrer:document.referrer||null,
+    utm_source:params.get('utm_source')||'site',utm_medium:params.get('utm_medium')||'organico',utm_campaign:params.get('utm_campaign')||ORIGEM,convite:null,
+    user_agent:navigator.userAgent,evento:evento,campanha_codigo:ORIGEM,sessao_id:SESSAO}).then(function(r){if(r.error)console.warn('track:',r.error.message);});}catch(e){}}
+  track('page_view');
+  document.querySelectorAll('a[href="#cadastro"]').forEach(function(a){a.addEventListener('click',function(){track('cta_click','cta:'+(a.dataset.oferta||'teste'));});});
+  var form=document.getElementById('ft'),btn=document.getElementById('t-enviar'),st=document.getElementById('t-status');
+  function msg(t,tipo){st.textContent=t;st.style.color=tipo==='erro'?'#9b2c2c':(tipo==='ok'?'#2f7a55':'inherit');}
+  var iniciou=false;form.addEventListener('focusin',function(){if(!iniciou){iniciou=true;track('trial_form_start','form');}});
+  form.addEventListener('submit',async function(e){
+    e.preventDefault();
+    if(!form.checkValidity()){form.reportValidity();return;}
+    var v=function(id){return document.getElementById(id).value.trim();};
+    btn.disabled=true;btn.textContent='Criando seu acesso...';msg('','');
+    try{
+      var r1=await db.auth.signUp({email:v('t-email'),password:document.getElementById('t-senha').value});
+      if(r1.error)throw r1.error;
+      var session=r1.data&&r1.data.session;
+      if(!session){msg('Conta criada! Confira seu e-mail para confirmar o acesso.','ok');btn.disabled=false;btn.textContent='Começar meu teste grátis';return;}
+      var r2=await db.rpc('fn_criar_trial_campanha',{p_codigo_publico:sel.value,p_nome_empresa:v('t-empresa'),p_nome_usuario:v('t-nome'),
+        p_whatsapp:v('t-whats'),p_faixa_imoveis:null,p_email:v('t-email'),p_interesse_importacao:false});
+      if(r2.error)throw r2.error;
+      track('trial_completo','trial_completo:'+sel.value);
+      msg('Tudo pronto! Abrindo o app...','ok');
+      location.href=APP_URL+'/#access_token='+encodeURIComponent(session.access_token)+'&refresh_token='+encodeURIComponent(session.refresh_token)+'&type=trial_handoff';
+    }catch(err){
+      var m=(err&&err.message)?err.message:'erro desconhecido';track('erro','erro:signup');
+      msg(m.indexOf('already registered')>=0||m.indexOf('já está vinculado')>=0?'Este e-mail já tem uma conta. Entre pelo app ou use outro e-mail.'
+        :'Não deu para criar seu acesso agora ('+m+'). Tente de novo ou fale com a gente no WhatsApp.','erro');
+      btn.disabled=false;btn.textContent='Começar meu teste grátis';
+    }
+  });
+})();
+</script>
+<script src="/cookie-banner.js"></script>
+</body>
+</html>

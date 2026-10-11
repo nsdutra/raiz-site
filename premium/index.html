@@ -2,7 +2,12 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Página Premium (premium/index.html)
-  VERSÃO: v1.3.1 · LINHAS: 526 · 2026-10-04
+  VERSÃO: v1.4.0 · LINHAS: 536 · 2026-10-11
+  NOVIDADES v1.4.0 — marca e ramos (demanda 680ee9f8, sessão 20261011-1120-marca-ramos; plano aprovado pelo Nicola
+    11/10/2026 11:20): favicon com o símbolo, theme-color, apple-touch-icon do app, símbolo ao lado de "Raiz Premium" no
+    topo e de "Raiz Patrimônio" no rodapé (a página não tinha favicon). Textos, cadastro, agenda e tracking intocados.
+  --- v1.3.1 ---
+  VERSÃO-ANT: v1.3.1 · LINHAS-ANT: 526 · 2026-10-04
   NOVIDADES v1.3.1 — pedido do Nicola (04/10/2026, 00:36): sai a pergunta de quantidade de bens
     do cadastro do teste; o cadastro ganha link para agendar a demonstração (a agenda já tinha
     link para o teste); sai a visita presencial: a apresentação é por videochamada e o resto
@@ -54,6 +59,9 @@
 <title>Raiz Premium — o patrimônio da sua família, com a sua cara</title>
 <meta name="description" content="Acelerador para equipes e para famílias com patrimônio acima de 50 bens: demonstração, personalização com a família e entrega em até 30 dias.">
 <link rel="canonical" href="https://raizpatrimonio.com.br/premium/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 120 120%22%3E%3Crect width=%22120%22 height=%22120%22 rx=%2226%22 fill=%22%231e3a32%22/%3E%3Cg transform=%22translate%2814 6%29 scale%28.82%29%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%227%22 stroke-linecap=%22round%22%3E%3Cpath d=%22M60 64 C60 50 26 52 26 30%22/%3E%3Cpath d=%22M60 64 C60 50 44 38 44 16%22/%3E%3Cpath d=%22M60 64 C60 50 60 32 60 10%22/%3E%3Cpath d=%22M60 64 C60 50 76 38 76 16%22/%3E%3Cpath d=%22M60 64 C60 50 94 52 94 30%22/%3E%3Cpath d=%22M60 64 V92%22/%3E%3Cpath d=%22M60 80 C52 86 44 88 36 98%22/%3E%3Cpath d=%22M60 80 C68 86 76 88 84 98%22/%3E%3Ccircle cx=%2226%22 cy=%2230%22 r=%228%22 fill=%22%237e6596%22 stroke=%22none%22/%3E%3Ccircle cx=%2244%22 cy=%2216%22 r=%228%22 fill=%22%233c4f9a%22 stroke=%22none%22/%3E%3Ccircle cx=%2260%22 cy=%2210%22 r=%228%22 fill=%22%233f8163%22 stroke=%22none%22/%3E%3Ccircle cx=%2276%22 cy=%2216%22 r=%228%22 fill=%22%237a8f3c%22 stroke=%22none%22/%3E%3Ccircle cx=%2294%22 cy=%2230%22 r=%228%22 fill=%22%23966040%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="https://app.raizpatrimonio.com.br/icon-maskable-192.png">
+<meta name="theme-color" content="#1e3a32">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -82,7 +90,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stro
 /* NAV */
 header.nav{position:sticky;top:0;z-index:20;background:rgba(250,249,245,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .nav-in{display:flex;align-items:center;justify-content:space-between;height:66px}
-.logo{font:800 19px "Bricolage Grotesque",system-ui,sans-serif;text-decoration:none}.logo span{color:var(--brass-deep);font-weight:600}
+.logo{font:800 19px "Bricolage Grotesque",system-ui,sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:8px}.logo .rz-simb{flex:none}.logo span{color:var(--brass-deep);font-weight:600}
 .nav-links{display:flex;align-items:center;gap:22px;font-size:14.5px;font-weight:500}
 .nav-links a{text-decoration:none;color:#3c4a45}.nav-links a:hover{color:var(--pine)}
 .nav-cta{background:var(--pine);color:#fff!important;font-weight:600;padding:10px 18px;border-radius:999px}
@@ -263,7 +271,7 @@ footer a{color:#e4ede8}footer .row{display:flex;gap:28px;flex-wrap:wrap;justify-
 </svg>
 
 <header class="nav"><div class="wrap nav-in">
-  <a class="logo" href="#topo">Raiz <span>Premium</span></a>
+  <a class="logo" href="#topo"><svg class="rz-simb" viewBox="16 2 88 112" width="22" height="28" fill="none" stroke="#1e3a32" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 64 C60 50 26 52 26 30"/><path d="M60 64 C60 50 44 38 44 16"/><path d="M60 64 C60 50 60 32 60 10"/><path d="M60 64 C60 50 76 38 76 16"/><path d="M60 64 C60 50 94 52 94 30"/><path d="M60 64 V92"/><path d="M60 80 C52 86 44 88 36 98"/><path d="M60 80 C68 86 76 88 84 98"/><path d="M60 92 C56 98 54 102 52 110"/><path d="M60 92 C64 98 66 102 68 110"/><circle cx="26" cy="30" r="6.5" fill="#7e6596" stroke="none"/><circle cx="44" cy="16" r="6.5" fill="#3c4f9a" stroke="none"/><circle cx="60" cy="10" r="6.5" fill="#3f8163" stroke="none"/><circle cx="76" cy="16" r="6.5" fill="#7a8f3c" stroke="none"/><circle cx="94" cy="30" r="6.5" fill="#966040" stroke="none"/></svg>Raiz <span>Premium</span></a>
   <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" id="tg"><svg class="i"><use href="#menu"/></svg></button>
   <nav class="nav-links" id="nv">
     <a href="#para-quem">Para quem é</a><a href="#programa">O programa</a><a href="#alem">Além dos imóveis</a><a href="#inclui">O que inclui</a><a href="#faq">Dúvidas</a>
@@ -434,6 +442,7 @@ footer a{color:#e4ede8}footer .row{display:flex;gap:28px;flex-wrap:wrap;justify-
 footer.rf{background:#17211e;color:#a9b3ae;padding:44px 0 26px;font:14px/1.6 "Inter",system-ui,sans-serif;text-align:left}
 footer.rf a{color:#a9b3ae;text-decoration:none;margin:0}footer.rf a:hover{color:#fff}
 footer.rf a.rf-logo{color:#fff}
+.rf-logo{display:inline-flex;align-items:center;gap:8px}.rf-logo .rz-simb{flex:none} /* marca e ramos 11/10/2026 — símbolo ao lado do nome */
 .rf-in{max-width:1120px;margin:0 auto;padding:0 24px}
 .rf-top{display:flex;flex-wrap:wrap;gap:28px 48px;justify-content:space-between;align-items:flex-start}
 .rf-logo{font-family:"Bricolage Grotesque",Georgia,serif;font-weight:700;font-size:21px;color:#fff;letter-spacing:-.01em}
@@ -450,7 +459,7 @@ footer.rf a.rf-btn:hover{border-color:#c68a3b}
 <footer class="rf">
   <div class="rf-in">
   <div class="rf-top">
-    <div class="rf-col"><a class="rf-logo" href="/">Raiz<span>Patrimônio</span></a><p>Soluções para gestão patrimonial.</p><b style="margin-top:14px">Fale conosco</b><div class="rf-canais"><a class="rf-btn" href="https://wa.me/5511947461828?text=Oi!%20Quero%20conhecer%20o%20Raiz%20Patrim%C3%B4nio." target="_blank" rel="noopener" aria-label="Falar no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3.9 2.5c.1.2 1.6 2.5 4 3.5 1.5.6 2 .7 2.8.6.4-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.2z"/></svg>WhatsApp</a><a class="rf-btn" href="mailto:contato@raizpatrimonio.com.br" aria-label="Enviar e-mail"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>E-mail</a></div></div>
+    <div class="rf-col"><a class="rf-logo" href="/"><svg class="rz-simb" viewBox="16 2 88 112" width="22" height="28" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 64 C60 50 26 52 26 30"/><path d="M60 64 C60 50 44 38 44 16"/><path d="M60 64 C60 50 60 32 60 10"/><path d="M60 64 C60 50 76 38 76 16"/><path d="M60 64 C60 50 94 52 94 30"/><path d="M60 64 V92"/><path d="M60 80 C52 86 44 88 36 98"/><path d="M60 80 C68 86 76 88 84 98"/><path d="M60 92 C56 98 54 102 52 110"/><path d="M60 92 C64 98 66 102 68 110"/><circle cx="26" cy="30" r="6.5" fill="#7e6596" stroke="none"/><circle cx="44" cy="16" r="6.5" fill="#3c4f9a" stroke="none"/><circle cx="60" cy="10" r="6.5" fill="#3f8163" stroke="none"/><circle cx="76" cy="16" r="6.5" fill="#7a8f3c" stroke="none"/><circle cx="94" cy="30" r="6.5" fill="#966040" stroke="none"/></svg>Raiz<span>Patrimônio</span></a><p>Soluções para gestão patrimonial.</p><b style="margin-top:14px">Fale conosco</b><div class="rf-canais"><a class="rf-btn" href="https://wa.me/5511947461828?text=Oi!%20Quero%20conhecer%20o%20Raiz%20Patrim%C3%B4nio." target="_blank" rel="noopener" aria-label="Falar no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3.9 2.5c.1.2 1.6 2.5 4 3.5 1.5.6 2 .7 2.8.6.4-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.2z"/></svg>WhatsApp</a><a class="rf-btn" href="mailto:contato@raizpatrimonio.com.br" aria-label="Enviar e-mail"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>E-mail</a></div></div>
     <div class="rf-col"><b>Parcerias</b><p>Estamos abertos a parcerias com administradoras, family offices, escritórios contábeis e imobiliárias. Fale com a gente.</p><div class="rf-canais"><a class="rf-btn" href="https://wa.me/5511947461828?text=Oi!%20Quero%20conversar%20sobre%20parceria%20com%20o%20Raiz%20Patrim%C3%B4nio." target="_blank" rel="noopener" aria-label="Falar no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3.9 2.5c.1.2 1.6 2.5 4 3.5 1.5.6 2 .7 2.8.6.4-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.2z"/></svg>WhatsApp</a><a class="rf-btn" href="mailto:contato@raizpatrimonio.com.br" aria-label="Enviar e-mail"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>E-mail</a></div></div>
   </div>
   <div class="rf-leg"><span>© <span id="ano">2026</span> Raiz Patrimônio</span><a href="/termos-de-uso">Termos de Uso</a><a href="/politica-de-privacidade">Política de Privacidade</a><a href="/politica-de-privacidade#9-cookies-e-rastreamento-na-landing-page">Cookies</a><a href="/termo-beta">Termo de Beta</a></div>
