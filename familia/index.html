@@ -2,7 +2,15 @@
 <!--
   ============================================================================
   RAIZ FAMÍLIA — Landing da frente Família (familia/index.html)
-  VERSÃO: v1.0.0 · LINHAS: 595 · 2026-10-11
+  VERSÃO: v1.1.0 · LINHAS: 602 · 2026-10-20
+  NOVIDADES v1.1.0 — pedido do Nicola (20/10/2026, 23:08 e 23:16), demanda e92f5520: saem os selos
+    "em breve" do que já roda no app e foi conferido (agenda em calendário, leitura do calendário
+    escolar, importação da fatura do cartão, divisão entre responsáveis, aviso com botão de ação,
+    conta fora do padrão e dica de economia). Continuam "em breve", por decisão do Nicola, as 4 que
+    ainda não rodam: plano da semana, resumo para quem ajuda em casa, convite de compromisso para a
+    agenda do celular e saúde reservada por pessoa (registradas na demanda e92f5520).
+  --- v1.0.0 ---
+  VERSÃO-ANT: v1.0.0 · LINHAS-ANT: 595 · 2026-10-11
   ROTA: https://raizpatrimonio.com.br/familia/  (repositório raiz-site, familia/index.html)
   BASE: PROTOTIPO_LANDING_FAMILIA_RAIZ v1.2.0 (raiz\docs), aprovado pelo Nicola em 11/10/2026 ("colocar no ar a de
         família"), demanda 680ee9f8, sessão 20261011-1120-marca-ramos.
@@ -322,8 +330,8 @@ details p{color:var(--muted);margin:10px 0 0}
   <h2>Tudo o que a família precisa lembrar, num lugar só.</h2>
   <div class="grid">
     <article class="card"><div class="ic"><svg class="i"><use href="#home"/></svg></div><h3>Casa e casa de veraneio</h3><p>Calendário de limpeza e manutenção: filtro, ar-condicionado, piscina, jardim, dedetização e extintores, com aviso antes da temporada.</p></article>
-    <article class="card"><div class="ic"><svg class="i"><use href="#split"/></svg></div><h3>Despesas e divisão<span class="breve">em breve</span></h3><p>Cada despesa com quem pagou e para quem foi, e a divisão entre os responsáveis da casa fechada no fim do mês.</p></article>
-    <article class="card"><div class="ic"><svg class="i"><use href="#bolt"/></svg></div><h3>Contas da casa<span class="breve">em breve</span></h3><p>Cartão, luz, água, gás e telefone conferidos todo mês, com aviso de cobrança fora do padrão e de onde dá para economizar.</p></article>
+    <article class="card"><div class="ic"><svg class="i"><use href="#split"/></svg></div><h3>Despesas e divisão</h3><p>Cada despesa com quem pagou e para quem foi, e a divisão entre os responsáveis da casa fechada no fim do mês.</p></article>
+    <article class="card"><div class="ic"><svg class="i"><use href="#bolt"/></svg></div><h3>Contas da casa</h3><p>Cartão, luz, água, gás e telefone conferidos todo mês, com aviso de cobrança fora do padrão e de onde dá para economizar.</p></article>
     <article class="card"><div class="ic"><svg class="i"><use href="#kids"/></svg></div><h3>Crianças</h3><p>Escola, provas e reuniões, médicos e dentista, esportes, aulas e aniversários dos colegas, com quem leva e quem busca.</p></article>
     <article class="card"><div class="ic"><svg class="i"><use href="#car"/></svg></div><h3>Veículos</h3><p>Revisões, troca de óleo e pneus, IPVA, licenciamento e seguro de cada carro, cada um com a sua data.</p></article>
     <article class="card"><div class="ic"><svg class="i"><use href="#plane"/></svg></div><h3>Viagens</h3><p>Lembretes antes de viajar: documentos, vacinas, reservas, seguro-viagem e quem cuida da casa e dos pets.</p></article>
@@ -338,7 +346,7 @@ details p{color:var(--muted);margin:10px 0 0}
   <h2>Você envia, o Raiz organiza, a família recebe o plano.</h2>
   <p class="sub">Sem formulário para preencher. A inteligência artificial lê o que você manda e monta a agenda da casa.</p>
   <div class="steps">
-    <div class="step"><div class="n">1</div><h3>Envie o que você já tem</h3><p>Pelo app ou pelo WhatsApp, em foto, PDF ou arquivo.</p><ul><li>documentos e carteirinhas</li><li>calendário escolar<span class="breve">em breve</span></li><li>fatura do cartão e contas da casa<span class="breve">em breve</span></li></ul></div>
+    <div class="step"><div class="n">1</div><h3>Envie o que você já tem</h3><p>Pelo app ou pelo WhatsApp, em foto, PDF ou arquivo.</p><ul><li>documentos e carteirinhas</li><li>calendário escolar</li><li>fatura do cartão e contas da casa</li></ul></div>
     <div class="step"><div class="n">2</div><h3>Combine com quem divide a rotina<span class="breve">em breve</span></h3><p>Envie convites de compromisso para os outros responsáveis. Cada um confirma e o evento entra na agenda que já usa no celular.</p></div>
     <div class="step"><div class="n">3</div><h3>Receba o plano da semana<span class="breve">em breve</span></h3><p>Toda semana, o que importa de verdade: compromissos, contas que vencem, documentos e tarefas da casa, com quem faz cada coisa.</p></div>
   </div>
@@ -346,7 +354,7 @@ details p{color:var(--muted);margin:10px 0 0}
 
 <section class="sec tint" id="calendario"><div class="wrap">
   <div class="eyebrow">Calendário</div>
-  <h2>Todos os avisos da família num calendário.<span class="breve">em breve</span></h2>
+  <h2>Todos os avisos da família num calendário.</h2>
   <p class="sub">Escola, contas, casa, saúde, pets e documentos no mesmo mês, cada assunto com a sua cor. Toque no dia e veja o que vence, com o botão do que fazer. Prefere lista? O mesmo calendário vira a lista do dia ou da semana.</p>
   <div class="cal-wrap">
     <div class="cal" aria-label="Exemplo de calendário de outubro">
@@ -365,7 +373,7 @@ details p{color:var(--muted);margin:10px 0 0}
 
 <section class="sec" id="acao"><div class="wrap">
   <div class="eyebrow">Do aviso à ação</div>
-  <h2>O aviso já vem com o próximo passo.<span class="breve">em breve</span></h2>
+  <h2>O aviso já vem com o próximo passo.</h2>
   <p class="sub">Não é só lembrar. Cada alerta traz o botão do que fazer: falar com quem resolve, ver o que foi feito da última vez ou marcar o horário. Um toque, e o contato certo abre no WhatsApp com a mensagem pronta.</p>
   <div class="acoes">
     <article class="alerta"><div class="top"><i></i>Casa de praia · em 15 dias</div><h3>Manutenção do ar-condicionado</h3><p>Antes da temporada. Da última vez, em novembro, o técnico limpou os filtros e trocou um capacitor.</p>
@@ -384,9 +392,9 @@ details p{color:var(--muted);margin:10px 0 0}
   <div class="ia-grid">
     <article class="ia-card"><span class="selo-ia">✦ Raiz IA no app</span><h3>O facilitador do dia a dia</h3><p>Envie uma foto, um PDF ou a fatura e a Raiz IA preenche o cadastro, cria os avisos e liga cada coisa à pessoa, ao pet, ao carro ou à casa certa. Pergunte em português e ela responde com os seus dados.</p>
       <ul class="list" style="margin-top:0">
-        <li><svg class="i"><use href="#check"/></svg>Lê apólices e documentos; calendário escolar e fatura<span class="breve">em breve</span></li>
+        <li><svg class="i"><use href="#check"/></svg>Lê apólices, documentos, calendário escolar e fatura</li>
         <li><svg class="i"><use href="#check"/></svg>Monta o plano da semana e o resumo para quem ajuda em casa<span class="breve">em breve</span></li>
-        <li><svg class="i"><use href="#check"/></svg>Aponta conta fora do padrão e onde dá para economizar<span class="breve">em breve</span></li>
+        <li><svg class="i"><use href="#check"/></svg>Aponta conta fora do padrão e onde dá para economizar</li>
       </ul></article>
     <article class="ia-card"><span class="selo-ia">✦ Raiz IA no WhatsApp</span><h3>Recebe e te deixa informado</h3><p>Mande para o número da Raiz IA o que chegar: boleto, bilhete da escola, receita do veterinário. Ela guarda, cria o aviso e te chama quando for a hora.</p>
       <div class="chat" aria-label="Exemplo de conversa">
@@ -424,7 +432,7 @@ details p{color:var(--muted);margin:10px 0 0}
 <section class="sec tint" id="economia"><div class="wrap two">
   <div>
     <div class="eyebrow">Economia e divisão</div>
-    <h2>As contas da casa conferidas, e a divisão sem discussão.<span class="breve">em breve</span></h2>
+    <h2>As contas da casa conferidas, e a divisão sem discussão.</h2>
     <p class="sub">Envie a fatura e as contas. O Raiz separa cada despesa, mostra o que fugiu do normal, sugere onde economizar e fecha quanto cabe a cada responsável.</p>
     <ul class="list">
       <li><svg class="i"><use href="#check"/></svg>Aviso de conta acima da média e de cobrança repetida</li>
@@ -499,7 +507,7 @@ details p{color:var(--muted);margin:10px 0 0}
 <section class="sec" id="duvidas"><div class="wrap two" style="align-items:start">
   <div><div class="eyebrow">Dúvidas</div><h2>O que as famílias perguntam antes.</h2></div>
   <div>
-    <details><summary>Preciso digitar tudo?</summary><p>Não. Envie os documentos em foto ou PDF, pelo app ou pelo WhatsApp: a inteligência artificial lê, preenche o cadastro e cria os avisos. Você só confere. A leitura do calendário da escola e da fatura do cartão chega em breve.</p></details>
+    <details><summary>Preciso digitar tudo?</summary><p>Não. Envie os documentos em foto ou PDF, pelo app ou pelo WhatsApp: a inteligência artificial lê, preenche o cadastro e cria os avisos. Você só confere. Vale também para o calendário da escola e a fatura do cartão.</p></details>
     <details><summary>Funciona com a agenda que já uso no celular?</summary><p>Em breve. Os compromissos vão poder ser enviados como convite e entrar na agenda de cada responsável. Hoje os avisos chegam no app e no WhatsApp.</p></details>
     <details><summary>Quem mais da família pode usar?</summary><p>Todos que dividem a rotina: responsáveis, filhos mais velhos e quem ajuda em casa, cada um com o seu acesso.</p></details>
     <details><summary>O que conta como cadastro?</summary><p>Cada pessoa, pet, carro ou casa que o Raiz acompanha. Uma família com 2 adultos, 2 crianças, 2 carros, 1 casa e 1 pet usa 8 cadastros, e cabe no Essencial Ampliado.</p></details>
