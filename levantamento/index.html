@@ -1,0 +1,326 @@
+<!--
+  ============================================================================
+  RAIZ PATRIMÔNIO — Levantamento por ramo antes da conversa (levantamento/index.html)
+  VERSÃO: v1.0.0 · LINHAS: 327 · 2026-11-11
+  Endereço: raizpatrimonio.com.br/levantamento/?c=<token do convite pessoal gerado no Gestão> (o mesmo token do /amigos/).
+  Plano: PLANO_LANDING_LEVANTAMENTO_RAIZ v1.2.0, de acordo do Nicola 11/11 07:07 (com limite por link). Demanda 5bd5b826.
+  Sessão: 20261111-0710-levantamento. Nasce do PROTOTIPO_LANDING_LEVANTAMENTO_RAIZ v1.2.0.
+  Como funciona:
+    - Só abre com convite válido: lê o nome por fn_convite_pessoal_ler(p_token). Sem convite, mostra o aviso e o WhatsApp.
+    - Ramos em branco e só os disponíveis no catálogo (Agro, Pecuária, Família, Imóveis, Outros bens, Obras).
+    - Enviar chama a Edge notificar-comercial (1.4, tipo levantamento), que confere o convite, limita a 3 envios por link
+      e manda as respostas ao WhatsApp comercial do Raiz. NADA das respostas é gravado no Raiz.
+  Changelog:
+    v1.0.0 · 2026-11-11 · criação.
+  ============================================================================
+-->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Levantamento Raiz</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1e3a32">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 120 120%22%3E%3Crect width=%22120%22 height=%22120%22 rx=%2226%22 fill=%22%231e3a32%22/%3E%3Cg transform=%22translate%2814 6%29 scale%28.82%29%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%227%22 stroke-linecap=%22round%22%3E%3Cpath d=%22M60 64 C60 50 26 52 26 30%22/%3E%3Cpath d=%22M60 64 C60 50 44 38 44 16%22/%3E%3Cpath d=%22M60 64 C60 50 60 32 60 10%22/%3E%3Cpath d=%22M60 64 C60 50 76 38 76 16%22/%3E%3Cpath d=%22M60 64 C60 50 94 52 94 30%22/%3E%3Cpath d=%22M60 64 V92%22/%3E%3Cpath d=%22M60 80 C52 86 44 88 36 98%22/%3E%3Cpath d=%22M60 80 C68 86 76 88 84 98%22/%3E%3Ccircle cx=%2226%22 cy=%2230%22 r=%228%22 fill=%22%237e6596%22 stroke=%22none%22/%3E%3Ccircle cx=%2244%22 cy=%2216%22 r=%228%22 fill=%22%233c4f9a%22 stroke=%22none%22/%3E%3Ccircle cx=%2260%22 cy=%2210%22 r=%228%22 fill=%22%233f8163%22 stroke=%22none%22/%3E%3Ccircle cx=%2276%22 cy=%2216%22 r=%228%22 fill=%22%237a8f3c%22 stroke=%22none%22/%3E%3Ccircle cx=%2294%22 cy=%2230%22 r=%228%22 fill=%22%23966040%22 stroke=%22none%22/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: a mesma folha das landings — topo verde, conteúdo em papel claro, um passo por vez com barra de progresso; o latão marca escolha. */
+:root{--ink:#17211e;--paper:#faf9f5;--pine:#1e3a32;--pine-deep:#152a24;--brass:#c68a3b;--brass-deep:#a86f27;--sage:#6b857a;--line:#e6e3da;--card:#ffffff;--soft:#f1efe7;--brassSoft:#f6ead8;--radius:16px;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;--body:Inter, "Segoe UI", Roboto, system-ui, sans-serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#eaf0ec;--paper:#111815;--card:#19221e;--line:#2c3933;--soft:#202b26;--brassSoft:#3a2d1c;--sage:#98b0a5;--pine:#9cc8b6;--brass:#e0ab62;--brass-deep:#e8b672;color-scheme:dark}}
+:root[data-theme="dark"]{--ink:#eaf0ec;--paper:#111815;--card:#19221e;--line:#2c3933;--soft:#202b26;--brassSoft:#3a2d1c;--sage:#98b0a5;--pine:#9cc8b6;--brass:#e0ab62;--brass-deep:#e8b672;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55}
+.topo{background:#1e3a32;color:#fff;padding-block:18px 26px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.topo .in{max-width:720px;margin:0 auto;display:grid;gap:14px}
+.marca{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.01em}
+.marca svg{width:24px;height:31px;flex:none}
+.topo h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,6.5vw,40px);line-height:1.08;margin:0;text-wrap:balance}
+.topo p{margin:0;color:#d5e2dc;max-width:58ch}
+.empresa{display:inline-flex;gap:8px;align-items:center;background:rgba(255,255,255,.1);border-radius:999px;padding:5px 12px;font-size:13.5px;width:max-content;max-width:100%}
+.wrap{max-width:720px;margin:0 auto;padding-block:20px 80px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:grid;gap:18px}
+.prog{display:grid;gap:8px}
+.prog .bar{height:6px;background:var(--soft);border-radius:3px;overflow:hidden}
+.prog .bar i{display:block;height:100%;background:var(--brass);width:0;transition:width .3s}
+.prog .lbl{display:flex;justify-content:space-between;font-size:13px;color:var(--sage)}
+.passo{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;display:grid;gap:18px;min-width:0}
+[hidden]{display:none!important}
+h2{font-family:var(--display);font-weight:700;font-size:24px;line-height:1.15;margin:0;text-wrap:balance}
+.sub{margin:-8px 0 0;color:var(--sage);font-size:14.5px}
+.q{display:grid;gap:8px}
+.q > label,.ql{font-weight:600;font-size:15px}
+.h{font-weight:400;color:var(--sage);font-size:13px}
+input[type=text],textarea,select{font:inherit;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:11px 12px;width:100%;min-width:0}
+textarea{resize:vertical;min-height:80px}
+:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer}
+.chip input:checked + span{background:#1e3a32;border-color:#1e3a32;color:#fff}
+.chip input:focus-visible + span{outline:2px solid var(--brass);outline-offset:2px}
+.ramos{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.ramo{position:relative}
+.ramo input{position:absolute;opacity:0;pointer-events:none}
+.ramo span{display:grid;gap:3px;border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--paper);cursor:pointer;height:100%}
+.ramo span b{font-family:var(--display);font-size:17px;display:flex;align-items:center;gap:8px}
+.ramo span b i{width:14px;height:14px;border-radius:50%;flex:none;background-image:radial-gradient(circle at 34% 28%,rgba(255,255,255,.38),rgba(255,255,255,0) 60%);box-shadow:0 1px 2px rgba(0,0,0,.22)}
+.ramo span small{color:var(--sage);font-size:13px}
+.ramo input:checked + span{border-color:var(--brass);background:var(--brassSoft);box-shadow:inset 0 0 0 1px var(--brass)}
+.ramo input:focus-visible + span{outline:2px solid var(--brass);outline-offset:2px}
+.bloco{border-top:1px solid var(--line);padding-top:16px;display:grid;gap:12px}
+.bloco:first-child{border-top:0;padding-top:0}
+.bloco h3{font-family:var(--display);font-size:19px;margin:0;color:var(--brass-deep)}
+.dor{display:grid;gap:6px}
+.dor .t{font-size:14.5px;font-weight:500}
+.esc{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.esc label{position:relative}
+.esc input{position:absolute;opacity:0;pointer-events:none}
+.esc span{display:block;text-align:center;font-size:12.5px;border:1px solid var(--line);border-radius:9px;padding:7px 2px;cursor:pointer;background:var(--paper)}
+.esc input:checked + span{background:var(--brassSoft);border-color:var(--brass);color:var(--brass-deep);font-weight:600}
+.esc input[value="0"]:checked + span{background:var(--soft);border-color:var(--line);color:var(--sage)}
+.esc input:focus-visible + span{outline:2px solid var(--brass);outline-offset:2px}
+.nav{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap}
+.b{font:inherit;font-weight:600;font-size:15px;border-radius:12px;padding:12px 20px;cursor:pointer;border:1px solid #1e3a32;background:#1e3a32;color:#fff}
+a.b{display:inline-block;text-decoration:none}
+.b.sec{background:transparent;color:var(--ink);border-color:var(--line)}
+.b:disabled{opacity:.45;cursor:not-allowed}
+.aviso{font-size:13px;color:var(--sage)}
+.lgpd{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:13.5px}
+.rev{display:grid;gap:10px;font-size:14.5px}
+.rev dt{font-weight:600}
+.rev dd{margin:0 0 6px;color:var(--sage)}
+.ok{display:grid;gap:12px;text-align:left}
+.ok .sel{font-family:var(--display);font-size:46px;line-height:1;color:var(--brass)}
+details{border:1px dashed var(--line);border-radius:12px;padding:10px 12px;font-size:13px}
+.carregando{text-align:center;color:var(--sage);padding:48px 16px}
+@media (prefers-reduced-motion:reduce){.prog .bar i{transition:none}}
+</style>
+</head>
+<body>
+<header class="topo"><div class="in">
+  <div class="marca"><svg viewBox="16 2 88 112" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M60 64 C60 50 26 52 26 30"/><path d="M60 64 C60 50 44 38 44 16"/><path d="M60 64 C60 50 60 32 60 10"/><path d="M60 64 C60 50 76 38 76 16"/><path d="M60 64 C60 50 94 52 94 30"/><path d="M60 64 V92"/><path d="M60 80 C52 86 44 88 36 98"/><path d="M60 80 C68 86 76 88 84 98"/><path d="M60 92 C56 98 54 102 52 110"/><path d="M60 92 C64 98 66 102 68 110"/><circle cx="26" cy="30" r="6.5" fill="#7e6596" stroke="none"/><circle cx="44" cy="16" r="6.5" fill="#3c4f9a" stroke="none"/><circle cx="60" cy="10" r="6.5" fill="#3f8163" stroke="none"/><circle cx="76" cy="16" r="6.5" fill="#7a8f3c" stroke="none"/><circle cx="94" cy="30" r="6.5" fill="#966040" stroke="none"/></svg>Raiz</div>
+  <span class="empresa" id="emp">Levantamento antes da conversa</span>
+  <h1 id="titulo">Conte como é a sua rotina hoje</h1>
+  <p>Leva de 5 a 8 minutos. As perguntas mudam conforme o que faz parte do seu patrimônio, e as respostas preparam a nossa conversa.</p>
+</div></header>
+
+<main class="wrap carregando" id="carregando">Abrindo o seu levantamento…</main>
+
+<main class="wrap" id="form" hidden>
+  <div class="prog" aria-live="polite"><div class="bar"><i id="barra"></i></div><div class="lbl"><span id="passoLbl">Passo 1 de 5</span><span id="passoNome">Você</span></div></div>
+
+  <section class="passo" id="p1">
+    <h2>Você</h2>
+    <div class="q"><label for="nome">Seu nome</label><input type="text" id="nome" autocomplete="name"></div>
+    <div class="q"><span class="ql">Qual é o seu papel? <span class="h">Marque o que for seu.</span></span><div class="chips" id="papel"></div></div>
+    <div class="q"><label for="tempo">Quanto tempo por semana vai em conferir, cobrar, pagar, guardar e procurar coisas?</label>
+      <select id="tempo"><option value="">Escolha</option><option>Até 1 hora</option><option>De 1 a 3 horas</option><option>De 3 a 6 horas</option><option>Mais de 6 horas</option><option>Não sei dizer</option></select></div>
+  </section>
+
+  <section class="passo" id="p2" hidden>
+    <h2>O que faz parte do seu patrimônio?</h2>
+    <p class="sub">Escolha um ou mais. As próximas perguntas seguem o que você marcar.</p>
+    <div class="ramos" id="ramos"></div>
+  </section>
+
+  <section class="passo" id="p3" hidden>
+    <h2>Onde mais pesa hoje</h2>
+    <p class="sub">Para cada situação, quanto ela incomoda. Depois, conte como faz hoje.</p>
+    <div id="blocos"></div>
+  </section>
+
+  <section class="passo" id="p4" hidden>
+    <h2>Ferramentas e resultado</h2>
+    <div class="q"><span class="ql">O que vocês usam hoje no geral?</span><div class="chips" id="tec"></div></div>
+    <div class="q"><label for="tecqual">Algum sistema ou aplicativo que vale citar pelo nome?</label><input type="text" id="tecqual" placeholder="Ex.: sistema da cooperativa, planilha do contador"></div>
+    <div class="q"><label for="resultado">Daqui a 30 dias, o que te deixaria mais tranquila ou tranquilo?</label><textarea id="resultado"></textarea></div>
+    <div class="q"><span class="ql">Por onde prefere receber avisos?</span><div class="chips" id="canal"></div></div>
+    <p class="lgpd">Não precisa mandar documentos, números de conta ou valores aqui. As respostas vão para a equipe Raiz e servem só para preparar a conversa. <a href="/politica-de-privacidade" target="_blank" rel="noopener">Política de privacidade</a>.</p>
+  </section>
+
+  <section class="passo" id="p5" hidden>
+    <h2>Confira antes de enviar</h2>
+    <dl class="rev" id="rev"></dl>
+  </section>
+
+  <section class="passo ok" id="p6" hidden>
+    <span class="sel">✓</span>
+    <h2 id="obrigado">Obrigado por responder!</h2>
+    <p>O Raiz pode ajudar a minimizar muitos dos pontos que você indicou. Vamos usar estas informações para preparar e personalizar a nossa reunião.</p>
+  </section>
+
+  <div class="nav" id="nav">
+    <button class="b sec" type="button" id="voltar">Voltar</button>
+    <button class="b" type="button" id="avancar">Continuar</button>
+  </div>
+  <p class="aviso" id="aviso" role="status"></p>
+</main>
+
+<main class="wrap" id="semConvite" hidden>
+  <section class="passo">
+    <h2>Este levantamento é por convite</h2>
+    <p class="sub">O link que você abriu não é válido ou já venceu. Se recebeu um convite do Raiz, abra pelo link da mensagem; se não, fale com a gente pelo WhatsApp.</p>
+    <p><a class="b" href="https://wa.me/5511947461828" target="_blank" rel="noopener">Falar com o Raiz</a></p>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+const SUPABASE_URL = "https://oduwpttbbemypiypjsux.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kdXdwdHRiYmVteXBpeXBqc3V4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyODEyOTcsImV4cCI6MjEwMDg1NzI5N30.9-cu1CV1wPbo5UH1G2eAsWqsvS54AWNuQZOlifc9a7w"; // chave pública (a mesma das outras páginas do site)
+const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+const RAMOS = {
+  agro: { nome: "Agro", cor: "#7a8f3c", sub: "Café e outras lavouras, máquinas, arrendamento", dores: ["Prazos da terra: ITR, CCIR, CAR, licença e outorga", "Saber o custo da safra e quanto sobra por saca", "Caderno de campo: aplicações, chuva e mão de obra", "Manutenção de máquinas, secador e terreiro", "Parcelas do custeio e de financiamentos", "Venda do café e recebimento"] },
+  pecuaria: { nome: "Pecuária", cor: "#966040", sub: "Gado de corte, leite e outros rebanhos", dores: ["Controle do rebanho por lote", "Vacinas, GTA e sanidade", "Produção de leite e pagamento do laticínio", "Pesagem, engorda e venda do lote", "Custo por lote ou por animal"] },
+  familia: { nome: "Família", cor: "#7e6596", sub: "Pessoas, documentos, casa, agenda e pets", dores: ["Documentos que vencem (CNH, passaporte, RG)", "Contas da casa e quem paga cada uma", "Agenda: escola, aniversários e viagens", "Seguros de vida, da casa e de viagem", "Vacinas e saúde do pet"] },
+  imoveis: { nome: "Imóveis", cor: "#3c4f9a", sub: "Aluguel, temporada, salas e lojas", dores: ["Cobrar e dar recibo do aluguel", "Reajuste no aniversário do contrato", "IPTU e condomínio repassados", "Atraso de inquilino", "Ver quanto cada imóvel rende"] },
+  bens: { nome: "Outros bens", cor: "#5d636b", sub: "Carros, barcos, arte e coleções", dores: ["IPVA, licenciamento e multas", "Revisões e manutenção", "Seguro dos bens", "Valor atualizado de cada bem"] },
+  obras: { nome: "Obras", cor: "#b07a2a", sub: "Construção, reforma ou imóvel na planta", dores: ["Acompanhar avanço e cronograma", "Pagamentos e prestação de contas da obra", "Documentos: alvará, ART e notas", "Fotos e diário da obra"] },
+};
+const GERAL = { nome: "Em tudo", dores: ["Achar um documento quando preciso", "Informação espalhada no WhatsApp, e-mail e papel", "Depender de uma pessoa que sabe onde está tudo", "Prestar contas e dividir entre a família ou sócios", "Juntar e mandar tudo ao contador"] };
+const ESC = [["0", "Não se aplica"], ["1", "Pouco"], ["2", "Médio"], ["3", "Muito"]];
+const COMO = ["Planilha", "Sistema do setor", "App do banco ou cooperativa", "WhatsApp", "Papel e pastas", "Contador ou escritório", "Ninguém faz"];
+const PAPEL = ["Decido e acompanho", "Faço o dia a dia", "Cuido das contas", "Cuido dos documentos", "Acompanho de longe"];
+const CANAL = ["WhatsApp", "Aplicativo", "E-mail", "Tanto faz"];
+// RAMOS: só os disponíveis no catálogo (ativo_ramos ativos em nov/26); Varejo e Investimentos entram quando forem liberados. Na página real vem de fn_levantamento_catalogo().
+// Protótipo: tokens simulados, mascarados como os do Gestão. Na página real: fn_convite_pessoal_ler(p_token) devolve { nome_convidado, valido }; sem convite válido, nada abre.
+
+const $ = (id) => document.getElementById(id);
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const slug = (t) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+const params = new URLSearchParams(location.search);
+const tokenTxt = (params.get("c") || "").trim().toLowerCase();
+let conv = null;
+let passo = 1;
+const NOMES = ["Você", "Seu patrimônio", "Onde pesa", "Ferramentas", "Revisão"];
+
+function chips(el, lista, nome, tipo = "checkbox") {
+  $(el).innerHTML = lista.map((t, i) => `<label class="chip"><input type="${tipo}" name="${nome}" id="${nome}${i}" value="${esc(t)}"><span>${esc(t)}</span></label>`).join("");
+}
+chips("papel", PAPEL, "papel"); chips("tec", COMO, "tec"); chips("canal", CANAL, "canal", "radio");
+$("ramos").innerHTML = Object.entries(RAMOS).map(([k, r]) => `<label class="ramo"><input type="checkbox" name="ramo" id="r_${k}" value="${k}"><span><b><i style="background-color:${r.cor}"></i>${esc(r.nome)}</b><small>${esc(r.sub)}</small></span></label>`).join("");
+
+function semConvite() {
+  $("carregando").hidden = true; $("form").hidden = true; $("semConvite").hidden = false;
+  $("titulo").textContent = "Levantamento Raiz";
+}
+async function abrir() {
+  if (!/^[a-z0-9]{6,40}$/.test(tokenTxt) || !sb) return semConvite();
+  try {
+    const { data, error } = await sb.rpc("fn_convite_pessoal_ler", { p_token: tokenTxt });
+    const linha = Array.isArray(data) ? data[0] : data;
+    if (error || !linha || !linha.valido) return semConvite();
+    conv = { nome: (linha.nome_convidado || "").trim().split(/\s+/)[0] || "" };
+  } catch (_) { return semConvite(); }
+  if (conv.nome) { $("titulo").textContent = `${conv.nome}, conte como é a sua rotina hoje`; $("nome").value = conv.nome; }
+  $("carregando").hidden = true; $("form").hidden = false;
+  mostrar();
+}
+
+function ramosMarcados() { return [...document.querySelectorAll('input[name="ramo"]:checked')].map((i) => i.value); }
+function montarBlocos() {
+  const guard = coletarBlocos();
+  const lista = [...ramosMarcados().map((k) => [k, RAMOS[k]]), ["geral", GERAL]];
+  $("blocos").innerHTML = lista.map(([k, r]) => `<div class="bloco" data-r="${k}"><h3>${esc(r.nome)}</h3>${r.dores.map((d, i) => `<div class="dor" role="radiogroup" aria-label="${esc(d)}"><span class="t">${esc(d)}</span><div class="esc">${ESC.map(([v, t]) => `<label><input type="radio" name="${k}_${i}" id="${k}_${i}_${v}" value="${v}"><span>${t}</span></label>`).join("")}</div></div>`).join("")}${k === "geral" ? "" : `<div class="q"><span class="ql">Como faz isso hoje?</span><div class="chips">${COMO.map((c, j) => `<label class="chip"><input type="checkbox" name="como_${k}" id="como_${k}_${j}" value="${esc(c)}"><span>${esc(c)}</span></label>`).join("")}</div></div>`}<div class="q"><label for="maior_${k}">${k === "geral" ? "A maior dor, nas suas palavras" : "Algo mais sobre " + esc(r.nome.toLowerCase()) + "?"}</label><textarea id="maior_${k}" rows="2"></textarea></div></div>`).join("");
+  aplicarBlocos(guard);
+}
+function coletarBlocos() {
+  const out = {};
+  document.querySelectorAll("#blocos .bloco").forEach((b) => {
+    const k = b.dataset.r, r = k === "geral" ? GERAL : RAMOS[k], dores = {};
+    r.dores.forEach((d, i) => { const x = b.querySelector(`input[name="${k}_${i}"]:checked`); if (x) dores[slug(d)] = Number(x.value); });
+    out[k] = { dores, como: [...b.querySelectorAll(`input[name="como_${k}"]:checked`)].map((i) => i.value), texto: ($("maior_" + k) || {}).value || "" };
+  });
+  return out;
+}
+function aplicarBlocos(g) {
+  Object.entries(g || {}).forEach(([k, v]) => {
+    const r = k === "geral" ? GERAL : RAMOS[k]; if (!r || !document.querySelector(`.bloco[data-r="${k}"]`)) return;
+    r.dores.forEach((d, i) => { const val = v.dores[slug(d)]; if (val !== undefined) { const el = $(`${k}_${i}_${val}`); if (el) el.checked = true; } });
+    (v.como || []).forEach((c) => { const j = COMO.indexOf(c); const el = $(`como_${k}_${j}`); if (el) el.checked = true; });
+    if ($("maior_" + k)) $("maior_" + k).value = v.texto || "";
+  });
+}
+function respostas() {
+  return {
+    versao_formulario: "levantamento_v1",
+    nome: $("nome").value.trim(),
+    papel: [...document.querySelectorAll('input[name="papel"]:checked')].map((i) => i.value),
+    tempo_semana: $("tempo").value,
+    ramos: ramosMarcados(),
+    por_ramo: coletarBlocos(),
+    tecnologia: [...document.querySelectorAll('input[name="tec"]:checked')].map((i) => i.value),
+    tecnologia_nomes: $("tecqual").value.trim(),
+    resultado_30_dias: $("resultado").value.trim(),
+    canal: (document.querySelector('input[name="canal"]:checked') || {}).value || "",
+  };
+}
+// Corpo que a Edge notificar-comercial 1.4 (tipo levantamento) transforma nas mensagens do WhatsApp comercial
+function corpoEnvio(r) {
+  const blocos = Object.entries(r.por_ramo).map(([k, v]) => {
+    const def = k === "geral" ? GERAL : RAMOS[k];
+    const por = (n) => def.dores.filter((d) => v.dores[slug(d)] === n);
+    return { ramo: def.nome, muito: por(3), medio: por(2), como: v.como, obs: v.texto };
+  });
+  return { tipo: "levantamento", token: tokenTxt, respostas: {
+    nome: r.nome, papel: r.papel, tempo_semana: r.tempo_semana, canal: r.canal, ramos: r.ramos.map((k) => RAMOS[k].nome),
+    blocos, tecnologia: r.tecnologia, tecnologia_nomes: r.tecnologia_nomes, resultado_30_dias: r.resultado_30_dias } };
+}
+let enviando = false;
+async function enviar() {
+  if (enviando) return false;
+  enviando = true; $("avancar").disabled = true; $("avancar").textContent = "Enviando…";
+  try {
+    const { data, error } = await sb.functions.invoke("notificar-comercial", { body: corpoEnvio(respostas()) });
+    if (error) {
+      let msg = "Não conseguimos enviar agora. Tente de novo em alguns minutos.";
+      try { const j = await error.context.json(); if (j && j.erro) msg = j.erro; } catch (_) {}
+      $("aviso").textContent = msg; return false;
+    }
+    return !!(data && data.ok);
+  } catch (_) {
+    $("aviso").textContent = "Sem conexão agora. Confira a internet e tente de novo."; return false;
+  } finally { enviando = false; $("avancar").disabled = false; if (passo === 5) $("avancar").textContent = "Enviar"; }
+}
+function revisar() {
+  const r = respostas(), L = [];
+  L.push(["Você", `${r.nome || "—"} · ${r.papel.join(", ") || "papel não marcado"} · ${r.tempo_semana || "tempo não informado"}`]);
+  L.push(["Patrimônio", r.ramos.map((k) => RAMOS[k].nome).join(", ") || "—"]);
+  Object.entries(r.por_ramo).forEach(([k, v]) => {
+    const nome = k === "geral" ? GERAL.nome : RAMOS[k].nome;
+    const fortes = Object.entries(v.dores).filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1]).map(([d, n]) => `${n === 3 ? "muito" : "médio"}: ${d.replace(/_/g, " ")}`);
+    L.push([nome, (fortes.length ? fortes.join("; ") : "nada marcado como médio ou muito") + (v.como.length ? ` · hoje: ${v.como.join(", ")}` : "")]);
+  });
+  L.push(["Ferramentas", [r.tecnologia.join(", "), r.tecnologia_nomes].filter(Boolean).join(" · ") || "—"]);
+  L.push(["Em 30 dias", r.resultado_30_dias || "—"]);
+  L.push(["Canal", r.canal || "—"]);
+  $("rev").innerHTML = L.map(([t, d]) => `<dt>${esc(t)}</dt><dd>${esc(d)}</dd>`).join("");
+}
+function mostrar() {
+  for (let i = 1; i <= 6; i++) $("p" + i).hidden = i !== passo;
+  const fim = passo === 6;
+  $("nav").hidden = fim;
+  $("voltar").disabled = passo === 1;
+  $("avancar").textContent = passo === 5 ? "Enviar" : "Continuar";
+  $("barra").style.width = (fim ? 100 : (passo - 1) / 5 * 100) + "%";
+  $("passoLbl").textContent = fim ? "Concluído" : `Passo ${passo} de 5`;
+  $("passoNome").textContent = fim ? "" : NOMES[passo - 1];
+  $("aviso").textContent = "";
+  window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+}
+$("avancar").addEventListener("click", async () => {
+  if (passo === 1 && !$("nome").value.trim()) { $("aviso").textContent = "Escreva seu nome para continuar."; $("nome").focus(); return; }
+  if (passo === 2) { if (!ramosMarcados().length) { $("aviso").textContent = "Escolha pelo menos um item do seu patrimônio."; return; } montarBlocos(); }
+  if (passo === 4) revisar();
+  if (passo === 5 && !(await enviar())) return;
+  passo++; mostrar();
+});
+$("voltar").addEventListener("click", () => { if (passo > 1) { passo--; mostrar(); } });
+abrir();
+</script>
+</body>
+</html>
