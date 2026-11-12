@@ -2,7 +2,15 @@
 <!--
   ============================================================================
   RAIZ PATRIMÔNIO — Página de convite para amigos (amigos/index.html)
-  VERSÃO: v1.5.0 · LINHAS: 723 · 2026-10-11
+  VERSÃO: v1.6.0 · LINHAS: 731 · 2026-11-12
+  NOVIDADES v1.6.0 — CRM F1 (demanda 700f5659 e parte da c390a592, sessão 20261112-0844-crm-f1; ficha aprovada pelo
+    Nicola 12/11 08:40): o registro em comercial.eventos_landing passa a levar o CÓDIGO do convite (?c=, o token do
+    link pessoal) na coluna convite, que existia e ficava vazia. Assim o Gestão mostra, na linha do tempo do número,
+    quais vídeos e botões a pessoa tocou. Nunca o nome (LGPD): o token já é público na URL e não identifica sozinho.
+    A validação de "exige convite" continua na demanda c390a592.
+
+  --- v1.5.0 ---
+  VERSÃO-ANT: v1.5.0 · LINHAS-ANT: 723 · 2026-10-11
   NOVIDADES v1.5.0 — marca e ramos (demanda 680ee9f8, sessão 20261011-1120-marca-ramos; plano aprovado pelo Nicola
     11/10/2026 11:20): o logo grande do topo passa a ser o ícone novo do app (o mesmo da tela do celular, servido de
     app.raizpatrimonio.com.br/icon-512.png), og:image idem; favicon com o símbolo, theme-color, símbolo ao lado do nome
@@ -602,7 +610,7 @@ footer.rf a.rf-btn:hover{border-color:#c68a3b}
         utm_source: params.get('utm_source') || 'convite-amigos',
         utm_medium: params.get('utm_medium') || 'whatsapp',
         utm_campaign: params.get('utm_campaign') || CAMPANHA,
-        convite: null,
+        convite: codigoConvite || null,
         user_agent: navigator.userAgent,
         evento: evento,
         campanha_codigo: CAMPANHA,
