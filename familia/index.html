@@ -2,7 +2,13 @@
 <!--
   ============================================================================
   RAIZ FAMÍLIA — Landing da frente Família (familia/index.html)
-  VERSÃO: v1.1.0 · LINHAS: 602 · 2026-10-20
+  VERSÃO: v1.2.0 · LINHAS: 612 · 2026-11-23
+  NOVIDADES v1.2.0 — sessão 20261123-1348-lead-ramos, demanda 2be7ea1c (FICHA_LEAD_RAMOS_ROBO_RAIZ v1.2.0, de acordo do Nicola
+    23/11/2026 20:23): a página lê o convite do lead (?c=<token>, fn_convite_pessoal_ler) — o nome já vem preenchido e o
+    acesso fica contado no convite; o evento de página guarda o convite. Achado na mesma entrega (DEM-09): o teste criado
+    aqui nascia com o ramo Imóveis — passa a nascer com o ramo Família (p_ramo 'familia').
+  --- v1.1.0 ---
+  VERSÃO-ANT: v1.1.0 · LINHAS-ANT: 602 · 2026-10-20
   NOVIDADES v1.1.0 — pedido do Nicola (20/10/2026, 23:08 e 23:16), demanda e92f5520: saem os selos
     "em breve" do que já roda no app e foi conferido (agenda em calendário, leitura do calendário
     escolar, importação da fatura do cartão, divisão entre responsáveis, aviso com botão de ação,
@@ -565,9 +571,13 @@ footer.rf a.rf-btn:hover{border-color:#c68a3b}
   var params=new URLSearchParams(location.search);
   var SESSAO=(function(){try{var id=sessionStorage.getItem('raiz_sessao_id');if(!id){id=crypto.randomUUID?crypto.randomUUID():'sess-'+Date.now();sessionStorage.setItem('raiz_sessao_id',id);}return id;}catch(e){return null;}})();
   function track(evento,pagina){try{db.schema('comercial').from('eventos_landing').insert({pagina:'familia:'+(pagina||'home'),referrer:document.referrer||null,
-    utm_source:params.get('utm_source')||'site',utm_medium:params.get('utm_medium')||'organico',utm_campaign:params.get('utm_campaign')||ORIGEM,convite:null,
+    utm_source:params.get('utm_source')||'site',utm_medium:params.get('utm_medium')||'organico',utm_campaign:params.get('utm_campaign')||ORIGEM,convite:params.get('c')||null,
     user_agent:navigator.userAgent,evento:evento,campanha_codigo:ORIGEM,sessao_id:SESSAO}).then(function(r){if(r.error)console.warn('track:',r.error.message);});}catch(e){}}
   track('page_view');
+  // convite do lead (?c=): nome preenchido e acesso contado no convite
+  (function(){var c=params.get('c');if(!c)return;
+    db.rpc('fn_convite_pessoal_ler',{p_token:c}).then(function(r){var d=r&&r.data&&r.data[0];
+      if(d&&d.valido&&d.nome_convidado){var i=document.getElementById('t-nome');if(i&&!i.value)i.value=d.nome_convidado;}}).catch(function(){});})();
   document.querySelectorAll('a[href="#cadastro"]').forEach(function(a){a.addEventListener('click',function(){track('cta_click','cta:'+(a.dataset.oferta||'teste'));});});
   var form=document.getElementById('ft'),btn=document.getElementById('t-enviar'),st=document.getElementById('t-status');
   function msg(t,tipo){st.textContent=t;st.style.color=tipo==='erro'?'#9b2c2c':(tipo==='ok'?'#2f7a55':'inherit');}
@@ -583,7 +593,7 @@ footer.rf a.rf-btn:hover{border-color:#c68a3b}
       var session=r1.data&&r1.data.session;
       if(!session){msg('Conta criada! Confira seu e-mail para confirmar o acesso.','ok');btn.disabled=false;btn.textContent='Começar meu teste grátis';return;}
       var r2=await db.rpc('fn_criar_trial_campanha',{p_codigo_publico:sel.value,p_nome_empresa:v('t-empresa'),p_nome_usuario:v('t-nome'),
-        p_whatsapp:v('t-whats'),p_faixa_imoveis:null,p_email:v('t-email'),p_interesse_importacao:false});
+        p_whatsapp:v('t-whats'),p_faixa_imoveis:null,p_email:v('t-email'),p_interesse_importacao:false,p_ramo:'familia'});
       if(r2.error)throw r2.error;
       track('trial_completo','trial_completo:'+sel.value);
       msg('Tudo pronto! Abrindo o app...','ok');
